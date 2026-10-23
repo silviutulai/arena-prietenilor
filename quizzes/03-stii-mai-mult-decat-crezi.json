@@ -1,0 +1,187 @@
+{
+  "title": "Știi mai mult decât crezi",
+  "level": 3,
+  "seconds": 15,
+  "questions": [
+    {
+      "q": "Care este capitala Japoniei?",
+      "a": [
+        "Tokyo",
+        "Kyoto",
+        "Osaka",
+        "Seul"
+      ]
+    },
+    {
+      "q": "Câte planete are Sistemul Solar?",
+      "a": [
+        "8",
+        "9",
+        "7",
+        "10"
+      ]
+    },
+    {
+      "q": "Cine a scris poemul „Luceafărul”?",
+      "a": [
+        "Mihai Eminescu",
+        "Ion Creangă",
+        "George Coșbuc",
+        "Lucian Blaga"
+      ]
+    },
+    {
+      "q": "Care este simbolul chimic al aurului?",
+      "a": [
+        "Au",
+        "Ag",
+        "Fe",
+        "Go"
+      ]
+    },
+    {
+      "q": "În ce an a avut loc Marea Unire?",
+      "a": [
+        "1918",
+        "1859",
+        "1877",
+        "1920"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare mamifer de pe Pământ?",
+      "a": [
+        "Balena albastră",
+        "Elefantul african",
+        "Rechinul-balenă",
+        "Girafa"
+      ]
+    },
+    {
+      "q": "Pe ce continent se află Egiptul?",
+      "a": [
+        "Africa",
+        "Asia",
+        "Europa",
+        "America de Sud"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Mona Lisa”?",
+      "a": [
+        "Leonardo da Vinci",
+        "Michelangelo",
+        "Rafael",
+        "Vincent van Gogh"
+      ]
+    },
+    {
+      "q": "Care este capitala Germaniei?",
+      "a": [
+        "Berlin",
+        "München",
+        "Hamburg",
+        "Frankfurt"
+      ]
+    },
+    {
+      "q": "Câte secunde are o oră?",
+      "a": [
+        "3600",
+        "360",
+        "6000",
+        "1440"
+      ]
+    },
+    {
+      "q": "Cine a fost primul om care a pășit pe Lună?",
+      "a": [
+        "Neil Armstrong",
+        "Iuri Gagarin",
+        "Buzz Aldrin",
+        "Michael Collins"
+      ]
+    },
+    {
+      "q": "Care este formula chimică a apei?",
+      "a": [
+        "H₂O",
+        "CO₂",
+        "O₂",
+        "H₂O₂"
+      ]
+    },
+    {
+      "q": "Care este cea mai mare țară ca suprafață?",
+      "a": [
+        "Rusia",
+        "Canada",
+        "China",
+        "SUA"
+      ]
+    },
+    {
+      "q": "În ce an a căzut regimul comunist în România?",
+      "a": [
+        "1989",
+        "1990",
+        "1987",
+        "1991"
+      ]
+    },
+    {
+      "q": "Ce vitamină produce pielea când e expusă la soare?",
+      "a": [
+        "Vitamina D",
+        "Vitamina C",
+        "Vitamina A",
+        "Vitamina B12"
+      ]
+    },
+    {
+      "q": "În ce oraș se află Colosseumul?",
+      "a": [
+        "Roma",
+        "Atena",
+        "Napoli",
+        "Florența"
+      ]
+    },
+    {
+      "q": "Cine a scris seria „Harry Potter”?",
+      "a": [
+        "J.K. Rowling",
+        "J.R.R. Tolkien",
+        "Roald Dahl",
+        "C.S. Lewis"
+      ]
+    },
+    {
+      "q": "Care este capitala Republicii Moldova?",
+      "a": [
+        "Chișinău",
+        "Bălți",
+        "Tiraspol",
+        "Cahul"
+      ]
+    },
+    {
+      "q": "Câte coarde are o vioară?",
+      "a": [
+        "4",
+        "5",
+        "6",
+        "3"
+      ]
+    },
+    {
+      "q": "Ce râu traversează orașul Paris?",
+      "a": [
+        "Sena",
+        "Loara",
+        "Rinul",
+        "Ronul"
+      ]
+    }
+  ]
+}

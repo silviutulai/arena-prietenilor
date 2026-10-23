@@ -1,0 +1,187 @@
+{
+  "title": "Expert",
+  "level": 9,
+  "seconds": 25,
+  "questions": [
+    {
+      "q": "Cine a fost primul român laureat al Premiului Nobel, în 1974, pentru Medicină?",
+      "a": [
+        "George Emil Palade",
+        "Nicolae Paulescu",
+        "Victor Babeș",
+        "Ana Aslan"
+      ]
+    },
+    {
+      "q": "Ce hormon a izolat Nicolae Paulescu, numit de el „pancreină”?",
+      "a": [
+        "Insulina",
+        "Adrenalina",
+        "Tiroxina",
+        "Cortizolul"
+      ]
+    },
+    {
+      "q": "Cum se numește constanta matematică „e”, cu valoarea aproximativă 2,718?",
+      "a": [
+        "Numărul lui Euler",
+        "Constanta lui Planck",
+        "Numărul de aur",
+        "Numărul lui Avogadro"
+      ]
+    },
+    {
+      "q": "Cine a demonstrat Marea teoremă a lui Fermat, în anii '90?",
+      "a": [
+        "Andrew Wiles",
+        "Grigori Perelman",
+        "Terence Tao",
+        "John Nash"
+      ]
+    },
+    {
+      "q": "În ce an a avut loc bătălia de la Waterloo?",
+      "a": [
+        "1815",
+        "1805",
+        "1812",
+        "1821"
+      ]
+    },
+    {
+      "q": "Ce rege a unificat triburile dacilor în secolul I î.Hr.?",
+      "a": [
+        "Burebista",
+        "Decebal",
+        "Dromichete",
+        "Zalmoxis"
+      ]
+    },
+    {
+      "q": "Ce scriitoare născută în Banat a primit Premiul Nobel pentru Literatură în 2009?",
+      "a": [
+        "Herta Müller",
+        "Ana Blandiana",
+        "Nina Cassian",
+        "Gabriela Adameșteanu"
+      ]
+    },
+    {
+      "q": "Ce element chimic are numărul atomic 79?",
+      "a": [
+        "Aurul",
+        "Argintul",
+        "Platina",
+        "Mercurul"
+      ]
+    },
+    {
+      "q": "Care este cel mai lung os din corpul uman?",
+      "a": [
+        "Femurul",
+        "Tibia",
+        "Humerusul",
+        "Peroneul"
+      ]
+    },
+    {
+      "q": "Ce oraș antic a fost îngropat de erupția Vezuviului din anul 79?",
+      "a": [
+        "Pompei",
+        "Cartagina",
+        "Troia",
+        "Efes"
+      ]
+    },
+    {
+      "q": "Cine a compus opera „Oedipe”?",
+      "a": [
+        "George Enescu",
+        "Ciprian Porumbescu",
+        "Gavriil Musicescu",
+        "Paul Constantinescu"
+      ]
+    },
+    {
+      "q": "Care dintre aceste mări este cea mai sărată?",
+      "a": [
+        "Marea Moartă",
+        "Marea Roșie",
+        "Marea Mediterană",
+        "Marea Neagră"
+      ]
+    },
+    {
+      "q": "Al cui nume îl poartă unitatea de măsură a frecvenței?",
+      "a": [
+        "Heinrich Hertz",
+        "James Watt",
+        "André-Marie Ampère",
+        "Alessandro Volta"
+      ]
+    },
+    {
+      "q": "Ce domnitor cărturar a scris „Descrierea Moldovei”?",
+      "a": [
+        "Dimitrie Cantemir",
+        "Constantin Brâncoveanu",
+        "Vasile Lupu",
+        "Petru Rareș"
+      ]
+    },
+    {
+      "q": "În ce an a fost semnat Tratatul de la Trianon?",
+      "a": [
+        "1920",
+        "1918",
+        "1919",
+        "1923"
+      ]
+    },
+    {
+      "q": "Ce limbaj de programare a fost creat de Guido van Rossum?",
+      "a": [
+        "Python",
+        "Java",
+        "C",
+        "Ruby"
+      ]
+    },
+    {
+      "q": "Care planetă se rotește cel mai încet în jurul axei sale, având cea mai lungă zi?",
+      "a": [
+        "Venus",
+        "Mercur",
+        "Jupiter",
+        "Neptun"
+      ]
+    },
+    {
+      "q": "Câte elemente chimice recunoscute oficial are tabelul periodic?",
+      "a": [
+        "118",
+        "112",
+        "108",
+        "124"
+      ]
+    },
+    {
+      "q": "Cine a scris romanul „Maitreyi”?",
+      "a": [
+        "Mircea Eliade",
+        "Camil Petrescu",
+        "Mihail Sebastian",
+        "Max Blecher"
+      ]
+    },
+    {
+      "q": "Care este cel mai înalt vârf din Munții Retezat?",
+      "a": [
+        "Peleaga",
+        "Vârful Retezat",
+        "Păpușa",
+        "Bucura"
+      ]
+    }
+  ]
+}

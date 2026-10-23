@@ -1,0 +1,187 @@
+{
+  "title": "Pentru cunoscători",
+  "level": 7,
+  "seconds": 20,
+  "questions": [
+    {
+      "q": "Cine a formulat legea atracției universale?",
+      "a": [
+        "Isaac Newton",
+        "Galileo Galilei",
+        "Johannes Kepler",
+        "Nicolaus Copernic"
+      ]
+    },
+    {
+      "q": "Care este cea mai adâncă groapă oceanică?",
+      "a": [
+        "Groapa Marianelor",
+        "Groapa Tonga",
+        "Groapa Puerto Rico",
+        "Groapa Java"
+      ]
+    },
+    {
+      "q": "Care este capitala Noii Zeelande?",
+      "a": [
+        "Wellington",
+        "Auckland",
+        "Christchurch",
+        "Hamilton"
+      ]
+    },
+    {
+      "q": "În ce an a avut loc Mica Unire (a Moldovei cu Țara Românească)?",
+      "a": [
+        "1859",
+        "1848",
+        "1866",
+        "1877"
+      ]
+    },
+    {
+      "q": "Ce element chimic are simbolul K?",
+      "a": [
+        "Potasiul",
+        "Kriptonul",
+        "Calciul",
+        "Carbonul"
+      ]
+    },
+    {
+      "q": "Cine a pictat tavanul Capelei Sixtine?",
+      "a": [
+        "Michelangelo",
+        "Rafael",
+        "Leonardo da Vinci",
+        "Sandro Botticelli"
+      ]
+    },
+    {
+      "q": "Ce inventator român a zburat în 1906, la Paris, cu un aparat mai greu decât aerul care decola singur?",
+      "a": [
+        "Traian Vuia",
+        "Aurel Vlaicu",
+        "Henri Coandă",
+        "Hermann Oberth"
+      ]
+    },
+    {
+      "q": "Ce împărat roman a cucerit Dacia?",
+      "a": [
+        "Traian",
+        "Augustus",
+        "Hadrian",
+        "Nero"
+      ]
+    },
+    {
+      "q": "În ce an a avut loc bătălia de la Călugăreni?",
+      "a": [
+        "1595",
+        "1600",
+        "1476",
+        "1504"
+      ]
+    },
+    {
+      "q": "Câți cromozomi are o celulă umană obișnuită?",
+      "a": [
+        "46",
+        "23",
+        "44",
+        "48"
+      ]
+    },
+    {
+      "q": "Ce compozitor a creat Simfonia a IX-a deși își pierduse auzul?",
+      "a": [
+        "Ludwig van Beethoven",
+        "Wolfgang Amadeus Mozart",
+        "Johann Sebastian Bach",
+        "Joseph Haydn"
+      ]
+    },
+    {
+      "q": "Care este cea mai mare țară din Africa ca suprafață?",
+      "a": [
+        "Algeria",
+        "Sudan",
+        "R.D. Congo",
+        "Libia"
+      ]
+    },
+    {
+      "q": "Care este capitala Kazahstanului?",
+      "a": [
+        "Astana",
+        "Almatî",
+        "Bișkek",
+        "Tașkent"
+      ]
+    },
+    {
+      "q": "Ce scriitor l-a creat pe Sherlock Holmes?",
+      "a": [
+        "Arthur Conan Doyle",
+        "Agatha Christie",
+        "Edgar Allan Poe",
+        "Charles Dickens"
+      ]
+    },
+    {
+      "q": "Care este unitatea de măsură a forței în Sistemul Internațional?",
+      "a": [
+        "Newtonul",
+        "Joule-ul",
+        "Watt-ul",
+        "Pascalul"
+      ]
+    },
+    {
+      "q": "Cine a scris „Divina Comedie”?",
+      "a": [
+        "Dante Alighieri",
+        "Francesco Petrarca",
+        "Giovanni Boccaccio",
+        "Niccolò Machiavelli"
+      ]
+    },
+    {
+      "q": "Care este cel mai înalt munte din Africa?",
+      "a": [
+        "Kilimanjaro",
+        "Muntele Kenya",
+        "Rwenzori",
+        "Toubkal"
+      ]
+    },
+    {
+      "q": "În ce oraș se află Muzeul Prado?",
+      "a": [
+        "Madrid",
+        "Barcelona",
+        "Lisabona",
+        "Roma"
+      ]
+    },
+    {
+      "q": "Cât este, aproximativ, viteza luminii în vid?",
+      "a": [
+        "300.000 km/s",
+        "30.000 km/s",
+        "3.000.000 km/s",
+        "150.000 km/s"
+      ]
+    },
+    {
+      "q": "Care este cel mai răspândit element chimic din Univers?",
+      "a": [
+        "Hidrogenul",
+        "Heliul",
+        "Oxigenul",
+        "Carbonul"
+      ]
+    }
+  ]
+}

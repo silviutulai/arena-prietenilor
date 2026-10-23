@@ -1,0 +1,187 @@
+{
+  "title": "Legendă",
+  "level": 10,
+  "seconds": 25,
+  "questions": [
+    {
+      "q": "Ce matematician a formulat celebra ipoteză, încă nedemonstrată, despre zerourile funcției zeta?",
+      "a": [
+        "Bernhard Riemann",
+        "Carl Friedrich Gauss",
+        "Leonhard Euler",
+        "David Hilbert"
+      ]
+    },
+    {
+      "q": "În ce an a fost fondată Societatea Academică Română, viitoarea Academie Română?",
+      "a": [
+        "1866",
+        "1859",
+        "1878",
+        "1918"
+      ]
+    },
+    {
+      "q": "Ce inventator român dă numele efectului prin care un jet de fluid urmează o suprafață curbă?",
+      "a": [
+        "Henri Coandă",
+        "Traian Vuia",
+        "Aurel Persu",
+        "Hermann Oberth"
+      ]
+    },
+    {
+      "q": "Ce cetate a fost capitala Daciei înainte de cucerirea romană?",
+      "a": [
+        "Sarmizegetusa Regia",
+        "Apulum",
+        "Napoca",
+        "Porolissum"
+      ]
+    },
+    {
+      "q": "Ce particulă a fost confirmată experimental la CERN în 2012?",
+      "a": [
+        "Bosonul Higgs",
+        "Quarkul top",
+        "Neutrinul",
+        "Gravitonul"
+      ]
+    },
+    {
+      "q": "Cine a scris „Critica rațiunii pure”?",
+      "a": [
+        "Immanuel Kant",
+        "G.W.F. Hegel",
+        "Friedrich Nietzsche",
+        "Arthur Schopenhauer"
+      ]
+    },
+    {
+      "q": "Care este cel mai adânc lac din lume?",
+      "a": [
+        "Baikal",
+        "Tanganyika",
+        "Lacul Superior",
+        "Marea Caspică"
+      ]
+    },
+    {
+      "q": "În ce an a avut loc bătălia de la Vaslui (Podul Înalt)?",
+      "a": [
+        "1475",
+        "1476",
+        "1457",
+        "1504"
+      ]
+    },
+    {
+      "q": "Ce element a fost descoperit în spectrul Soarelui înainte de a fi găsit pe Pământ?",
+      "a": [
+        "Heliul",
+        "Neonul",
+        "Argonul",
+        "Hidrogenul"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Carul cu boi”?",
+      "a": [
+        "Nicolae Grigorescu",
+        "Theodor Aman",
+        "Ion Andreescu",
+        "Ștefan Luchian"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare satelit al planetei Saturn?",
+      "a": [
+        "Titan",
+        "Encelad",
+        "Rhea",
+        "Iapetus"
+      ]
+    },
+    {
+      "q": "Ce număr este cunoscut drept „numărul Hardy–Ramanujan”?",
+      "a": [
+        "1729",
+        "1089",
+        "6174",
+        "2520"
+      ]
+    },
+    {
+      "q": "Cine a descoperit electronul, în 1897?",
+      "a": [
+        "J.J. Thomson",
+        "Ernest Rutherford",
+        "Niels Bohr",
+        "James Chadwick"
+      ]
+    },
+    {
+      "q": "Ce râu formează granița dintre România și Republica Moldova?",
+      "a": [
+        "Prutul",
+        "Nistrul",
+        "Siretul",
+        "Tisa"
+      ]
+    },
+    {
+      "q": "În ce an a murit Ștefan cel Mare?",
+      "a": [
+        "1504",
+        "1497",
+        "1512",
+        "1484"
+      ]
+    },
+    {
+      "q": "Cine a scris „Craii de Curtea-Veche”?",
+      "a": [
+        "Mateiu Caragiale",
+        "Ion Luca Caragiale",
+        "Tudor Arghezi",
+        "Ion Barbu"
+      ]
+    },
+    {
+      "q": "Ce matematician român a semnat poezie cu pseudonimul Ion Barbu?",
+      "a": [
+        "Dan Barbilian",
+        "Grigore Moisil",
+        "Gheorghe Țițeica",
+        "Traian Lalescu"
+      ]
+    },
+    {
+      "q": "Câte fețe are un icosaedru regulat?",
+      "a": [
+        "20",
+        "12",
+        "8",
+        "24"
+      ]
+    },
+    {
+      "q": "Ce matematician român a primit postum, în 1996, premiul „Computer Pioneer” al IEEE?",
+      "a": [
+        "Grigore Moisil",
+        "Dan Barbilian",
+        "Victor Toma",
+        "Simion Stoilow"
+      ]
+    },
+    {
+      "q": "Ce țară are cea mai lungă linie de coastă din lume?",
+      "a": [
+        "Canada",
+        "Rusia",
+        "Indonezia",
+        "Norvegia"
+      ]
+    }
+  ]
+}

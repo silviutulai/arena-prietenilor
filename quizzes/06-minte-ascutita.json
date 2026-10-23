@@ -1,0 +1,187 @@
+{
+  "title": "Minte ascuțită",
+  "level": 6,
+  "seconds": 20,
+  "questions": [
+    {
+      "q": "Cine a brevetat telefonul în 1876?",
+      "a": [
+        "Alexander Graham Bell",
+        "Thomas Edison",
+        "Nikola Tesla",
+        "Guglielmo Marconi"
+      ]
+    },
+    {
+      "q": "Care este capitala Elveției?",
+      "a": [
+        "Berna",
+        "Zürich",
+        "Geneva",
+        "Basel"
+      ]
+    },
+    {
+      "q": "În ce an a ajuns omul pe Lună?",
+      "a": [
+        "1969",
+        "1965",
+        "1972",
+        "1961"
+      ]
+    },
+    {
+      "q": "Ce particulă are sarcină electrică negativă?",
+      "a": [
+        "Electronul",
+        "Protonul",
+        "Neutronul",
+        "Fotonul"
+      ]
+    },
+    {
+      "q": "Cine a scris nuvela „Moara cu noroc”?",
+      "a": [
+        "Ioan Slavici",
+        "Liviu Rebreanu",
+        "Ion Creangă",
+        "Mihail Sadoveanu"
+      ]
+    },
+    {
+      "q": "Ce lanț muntos traversează România în formă de arc?",
+      "a": [
+        "Carpații",
+        "Alpii",
+        "Balcanii",
+        "Pirineii"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Cina cea de taină”?",
+      "a": [
+        "Leonardo da Vinci",
+        "Michelangelo",
+        "Rafael",
+        "Caravaggio"
+      ]
+    },
+    {
+      "q": "Cât este numărul pi rotunjit la două zecimale?",
+      "a": [
+        "3,14",
+        "3,41",
+        "3,16",
+        "3,12"
+      ]
+    },
+    {
+      "q": "Câți dinți are un adult, cu tot cu măselele de minte?",
+      "a": [
+        "32",
+        "28",
+        "30",
+        "36"
+      ]
+    },
+    {
+      "q": "Ce țară a dăruit Statuia Libertății Statelor Unite?",
+      "a": [
+        "Franța",
+        "Marea Britanie",
+        "Spania",
+        "Italia"
+      ]
+    },
+    {
+      "q": "Care este capitala Norvegiei?",
+      "a": [
+        "Oslo",
+        "Bergen",
+        "Stockholm",
+        "Helsinki"
+      ]
+    },
+    {
+      "q": "Cine a descoperit elementele poloniu și radiu?",
+      "a": [
+        "Marie și Pierre Curie",
+        "Ernest Rutherford",
+        "Wilhelm Röntgen",
+        "Dmitri Mendeleev"
+      ]
+    },
+    {
+      "q": "În ce an a căzut Zidul Berlinului?",
+      "a": [
+        "1989",
+        "1991",
+        "1987",
+        "1990"
+      ]
+    },
+    {
+      "q": "Cine a creat tabelul periodic al elementelor?",
+      "a": [
+        "Dmitri Mendeleev",
+        "Antoine Lavoisier",
+        "John Dalton",
+        "Robert Boyle"
+      ]
+    },
+    {
+      "q": "Cine a fost primul om în spațiu?",
+      "a": [
+        "Iuri Gagarin",
+        "Neil Armstrong",
+        "Alan Shepard",
+        "Valentina Tereșkova"
+      ]
+    },
+    {
+      "q": "Ce oraș a găzduit primele Jocuri Olimpice moderne, în 1896?",
+      "a": [
+        "Atena",
+        "Paris",
+        "Londra",
+        "Roma"
+      ]
+    },
+    {
+      "q": "Ce organ produce insulina?",
+      "a": [
+        "Pancreasul",
+        "Ficatul",
+        "Rinichii",
+        "Splina"
+      ]
+    },
+    {
+      "q": "Câte laturi are un octogon?",
+      "a": [
+        "8",
+        "6",
+        "10",
+        "12"
+      ]
+    },
+    {
+      "q": "Cine a scris romanul „Ion”?",
+      "a": [
+        "Liviu Rebreanu",
+        "Camil Petrescu",
+        "Marin Preda",
+        "Mihail Sadoveanu"
+      ]
+    },
+    {
+      "q": "Care este capitala Scoției?",
+      "a": [
+        "Edinburgh",
+        "Glasgow",
+        "Aberdeen",
+        "Dundee"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "title": "Cultură de buzunar",
+  "level": 4,
+  "seconds": 15,
+  "questions": [
+    {
+      "q": "Care este capitala Australiei?",
+      "a": [
+        "Canberra",
+        "Sydney",
+        "Melbourne",
+        "Perth"
+      ]
+    },
+    {
+      "q": "Care este cel mai înalt vârf din România?",
+      "a": [
+        "Moldoveanu",
+        "Negoiu",
+        "Omu",
+        "Peleaga"
+      ]
+    },
+    {
+      "q": "Care este cel mai lung fluviu din Europa?",
+      "a": [
+        "Volga",
+        "Dunărea",
+        "Rinul",
+        "Nipru"
+      ]
+    },
+    {
+      "q": "Ce gaz absorb plantele din aer pentru fotosinteză?",
+      "a": [
+        "Dioxidul de carbon",
+        "Oxigenul",
+        "Azotul",
+        "Hidrogenul"
+      ]
+    },
+    {
+      "q": "Cine a sculptat „Coloana fără sfârșit”?",
+      "a": [
+        "Constantin Brâncuși",
+        "Ion Jalea",
+        "Dimitrie Paciurea",
+        "Nicolae Grigorescu"
+      ]
+    },
+    {
+      "q": "Care este cea mai mică țară din lume?",
+      "a": [
+        "Vatican",
+        "Monaco",
+        "San Marino",
+        "Malta"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare deșert cald din lume?",
+      "a": [
+        "Sahara",
+        "Gobi",
+        "Kalahari",
+        "Atacama"
+      ]
+    },
+    {
+      "q": "Ce instrument măsoară presiunea atmosferică?",
+      "a": [
+        "Barometrul",
+        "Termometrul",
+        "Higrometrul",
+        "Anemometrul"
+      ]
+    },
+    {
+      "q": "Ce limbă oficială se vorbește în Brazilia?",
+      "a": [
+        "Portugheza",
+        "Spaniola",
+        "Engleza",
+        "Franceza"
+      ]
+    },
+    {
+      "q": "Care este planeta cea mai apropiată de Soare?",
+      "a": [
+        "Mercur",
+        "Venus",
+        "Marte",
+        "Pământ"
+      ]
+    },
+    {
+      "q": "Câte oase are, în medie, scheletul unui om adult?",
+      "a": [
+        "206",
+        "186",
+        "256",
+        "300"
+      ]
+    },
+    {
+      "q": "Care este capitala Canadei?",
+      "a": [
+        "Ottawa",
+        "Toronto",
+        "Vancouver",
+        "Montreal"
+      ]
+    },
+    {
+      "q": "Cine a descoperit penicilina?",
+      "a": [
+        "Alexander Fleming",
+        "Louis Pasteur",
+        "Marie Curie",
+        "Robert Koch"
+      ]
+    },
+    {
+      "q": "Ce metal este lichid la temperatura camerei?",
+      "a": [
+        "Mercurul",
+        "Plumbul",
+        "Fierul",
+        "Aluminiul"
+      ]
+    },
+    {
+      "q": "Cine a fost primul domnitor al Principatelor Unite?",
+      "a": [
+        "Alexandru Ioan Cuza",
+        "Carol I",
+        "Ștefan cel Mare",
+        "Mihai Viteazul"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare organ al corpului uman?",
+      "a": [
+        "Pielea",
+        "Ficatul",
+        "Creierul",
+        "Plămânii"
+      ]
+    },
+    {
+      "q": "Câte inimi are o caracatiță?",
+      "a": [
+        "3",
+        "1",
+        "2",
+        "8"
+      ]
+    },
+    {
+      "q": "Câte minute are o zi?",
+      "a": [
+        "1440",
+        "1240",
+        "1340",
+        "1540"
+      ]
+    },
+    {
+      "q": "Câte culori are curcubeul, în mod tradițional?",
+      "a": [
+        "7",
+        "6",
+        "5",
+        "8"
+      ]
+    },
+    {
+      "q": "Cât face 15% din 200?",
+      "a": [
+        "30",
+        "15",
+        "20",
+        "35"
+      ]
+    }
+  ]
+}

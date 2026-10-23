@@ -1,0 +1,187 @@
+{
+  "title": "Capcane",
+  "level": 8,
+  "seconds": 25,
+  "questions": [
+    {
+      "q": "Ce domnitor a realizat în 1600 prima unire a Țării Românești, Transilvaniei și Moldovei?",
+      "a": [
+        "Mihai Viteazul",
+        "Ștefan cel Mare",
+        "Vlad Țepeș",
+        "Mircea cel Bătrân"
+      ]
+    },
+    {
+      "q": "Cine a scris romanul „Baltagul”?",
+      "a": [
+        "Mihail Sadoveanu",
+        "Ioan Slavici",
+        "Liviu Rebreanu",
+        "George Călinescu"
+      ]
+    },
+    {
+      "q": "Ce fizician a propus în 1911 modelul atomului cu nucleu?",
+      "a": [
+        "Ernest Rutherford",
+        "Niels Bohr",
+        "J.J. Thomson",
+        "Max Planck"
+      ]
+    },
+    {
+      "q": "Ce țară are cele mai multe fusuri orare, socotind și teritoriile de peste mări?",
+      "a": [
+        "Franța",
+        "Rusia",
+        "SUA",
+        "Marea Britanie"
+      ]
+    },
+    {
+      "q": "Care este cel mai dur mineral natural?",
+      "a": [
+        "Diamantul",
+        "Cuarțul",
+        "Topazul",
+        "Corindonul"
+      ]
+    },
+    {
+      "q": "În ce an s-a scufundat Titanicul?",
+      "a": [
+        "1912",
+        "1905",
+        "1915",
+        "1920"
+      ]
+    },
+    {
+      "q": "Cine a scris „Război și pace”?",
+      "a": [
+        "Lev Tolstoi",
+        "Feodor Dostoievski",
+        "Anton Cehov",
+        "Aleksandr Pușkin"
+      ]
+    },
+    {
+      "q": "Care este capitala Braziliei?",
+      "a": [
+        "Brasília",
+        "Rio de Janeiro",
+        "São Paulo",
+        "Salvador"
+      ]
+    },
+    {
+      "q": "Ce vas de sânge duce sângele de la inimă la plămâni?",
+      "a": [
+        "Artera pulmonară",
+        "Vena cavă",
+        "Aorta",
+        "Vena pulmonară"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Guernica”?",
+      "a": [
+        "Pablo Picasso",
+        "Salvador Dalí",
+        "Joan Miró",
+        "Francisco Goya"
+      ]
+    },
+    {
+      "q": "Ce strâmtoare desparte Europa de Africa?",
+      "a": [
+        "Gibraltar",
+        "Bosfor",
+        "Dardanele",
+        "Messina"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare satelit natural din Sistemul Solar?",
+      "a": [
+        "Ganymede",
+        "Titan",
+        "Luna",
+        "Callisto"
+      ]
+    },
+    {
+      "q": "Cât este suma unghiurilor interioare ale unui hexagon?",
+      "a": [
+        "720°",
+        "540°",
+        "360°",
+        "900°"
+      ]
+    },
+    {
+      "q": "Cine a scris „Enigma Otiliei”?",
+      "a": [
+        "George Călinescu",
+        "Camil Petrescu",
+        "Mircea Eliade",
+        "Liviu Rebreanu"
+      ]
+    },
+    {
+      "q": "În timpul cărei dinastii s-a construit cea mai mare parte a Marelui Zid chinezesc care se vede azi?",
+      "a": [
+        "Ming",
+        "Han",
+        "Qin",
+        "Tang"
+      ]
+    },
+    {
+      "q": "Cine a fost primul rege al României?",
+      "a": [
+        "Carol I",
+        "Ferdinand I",
+        "Carol al II-lea",
+        "Mihai I"
+      ]
+    },
+    {
+      "q": "Ce gaz nobil dă lumina roșie-portocalie a reclamelor luminoase clasice?",
+      "a": [
+        "Neonul",
+        "Argonul",
+        "Heliul",
+        "Xenonul"
+      ]
+    },
+    {
+      "q": "Ce oraș a fost capitala Imperiului Bizantin?",
+      "a": [
+        "Constantinopol",
+        "Roma",
+        "Atena",
+        "Antiohia"
+      ]
+    },
+    {
+      "q": "În ce an a fost cucerită Bastilia, la începutul Revoluției Franceze?",
+      "a": [
+        "1789",
+        "1776",
+        "1799",
+        "1815"
+      ]
+    },
+    {
+      "q": "Cât face 2 la puterea a 10-a?",
+      "a": [
+        "1024",
+        "1000",
+        "512",
+        "2048"
+      ]
+    }
+  ]
+}

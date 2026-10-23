@@ -1,0 +1,187 @@
+{
+  "title": "Pe repede-înainte",
+  "level": 2,
+  "seconds": 15,
+  "questions": [
+    {
+      "q": "Câte minute are o oră?",
+      "a": [
+        "60",
+        "100",
+        "30",
+        "90"
+      ]
+    },
+    {
+      "q": "Care este capitala Franței?",
+      "a": [
+        "Paris",
+        "Lyon",
+        "Marsilia",
+        "Nisa"
+      ]
+    },
+    {
+      "q": "Câte laturi are un triunghi?",
+      "a": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "q": "Cu ce organ respirăm?",
+      "a": [
+        "Plămânii",
+        "Inima",
+        "Stomacul",
+        "Ficatul"
+      ]
+    },
+    {
+      "q": "Ce țară are forma unei cizme?",
+      "a": [
+        "Italia",
+        "Grecia",
+        "Portugalia",
+        "Croația"
+      ]
+    },
+    {
+      "q": "Cine a scris „Amintiri din copilărie”?",
+      "a": [
+        "Ion Creangă",
+        "Mihail Sadoveanu",
+        "Ioan Slavici",
+        "Liviu Rebreanu"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare ocean?",
+      "a": [
+        "Pacific",
+        "Atlantic",
+        "Indian",
+        "Arctic"
+      ]
+    },
+    {
+      "q": "Ce planetă e numită „Planeta Roșie”?",
+      "a": [
+        "Marte",
+        "Jupiter",
+        "Venus",
+        "Saturn"
+      ]
+    },
+    {
+      "q": "Câți jucători are pe teren o echipă de fotbal?",
+      "a": [
+        "11",
+        "10",
+        "9",
+        "12"
+      ]
+    },
+    {
+      "q": "Cât face 7 × 8?",
+      "a": [
+        "56",
+        "54",
+        "63",
+        "48"
+      ]
+    },
+    {
+      "q": "Ce culoare obții amestecând albastru cu galben?",
+      "a": [
+        "Verde",
+        "Mov",
+        "Portocaliu",
+        "Maro"
+      ]
+    },
+    {
+      "q": "Câte zile are un an bisect?",
+      "a": [
+        "366",
+        "365",
+        "364",
+        "367"
+      ]
+    },
+    {
+      "q": "Care este cel mai rapid animal de uscat?",
+      "a": [
+        "Ghepardul",
+        "Leul",
+        "Antilopa",
+        "Calul"
+      ]
+    },
+    {
+      "q": "Ce organ pompează sângele în corp?",
+      "a": [
+        "Inima",
+        "Plămânii",
+        "Ficatul",
+        "Rinichii"
+      ]
+    },
+    {
+      "q": "Care dintre aceste păsări nu poate zbura?",
+      "a": [
+        "Pinguinul",
+        "Vulturul",
+        "Barza",
+        "Rândunica"
+      ]
+    },
+    {
+      "q": "Care este capitala Spaniei?",
+      "a": [
+        "Madrid",
+        "Barcelona",
+        "Sevilla",
+        "Valencia"
+      ]
+    },
+    {
+      "q": "În ce țară se află Turnul Eiffel?",
+      "a": [
+        "Franța",
+        "Italia",
+        "Belgia",
+        "Spania"
+      ]
+    },
+    {
+      "q": "Ce sport practica Nadia Comăneci?",
+      "a": [
+        "Gimnastica",
+        "Tenisul",
+        "Atletismul",
+        "Înotul"
+      ]
+    },
+    {
+      "q": "Câte grade are un unghi drept?",
+      "a": [
+        "90",
+        "180",
+        "45",
+        "360"
+      ]
+    },
+    {
+      "q": "Care este cel mai înalt munte din lume?",
+      "a": [
+        "Everest",
+        "K2",
+        "Kilimanjaro",
+        "Mont Blanc"
+      ]
+    }
+  ]
+}

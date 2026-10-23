@@ -1,0 +1,187 @@
+{
+  "title": "Provocarea",
+  "level": 5,
+  "seconds": 20,
+  "questions": [
+    {
+      "q": "Cine a compus „Rapsodiile române”?",
+      "a": [
+        "George Enescu",
+        "Ciprian Porumbescu",
+        "Ion Ivanovici",
+        "Constantin Brâncuși"
+      ]
+    },
+    {
+      "q": "Ce oraș din România a fost Capitală Europeană a Culturii în 2007?",
+      "a": [
+        "Sibiu",
+        "Timișoara",
+        "Cluj-Napoca",
+        "Iași"
+      ]
+    },
+    {
+      "q": "Ce inventator român a brevetat stiloul cu rezervor în 1827?",
+      "a": [
+        "Petrache Poenaru",
+        "Henri Coandă",
+        "Aurel Vlaicu",
+        "Traian Vuia"
+      ]
+    },
+    {
+      "q": "În ce an a primit Nadia Comăneci primul 10 din istoria Jocurilor Olimpice?",
+      "a": [
+        "1976",
+        "1980",
+        "1972",
+        "1984"
+      ]
+    },
+    {
+      "q": "Ce domnitor a ctitorit Mănăstirea Putna?",
+      "a": [
+        "Ștefan cel Mare",
+        "Mihai Viteazul",
+        "Vlad Țepeș",
+        "Alexandru Ioan Cuza"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare lac din Africa?",
+      "a": [
+        "Lacul Victoria",
+        "Lacul Tanganyika",
+        "Lacul Malawi",
+        "Lacul Ciad"
+      ]
+    },
+    {
+      "q": "În ce an a început Primul Război Mondial?",
+      "a": [
+        "1914",
+        "1912",
+        "1916",
+        "1918"
+      ]
+    },
+    {
+      "q": "Cine a formulat teoria relativității?",
+      "a": [
+        "Albert Einstein",
+        "Isaac Newton",
+        "Niels Bohr",
+        "Galileo Galilei"
+      ]
+    },
+    {
+      "q": "Ce gaz formează cea mai mare parte a atmosferei Pământului?",
+      "a": [
+        "Azotul",
+        "Oxigenul",
+        "Dioxidul de carbon",
+        "Argonul"
+      ]
+    },
+    {
+      "q": "Care este cel mai mic număr prim?",
+      "a": [
+        "2",
+        "1",
+        "3",
+        "0"
+      ]
+    },
+    {
+      "q": "Cine a scris „Romeo și Julieta”?",
+      "a": [
+        "William Shakespeare",
+        "Charles Dickens",
+        "Molière",
+        "Dante Alighieri"
+      ]
+    },
+    {
+      "q": "Care este capitala Turciei?",
+      "a": [
+        "Ankara",
+        "Istanbul",
+        "Izmir",
+        "Antalya"
+      ]
+    },
+    {
+      "q": "Ce oraș din România se numea în Antichitate Tomis?",
+      "a": [
+        "Constanța",
+        "Mangalia",
+        "Tulcea",
+        "Brăila"
+      ]
+    },
+    {
+      "q": "Câți ani are un mileniu?",
+      "a": [
+        "1000",
+        "100",
+        "10000",
+        "500"
+      ]
+    },
+    {
+      "q": "În ce mare se varsă Dunărea?",
+      "a": [
+        "Marea Neagră",
+        "Marea Mediterană",
+        "Marea Caspică",
+        "Marea Adriatică"
+      ]
+    },
+    {
+      "q": "Care este cea mai mare planetă din Sistemul Solar?",
+      "a": [
+        "Jupiter",
+        "Saturn",
+        "Neptun",
+        "Uranus"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Noaptea înstelată”?",
+      "a": [
+        "Vincent van Gogh",
+        "Claude Monet",
+        "Pablo Picasso",
+        "Salvador Dalí"
+      ]
+    },
+    {
+      "q": "Ce limbă are cei mai mulți vorbitori nativi din lume?",
+      "a": [
+        "Chineza mandarină",
+        "Engleza",
+        "Spaniola",
+        "Hindi"
+      ]
+    },
+    {
+      "q": "Care este simbolul chimic al fierului?",
+      "a": [
+        "Fe",
+        "F",
+        "Fi",
+        "Ir"
+      ]
+    },
+    {
+      "q": "În ce an a aderat România la Uniunea Europeană?",
+      "a": [
+        "2007",
+        "2004",
+        "2009",
+        "2001"
+      ]
+    }
+  ]
+}

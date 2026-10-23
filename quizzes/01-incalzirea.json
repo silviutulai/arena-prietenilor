@@ -1,0 +1,187 @@
+{
+  "title": "Încălzirea",
+  "level": 1,
+  "seconds": 15,
+  "questions": [
+    {
+      "q": "Câte zile are o săptămână?",
+      "a": [
+        "7",
+        "5",
+        "6",
+        "8"
+      ]
+    },
+    {
+      "q": "Ce culoare are cerul senin în timpul zilei?",
+      "a": [
+        "Albastru",
+        "Verde",
+        "Roșu",
+        "Galben"
+      ]
+    },
+    {
+      "q": "Ce animal face „miau”?",
+      "a": [
+        "Pisica",
+        "Câinele",
+        "Vaca",
+        "Rața"
+      ]
+    },
+    {
+      "q": "Câte picioare are un păianjen?",
+      "a": [
+        "8",
+        "6",
+        "4",
+        "10"
+      ]
+    },
+    {
+      "q": "Care este capitala României?",
+      "a": [
+        "București",
+        "Cluj-Napoca",
+        "Iași",
+        "Timișoara"
+      ]
+    },
+    {
+      "q": "Cât face 5 + 7?",
+      "a": [
+        "12",
+        "11",
+        "13",
+        "10"
+      ]
+    },
+    {
+      "q": "Ce anotimp urmează după iarnă?",
+      "a": [
+        "Primăvara",
+        "Vara",
+        "Toamna",
+        "Tot iarna"
+      ]
+    },
+    {
+      "q": "Din ce se face pâinea, în principal?",
+      "a": [
+        "Din făină",
+        "Din zahăr",
+        "Din orez",
+        "Din lapte"
+      ]
+    },
+    {
+      "q": "Câte luni are un an?",
+      "a": [
+        "12",
+        "10",
+        "11",
+        "13"
+      ]
+    },
+    {
+      "q": "Pe ce planetă locuim?",
+      "a": [
+        "Pământ",
+        "Marte",
+        "Venus",
+        "Jupiter"
+      ]
+    },
+    {
+      "q": "Ce animal e numit „regele junglei”?",
+      "a": [
+        "Leul",
+        "Tigrul",
+        "Elefantul",
+        "Ursul"
+      ]
+    },
+    {
+      "q": "Câte degete are o mână?",
+      "a": [
+        "5",
+        "4",
+        "6",
+        "10"
+      ]
+    },
+    {
+      "q": "Ce fruct este galben și curbat?",
+      "a": [
+        "Banana",
+        "Mărul",
+        "Cireașa",
+        "Pruna"
+      ]
+    },
+    {
+      "q": "Ce culoare obții amestecând roșu cu alb?",
+      "a": [
+        "Roz",
+        "Mov",
+        "Portocaliu",
+        "Gri"
+      ]
+    },
+    {
+      "q": "Ce instrument are clape albe și negre?",
+      "a": [
+        "Pianul",
+        "Chitara",
+        "Toba",
+        "Trompeta"
+      ]
+    },
+    {
+      "q": "În ce anotimp ninge, de obicei?",
+      "a": [
+        "Iarna",
+        "Vara",
+        "Primăvara",
+        "Toamna"
+      ]
+    },
+    {
+      "q": "Câte roți are o bicicletă?",
+      "a": [
+        "2",
+        "3",
+        "4",
+        "1"
+      ]
+    },
+    {
+      "q": "Ce pasăre este un simbol al păcii?",
+      "a": [
+        "Porumbelul",
+        "Corbul",
+        "Vulturul",
+        "Bufnița"
+      ]
+    },
+    {
+      "q": "Care dintre aceste numere e cel mai mare?",
+      "a": [
+        "100",
+        "99",
+        "10",
+        "90"
+      ]
+    },
+    {
+      "q": "Ce animal are un gât foarte lung?",
+      "a": [
+        "Girafa",
+        "Zebra",
+        "Hipopotamul",
+        "Cămila"
+      ]
+    }
+  ]
+}
