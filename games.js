@@ -184,4 +184,102 @@ const hangman = {
   }
 };
 
-module.exports = { GAMES: { ttt, tttq, c4, hangman } };
+// Bătălia navală: tablă 8×8, flotă 4-3-3-2-2. Navele se așază aleatoriu (poți amesteca până îți place).
+// Lovitură = mai tragi o dată. Ratare = rândul trece. Câștigă cine scufundă primul toată flota adversă.
+const BS = 8;
+const FLEET = [4, 3, 3, 2, 2];
+const rand = (n) => Math.floor(Math.random() * n);
+
+function placeFleet() {
+  for (;;) {
+    const occupied = new Set();
+    const ships = [];
+    let ok = true;
+    for (const len of FLEET) {
+      let placed = false;
+      for (let t = 0; t < 300 && !placed; t++) {
+        const horiz = Math.random() < 0.5;
+        const r = rand(horiz ? BS : BS - len + 1);
+        const c = rand(horiz ? BS - len + 1 : BS);
+        const cells = Array.from({ length: len }, (_, i) => (horiz ? r * BS + c + i : (r + i) * BS + c));
+        const touches = cells.some((x) => {
+          const xr = Math.floor(x / BS);
+          const xc = x % BS;
+          for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+              const nr = xr + dr;
+              const nc = xc + dc;
+              if (nr >= 0 && nr < BS && nc >= 0 && nc < BS && occupied.has(nr * BS + nc)) return true;
+            }
+          }
+          return false;
+        });
+        if (!touches) {
+          cells.forEach((x) => occupied.add(x));
+          ships.push({ cells, hits: [] });
+          placed = true;
+        }
+      }
+      if (!placed) { ok = false; break; }
+    }
+    if (ok) return ships;
+  }
+}
+
+const isSunk = (s) => s.hits.length === s.cells.length;
+
+const battleship = {
+  name: 'Bătălia navală',
+  init() {
+    return { phase: 'setup', ships: [placeFleet(), placeFleet()], shots: [Array(BS * BS).fill(null), Array(BS * BS).fill(null)], ready: [false, false], last: null, done: false };
+  },
+  anyTurn: (st) => st.phase === 'setup',
+  move(st, p, payload) {
+    if (st.phase === 'setup') {
+      if (payload.action === 'shuffle') {
+        if (st.ready[p]) return 'Ai confirmat deja flota.';
+        st.ships[p] = placeFleet();
+        return { keep: true };
+      }
+      if (payload.action === 'ready') {
+        st.ready[p] = true;
+        if (st.ready[0] && st.ready[1]) st.phase = 'play';
+        return { keep: true };
+      }
+      return 'Așteaptă să fie gata amândoi.';
+    }
+    const idx = payload.shot;
+    if (!Number.isInteger(idx) || idx < 0 || idx >= BS * BS) return 'Țintă invalidă';
+    if (st.shots[p][idx] !== null) return 'Ai tras deja acolo.';
+    const ship = st.ships[1 - p].find((s) => s.cells.includes(idx));
+    if (!ship) {
+      st.shots[p][idx] = 'miss';
+      st.last = { by: p, idx, hit: false, sunk: false };
+      return { next: 1 - p };
+    }
+    st.shots[p][idx] = 'hit';
+    ship.hits.push(idx);
+    st.last = { by: p, idx, hit: true, sunk: isSunk(ship) };
+    if (st.ships[1 - p].every(isSunk)) {
+      st.done = true;
+      return { winner: p };
+    }
+    return { next: p };
+  },
+  view(st, me) {
+    if (me !== 0 && me !== 1) me = 0;
+    const enemy = st.ships[1 - me];
+    return {
+      phase: st.phase, size: BS, fleet: FLEET, ready: st.ready, last: st.last, done: st.done,
+      myShips: st.ships[me].map((s) => ({ cells: s.cells, sunk: isSunk(s) })),
+      incoming: st.shots[1 - me],
+      outgoing: st.shots[me],
+      enemySunk: enemy.filter(isSunk).map((s) => s.cells),
+      enemyShips: st.done ? enemy.map((s) => s.cells) : null,
+      enemyLeft: enemy.filter((s) => !isSunk(s)).map((s) => s.cells.length),
+      myLeft: st.ships[me].filter((s) => !isSunk(s)).map((s) => s.cells.length)
+    };
+  }
+};
+
+module.exports = { GAMES: { ttt, tttq, c4, hangman, battleship } };

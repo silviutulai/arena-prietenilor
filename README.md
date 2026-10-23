@@ -1,9 +1,29 @@
 # Arena Prietenilor
 
-Platformă de jocuri pentru tine și prietenii tăi. Conține **X și 0**, **X și 0 Quiz**, **4 în linie** și **Spânzurătoarea** (1 contra 1) și **10 quizuri** pe niveluri de dificultate, de la ușor la foarte greu, cu câte 20 de întrebări (toți joacă odată). Are și un **clasament săptămânal**, care pornește de la zero în fiecare luni, după ora României.
+Aplicație de jocuri pentru gașca ta, gândită pentru telefon.
 
-## X și 0 Quiz
-Alegi o căsuță și apare o întrebare de cultură generală (din toate quizurile, inclusiv cele adăugate de tine). Dacă răspunzi corect în 20 de secunde, îți pui X sau 0 acolo. Dacă greșești sau expiră timpul, căsuța rămâne liberă și rândul trece la celălalt.
+**Jocuri 1 la 1:** X și 0, X și 0 Quiz, 4 în linie, Spânzurătoarea, Bătălia navală.
+**Jocuri de grup:** Quiz (10 niveluri × 20 de întrebări), Cine e cel mai amuzant (3–10 jucători, 30 de întrebări) și varianta 18+.
+**Extra:** mascote personalizate, vot secret pentru jucătorul săptămânii, clasament săptămânal resetabil de admin.
+
+## Cine e cel mai amuzant
+- **Desfășurare:** organizatorul pornește jocul când sunt cel puțin 3 jucători (maxim 10).
+- **Runda:** la fiecare întrebare toți scriu un răspuns în 60 de secunde. Apoi răspunsurile apar anonim și fiecare votează în 30 de secunde cel mai amuzant (nu pe al lui). Câștigă runda cine are cele mai multe voturi.
+- **Final:** după 30 de întrebări, sau când organizatorul apasă „Închei”, câștigă cine a strâns cele mai multe voturi în total.
+- **Varianta 18+:** are întrebări vulgare și cere confirmarea vârstei.
+- **Întrebări noi:** le adaugi în `party-prompts.js`.
+
+## Bătălia navală
+Tablă 8×8, cu navele de 4, 3, 3, 2 și 2. Navele se așază singure, iar cu „Amestecă” le rearanjezi până îți place. Când lovești o navă, mai tragi o dată.
+
+## Jucătorul săptămânii
+Fiecare votează secret pe cineva din gașcă, în fila **Vot**. Votul se poate schimba până duminică seara. Luni, fiecare jucător vede la prima intrare o notificare cu câștigătorul.
+
+## Mascote
+La prima intrare, fiecare jucător își construiește mascota: formă, culoare, ochi, gură și accesoriu. Mascota apare peste tot în aplicație și se poate schimba din fila **Eu**.
+
+## Clasament
+Victorie 3 p, remiză 1 p. La jocurile de grup, locurile 1, 2 și 3 primesc 3, 2 și 1 p, iar ultimul loc nu primește puncte. Abandonul sau o deconectare mai lungă de 30 de secunde contează ca înfrângere. Clasamentul pornește de la zero în fiecare luni. Ca admin, îl poți reseta oricând din fila **Clasament** (butonul de jos).
 
 ## Conturi
 - **Primul cont** creat pe site devine administrator. După aceea, nimeni nu-și mai poate face cont singur.
@@ -11,11 +31,6 @@ Alegi o căsuță și apare o întrebare de cultură generală (din toate quizur
 - **Parolă uitată:** din același loc dai **Parolă nouă**. Prietenul e delogat de peste tot și intră cu parola nouă.
 - **Schimbarea parolei:** fiecare își poate schimba singur parola apăsând pe numele lui, sus.
 - **Înscriere liberă:** dacă vrei totuși ca oricine să-și poată face cont, setezi în Render `ALLOW_SIGNUP=true`.
-
-## Punctaj
-- **Meci 1 contra 1:** victorie 3 p, remiză 1 p, înfrângere 0 p.
-- **Quiz:** locul 1 = 3 p, locul 2 = 2 p, locul 3 = 1 p. Ultimul loc nu primește puncte.
-- **Abandon:** abandonul sau o deconectare mai lungă de 30 de secunde contează ca înfrângere.
 
 ## Pornire pe calculator (test)
 ```

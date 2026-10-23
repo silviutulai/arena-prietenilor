@@ -8,6 +8,7 @@ const bcrypt = require('bcryptjs');
 const { Server } = require('socket.io');
 const { createStorage, weekKey } = require('./storage');
 const { GAMES } = require('./games');
+const PARTY_PROMPTS = require('./party-prompts');
 
 const PORT = process.env.PORT || 3000;
 const INVITE_CODE = (process.env.INVITE_CODE || '').trim();
@@ -66,6 +67,18 @@ function loadBuiltinQuizzes() {
     } catch (e) {
       console.warn(`Quiz ignorat (${file}): JSON invalid`);
     }
+  }
+  return out;
+}
+
+// Mascota: formă, culoare, ochi, gură, accesoriu (indici).
+const MASCOT_LIMITS = { b: 6, c: 10, e: 6, m: 6, a: 8 };
+function cleanMascot(raw) {
+  const out = {};
+  for (const [k, n] of Object.entries(MASCOT_LIMITS)) {
+    const v = Number(raw?.[k]);
+    if (!Number.isInteger(v) || v < 0 || v >= n) return null;
+    out[k] = v;
   }
   return out;
 }
@@ -195,6 +208,75 @@ async function main() {
     res.json({ user: { ...user, isAdmin: await isAdmin(user) } });
   }));
 
+  app.post('/api/me/mascot', h(async (req, res) => {
+    const user = await authUser(req);
+    if (!user) return res.status(401).json({ error: 'Nu ești conectat.' });
+    const mascot = cleanMascot(req.body?.mascot);
+    if (!mascot) return res.status(400).json({ error: 'Mascotă invalidă.' });
+    await storage.setMascot(user.id, mascot);
+    io.emit('playersChanged');
+    res.json({ mascot });
+  }));
+
+  app.get('/api/players', h(async (req, res) => {
+    if (!(await authUser(req))) return res.status(401).json({ error: 'Nu ești conectat.' });
+    const users = await storage.listUsers();
+    res.json({ players: users.map((u) => ({ id: u.id, name: u.name, mascot: u.mascot })) });
+  }));
+
+  // ---------- Votul pentru jucătorul săptămânii (secret) ----------
+  async function voteHistory() {
+    const wk = weekKey();
+    const byWeek = new Map();
+    for (const t of await storage.voteTallies()) {
+      if (t.weekKey >= wk) continue;
+      if (!byWeek.has(t.weekKey)) byWeek.set(t.weekKey, []);
+      byWeek.get(t.weekKey).push(t);
+    }
+    return [...byWeek].sort((a, b) => (a[0] < b[0] ? 1 : -1)).map(([weekKey, list]) => {
+      const max = Math.max(...list.map((x) => x.votes));
+      return { weekKey, winners: list.filter((x) => x.votes === max).map(({ id, name, votes }) => ({ id, name, votes })) };
+    });
+  }
+
+  app.get('/api/vote', h(async (req, res) => {
+    const user = await authUser(req);
+    if (!user) return res.status(401).json({ error: 'Nu ești conectat.' });
+    const wk = weekKey();
+    const [myVote, voters, users, history] = await Promise.all([
+      storage.getVote(wk, user.id), storage.voterCount(wk), storage.listUsers(), voteHistory()
+    ]);
+    res.json({ weekKey: wk, myVote, voters, total: users.length, history: history.slice(0, 12) });
+  }));
+
+  app.post('/api/vote', h(async (req, res) => {
+    const user = await authUser(req);
+    if (!user) return res.status(401).json({ error: 'Nu ești conectat.' });
+    const target = Number(req.body?.targetId);
+    if (target === user.id) return res.status(400).json({ error: 'Nu te poți vota pe tine. 😄' });
+    if (!(await storage.getUserById(target))) return res.status(404).json({ error: 'Jucătorul nu există.' });
+    await storage.castVote(weekKey(), user.id, target);
+    io.emit('voteCount', { voters: await storage.voterCount(weekKey()) });
+    res.json({ ok: true });
+  }));
+
+  // Notificarea cu câștigătorul săptămânii trecute (o singură dată pentru fiecare jucător).
+  app.get('/api/award', h(async (req, res) => {
+    const user = await authUser(req);
+    if (!user) return res.status(401).json({ error: 'Nu ești conectat.' });
+    const latest = (await voteHistory())[0];
+    const seen = await storage.getAwardSeen(user.id);
+    res.json({ award: latest && (!seen || seen < latest.weekKey) ? latest : null });
+  }));
+
+  app.post('/api/award/seen', h(async (req, res) => {
+    const user = await authUser(req);
+    if (!user) return res.status(401).json({ error: 'Nu ești conectat.' });
+    const wk = String(req.body?.weekKey || '');
+    if (/^\d{4}-\d{2}-\d{2}$/.test(wk)) await storage.setAwardSeen(user.id, wk);
+    res.json({ ok: true });
+  }));
+
   app.post('/api/me/password', h(async (req, res) => {
     const me = await authUser(req);
     if (!me) return res.status(401).json({ error: 'Nu ești conectat.' });
@@ -236,6 +318,7 @@ async function main() {
     } catch {
       return res.status(409).json({ error: `Există deja un cont cu numele ${name}.` });
     }
+    io.emit('playersChanged');
     res.json({ user: { id: user.id, name: user.name } });
   }));
 
@@ -259,6 +342,15 @@ async function main() {
     io.in('u:' + id).disconnectSockets(true);
     if (!(await storage.deleteUser(id))) return res.status(404).json({ error: 'Contul nu există.' });
     io.emit('leaderboardChanged');
+    io.emit('playersChanged');
+    res.json({ ok: true });
+  }));
+
+  app.post('/api/admin/reset-board', h(async (req, res) => {
+    if (!(await adminOnly(req, res))) return;
+    await storage.resetWeek(weekKey());
+    io.emit('leaderboardChanged');
+    io.emit('boardReset');
     res.json({ ok: true });
   }));
 
@@ -345,7 +437,9 @@ async function main() {
   const toUser = (uid) => io.to('u:' + uid);
   const matchOf = (uid) => matches.get(userMatch.get(uid));
   const inQuiz = (uid) => Boolean(quiz && quiz.phase !== 'finished' && quiz.players.has(uid));
-  const isBusy = (uid) => userMatch.has(uid) || inQuiz(uid);
+  let party = null;
+  const inParty = (uid) => Boolean(party && party.phase !== 'finished' && party.players.has(uid));
+  const isBusy = (uid) => userMatch.has(uid) || inQuiz(uid) || inParty(uid);
 
   function broadcastLobby() {
     const list = [...online.values()]
@@ -373,14 +467,14 @@ async function main() {
   }
 
   // ---------- Meciuri 1 contra 1 ----------
-  function matchView(m) {
+  function matchView(m, uid) {
     return {
       id: m.id,
       game: m.game,
       gameName: GAMES[m.game].name,
       players: m.players.map((p) => ({ id: p.id, name: p.name })),
       turn: m.turn,
-      state: GAMES[m.game].view(m.state),
+      state: GAMES[m.game].view(m.state, m.players.findIndex((p) => p.id === uid)),
       over: m.over,
       rematch: [...m.rematch],
       away: [...m.away],
@@ -389,8 +483,7 @@ async function main() {
   }
 
   function sendMatch(m) {
-    const view = matchView(m);
-    for (const p of m.players) if (!m.left.has(p.id)) toUser(p.id).emit('match', view);
+    for (const p of m.players) if (!m.left.has(p.id)) toUser(p.id).emit('match', matchView(m, p.id));
   }
 
   function startMatch(game, a, b, starter) {
@@ -424,6 +517,7 @@ async function main() {
   }
 
   function applyResult(m, r) {
+    if (r.keep) return sendMatch(m);
     clearTimeout(m.timer);
     if (r.next === undefined) return finishMatch(m, r, 'normal');
     m.turn = r.next;
@@ -575,6 +669,150 @@ async function main() {
     broadcastLobby();
   }
 
+  // ---------- Cine e cel mai amuzant ----------
+  const PARTY_MAX = 10;
+  const PARTY_MIN = 3;
+  const PARTY_ROUNDS = 30;
+  const ANSWER_MS = 60_000;
+  const VOTE_MS = 30_000;
+  const RESULT_MS = 8_000;
+
+  function partyView(uid) {
+    if (!party) return null;
+    const p = party;
+    const v = {
+      id: p.id, adult: p.adult, phase: p.phase, hostId: p.hostId, index: p.index, total: p.prompts.length,
+      players: [...p.players.values()].map((x) => ({
+        id: x.id, name: x.name, score: x.score, rounds: x.rounds,
+        answered: p.answers.has(x.id), voted: p.votes.has(x.id), online: online.has(x.id)
+      }))
+    };
+    if (['answer', 'vote', 'result'].includes(p.phase)) {
+      v.prompt = p.prompts[p.index];
+      v.remainingMs = Math.max(0, p.deadline - Date.now());
+      v.durationMs = p.phase === 'answer' ? ANSWER_MS : p.phase === 'vote' ? VOTE_MS : RESULT_MS;
+    }
+    if (p.phase === 'answer' && p.answers.has(uid)) v.myAnswer = p.answers.get(uid);
+    if (p.phase === 'vote') {
+      v.ballot = p.ballot.map((b) => ({ key: b.key, text: b.text, mine: b.authorId === uid }));
+      v.myVote = p.votes.get(uid) ?? null;
+    }
+    if (p.phase === 'result') v.results = p.results;
+    if (p.phase === 'finished') v.ranking = p.ranking;
+    return v;
+  }
+
+  function sendParty() {
+    for (const id of online.keys()) toUser(id).emit('party', partyView(id));
+  }
+
+  function partyNext() {
+    if (!party) return;
+    clearTimeout(party.timer);
+    party.index++;
+    if (party.index >= party.prompts.length) return partyFinish();
+    party.phase = 'answer';
+    party.answers = new Map();
+    party.votes = new Map();
+    party.ballot = [];
+    party.results = null;
+    party.deadline = Date.now() + ANSWER_MS;
+    party.timer = setTimeout(partyToVote, ANSWER_MS);
+    sendParty();
+  }
+
+  function partyToVote() {
+    if (!party || party.phase !== 'answer') return;
+    clearTimeout(party.timer);
+    party.ballot = shuffle([...party.answers].map(([authorId, text]) => ({ key: newId(), authorId, text })));
+    if (party.ballot.length < 2) return partyResult();
+    party.phase = 'vote';
+    party.deadline = Date.now() + VOTE_MS;
+    party.timer = setTimeout(partyResult, VOTE_MS);
+    sendParty();
+  }
+
+  function partyResult() {
+    if (!party || (party.phase !== 'vote' && party.phase !== 'answer')) return;
+    clearTimeout(party.timer);
+    const counts = new Map(party.ballot.map((b) => [b.key, 0]));
+    for (const key of party.votes.values()) counts.set(key, (counts.get(key) || 0) + 1);
+    const max = Math.max(0, ...counts.values());
+    party.results = party.ballot.map((b) => {
+      const votes = counts.get(b.key) || 0;
+      const pl = party.players.get(b.authorId);
+      const winner = max > 0 && votes === max;
+      if (pl) {
+        pl.score += votes;
+        if (winner) pl.rounds++;
+      }
+      return { text: b.text, authorId: b.authorId, name: party.names.get(b.authorId) || '?', votes, winner };
+    }).sort((a, b) => b.votes - a.votes);
+    party.phase = 'result';
+    party.deadline = Date.now() + RESULT_MS;
+    party.timer = setTimeout(partyNext, RESULT_MS);
+    sendParty();
+  }
+
+  function partyCheckEarly() {
+    if (!party) return false;
+    const active = [...party.players.keys()].filter((id) => online.has(id));
+    if (party.phase === 'answer' && active.length && active.every((id) => party.answers.has(id))) {
+      partyToVote();
+      return true;
+    }
+    if (party.phase === 'vote') {
+      const eligible = active.filter((id) => party.ballot.some((b) => b.authorId !== id));
+      if (eligible.every((id) => party.votes.has(id))) {
+        partyResult();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function partyFinish() {
+    clearTimeout(party.timer);
+    party.phase = 'finished';
+    const list = [...party.players.values()].sort((a, b) => b.score - a.score || b.rounds - a.rounds);
+    const n = list.length;
+    let rank = 0;
+    const ranked = list.map((p, i) => {
+      if (i === 0 || p.score !== list[i - 1].score || p.rounds !== list[i - 1].rounds) rank = i + 1;
+      const points = rank <= 3 && rank < n ? 4 - rank : 0;
+      return { id: p.id, name: p.name, score: p.score, rounds: p.rounds, rank, points };
+    });
+    party.ranking = ranked;
+    if (n >= 2 && ranked.some((r) => r.score > 0)) {
+      const firsts = ranked.filter((r) => r.rank === 1).length;
+      record(ranked.map((r) => [{ id: r.id }, r.rank === 1 ? (firsts > 1 ? 'draw' : 'win') : 'loss', r.points]), 'funny');
+    }
+    const id = party.id;
+    party.timer = setTimeout(() => {
+      if (party && party.id === id) {
+        party = null;
+        sendParty();
+      }
+    }, 180_000);
+    sendParty();
+    broadcastLobby();
+  }
+
+  function partyRemove(uid) {
+    if (!party || party.phase === 'finished' || !party.players.has(uid)) return;
+    party.players.delete(uid);
+    if (party.players.size === 0) {
+      clearTimeout(party.timer);
+      party = null;
+    } else {
+      if (party.hostId === uid) party.hostId = party.players.keys().next().value;
+      if (party.phase !== 'lobby' && party.players.size < 2) return partyFinish();
+      partyCheckEarly();
+    }
+    sendParty();
+    broadcastLobby();
+  }
+
   // ---------- Conexiuni ----------
   io.on('connection', (socket) => {
     const u = socket.user;
@@ -594,8 +832,9 @@ async function main() {
 
     socket.emit('hello', { me: u });
     const current = matchOf(u.id);
-    if (current) socket.emit('match', matchView(current));
+    if (current) socket.emit('match', matchView(current, u.id));
     socket.emit('quiz', quizView());
+    socket.emit('party', partyView(u.id));
     broadcastLobby();
 
     socket.on('challenge', (data) => {
@@ -655,7 +894,7 @@ async function main() {
       const m = matchOf(u.id);
       if (!m || m.over) return;
       const idx = m.players.findIndex((p) => p.id === u.id);
-      if (m.turn !== idx) return err('Nu e rândul tău.');
+      if (m.turn !== idx && !GAMES[m.game].anyTurn?.(m.state)) return err('Nu e rândul tău.');
       const r = GAMES[m.game].move(m.state, idx, payload && typeof payload === 'object' ? payload : {}, gameCtx);
       if (typeof r === 'string') return err(r);
       applyResult(m, r);
@@ -686,7 +925,7 @@ async function main() {
       const def = getQuiz(data?.quizId);
       if (!def) return err('Quizul ales nu mai există.');
       if (quiz && quiz.phase !== 'finished') return err('Există deja un quiz. Intră în el!');
-      if (userMatch.has(u.id)) return err('Termină întâi jocul în care ești.');
+      if (userMatch.has(u.id) || inParty(u.id)) return err('Termină întâi jocul în care ești.');
       if (quiz) clearTimeout(quiz.timer);
       quiz = {
         id: newId(), phase: 'lobby', hostId: u.id, players: new Map(), questions: prepareQuestions(def),
@@ -702,7 +941,7 @@ async function main() {
 
     socket.on('quizJoin', () => {
       if (!quiz || quiz.phase !== 'lobby') return err('Quizul a început deja sau nu mai există.');
-      if (userMatch.has(u.id)) return err('Termină întâi jocul în care ești.');
+      if (userMatch.has(u.id) || inParty(u.id)) return err('Termină întâi jocul în care ești.');
       if (quiz.players.has(u.id)) return;
       quiz.players.set(u.id, { id: u.id, name: u.name, score: 0, correct: 0, gained: 0 });
       cancelChallengesOf(u.id);
@@ -727,6 +966,69 @@ async function main() {
       if (!maybeRevealEarly()) sendQuiz();
     });
 
+    socket.on('partyCreate', (data) => {
+      const adult = Boolean(data?.adult);
+      if (party && party.phase !== 'finished') return err('Există deja un joc „Cel mai amuzant”. Intră în el!');
+      if (isBusy(u.id)) return err('Termină întâi jocul în care ești.');
+      if (adult && !data?.confirm18) return err('Confirmă că ai peste 18 ani.');
+      if (party) clearTimeout(party.timer);
+      const bank = adult ? PARTY_PROMPTS.adult : PARTY_PROMPTS.normal;
+      party = {
+        id: newId(), adult, phase: 'lobby', hostId: u.id, players: new Map(), names: new Map(),
+        prompts: shuffle(bank).slice(0, PARTY_ROUNDS), index: -1,
+        answers: new Map(), votes: new Map(), ballot: [], results: null, ranking: null, timer: null, deadline: 0
+      };
+      party.players.set(u.id, { id: u.id, name: u.name, score: 0, rounds: 0 });
+      party.names.set(u.id, u.name);
+      cancelChallengesOf(u.id);
+      sendParty();
+      io.except('u:' + u.id).emit('partyInvite', { from: u.name, adult });
+      broadcastLobby();
+    });
+
+    socket.on('partyJoin', (data) => {
+      if (!party || party.phase !== 'lobby') return err('Jocul a început deja sau nu mai există.');
+      if (party.players.has(u.id)) return;
+      if (party.players.size >= PARTY_MAX) return err(`Sala e plină (maxim ${PARTY_MAX}).`);
+      if (isBusy(u.id)) return err('Termină întâi jocul în care ești.');
+      if (party.adult && !data?.confirm18) return err('Confirmă că ai peste 18 ani.');
+      party.players.set(u.id, { id: u.id, name: u.name, score: 0, rounds: 0 });
+      party.names.set(u.id, u.name);
+      cancelChallengesOf(u.id);
+      sendParty();
+      broadcastLobby();
+    });
+
+    socket.on('partyLeave', () => partyRemove(u.id));
+
+    socket.on('partyStart', () => {
+      if (!party || party.phase !== 'lobby' || party.hostId !== u.id) return;
+      if (party.players.size < PARTY_MIN) return err(`E nevoie de cel puțin ${PARTY_MIN} jucători.`);
+      partyNext();
+      broadcastLobby();
+    });
+
+    socket.on('partyAnswer', (data) => {
+      const text = String(data?.text || '').trim().replace(/\s+/g, ' ').slice(0, 140);
+      if (!party || party.phase !== 'answer' || !party.players.has(u.id) || party.answers.has(u.id) || !text) return;
+      party.answers.set(u.id, text);
+      if (!partyCheckEarly()) sendParty();
+    });
+
+    socket.on('partyVote', (data) => {
+      if (!party || party.phase !== 'vote' || !party.players.has(u.id) || party.votes.has(u.id)) return;
+      const b = party.ballot.find((x) => x.key === data?.key);
+      if (!b) return;
+      if (b.authorId === u.id) return err('Nu poți vota propriul răspuns. 😄');
+      party.votes.set(u.id, b.key);
+      if (!partyCheckEarly()) sendParty();
+    });
+
+    socket.on('partyEnd', () => {
+      if (!party || party.hostId !== u.id || !['answer', 'vote', 'result'].includes(party.phase)) return;
+      partyFinish();
+    });
+
     socket.on('disconnect', () => {
       const entry = online.get(u.id);
       if (!entry) return;
@@ -742,10 +1044,12 @@ async function main() {
       if (quiz) {
         if (!maybeRevealEarly()) sendQuiz();
       }
+      if (party && !partyCheckEarly()) sendParty();
       awayTimers.set(u.id, setTimeout(() => {
         awayTimers.delete(u.id);
         leaveMatch(u.id, 'abandon');
         if (quiz && quiz.phase === 'lobby') quizRemove(u.id);
+        if (party && party.phase === 'lobby') partyRemove(u.id);
       }, GRACE_MS));
       broadcastLobby();
     });

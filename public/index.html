@@ -3,78 +3,56 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0E1014" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F4F1FF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141127" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Arena</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 10'><circle cx='5' cy='5' r='4' fill='%23FF4D5E'/><circle cx='15' cy='5' r='4' fill='%23FFC23D'/><circle cx='25' cy='5' r='4' fill='%233355FF'/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <div id="auth" class="auth hidden">
+  <div id="auth" class="screen auth hidden">
     <div class="auth-box">
-      <div class="dots big" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="auth-mascots" id="authMascots" aria-hidden="true"></div>
       <h1>Arena</h1>
-      <p class="muted">Jocuri cu prietenii și un clasament care se resetează în fiecare luni.</p>
+      <p class="muted">Jocuri cu gașca, un clasament care se resetează în fiecare luni și mascote caraghioase.</p>
       <form id="authForm" novalidate>
         <label>Nume<input id="authName" autocomplete="username" maxlength="20" required></label>
         <label>Parolă<input id="authPass" type="password" autocomplete="current-password" required></label>
-        <label id="codeWrap" class="hidden">Cod de invitație <span class="muted">(doar la cont nou)</span><input id="authCode" autocomplete="off"></label>
-        <div class="row">
-          <button type="submit" data-mode="login" id="loginBtn" class="btn primary">Intră</button>
-          <button type="submit" data-mode="register" id="registerBtn" class="btn hidden">Creează cont</button>
+        <label id="codeWrap" class="hidden">Cod de invitație<input id="authCode" autocomplete="off"></label>
+        <div class="stack">
+          <button type="submit" data-mode="login" id="loginBtn" class="btn primary big">Intră în arenă</button>
+          <button type="submit" data-mode="register" id="registerBtn" class="btn big hidden">Creează cont</button>
         </div>
-        <p id="authNote" class="muted small"></p>
-        <p id="authError" class="error" role="alert"></p>
+        <p id="authNote" class="muted small center"></p>
+        <p id="authError" class="error center" role="alert"></p>
       </form>
     </div>
   </div>
 
+  <div id="builder" class="screen hidden"></div>
+
   <div id="app" class="hidden">
-    <header class="topbar">
-      <div class="brand"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>Arena</div>
-      <div class="me"><button id="meName" class="link me-name" title="Schimbă parola"></button><button id="logoutBtn" class="link">Ieși</button></div>
-    </header>
-    <nav class="tabs" id="tabs" aria-label="Secțiuni">
-      <button data-tab="play" class="tab active">Joacă</button>
-      <button data-tab="board" class="tab">Clasament</button>
-      <button data-tab="admin" class="tab hidden" id="adminTab">Admin</button>
-    </nav>
     <div id="conn" class="banner hidden">Conexiunea s-a întrerupt. Se reconectează…</div>
-    <main>
-      <section id="view-play" class="view">
-        <div id="quizSection"></div>
-        <div class="panel" id="outgoing" hidden></div>
-        <div class="panel">
-          <div class="panel-head"><h2>Online</h2><span class="muted small" id="onlineCount"></span></div>
-          <div id="players" class="players"></div>
-        </div>
-      </section>
-
-      <section id="view-board" class="view hidden">
-        <div class="panel">
-          <div class="panel-head"><h2>Clasamentul săptămânii</h2><span class="muted small" id="weekRange"></span></div>
-          <div class="table-wrap"><table id="boardTable" class="board-table"></table></div>
-          <p class="muted small rules">Victorie 3 p, remiză 1 p. La quiz: locul 1 ia 3 p, locul 2 ia 2 p, locul 3 ia 1 p; ultimul loc nu ia puncte.</p>
-        </div>
-        <div class="panel">
-          <h2>Săptămânile trecute</h2>
-          <ul id="history" class="history"></ul>
-        </div>
-      </section>
-
-      <section id="view-admin" class="view hidden"></section>
-      <section id="view-match" class="view hidden"></section>
-      <section id="view-quiz" class="view hidden"></section>
-    </main>
+    <main id="main"></main>
+    <nav class="bottom-nav" id="nav" aria-label="Secțiuni">
+      <button data-tab="play" class="nav-btn active"><span class="nav-ico">🎮</span><span>Joacă</span></button>
+      <button data-tab="vote" class="nav-btn"><span class="nav-ico">🗳️</span><span>Vot</span></button>
+      <button data-tab="board" class="nav-btn"><span class="nav-ico">🏆</span><span>Clasament</span></button>
+      <button data-tab="me" class="nav-btn"><span class="nav-ico" id="navMe">🙂</span><span>Eu</span></button>
+    </nav>
   </div>
 
+  <div id="sheet" class="sheet-wrap hidden"><div class="sheet" id="sheetBox"></div></div>
   <div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-box" id="modalBox"></div></div>
   <div id="toasts" aria-live="polite"></div>
+  <div id="confetti" aria-hidden="true"></div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/mascot.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>
