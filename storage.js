@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const GAME_IDS = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'quiz', 'funny'];
+const GAME_IDS = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps', 'quiz', 'funny', 'draw'];
 const OUTCOME_COL = { win: 'wins', draw: 'draws', loss: 'losses' };
 
 // Cheia săptămânii = data zilei de luni (ora României), ex. "2026-10-19".
@@ -72,12 +72,24 @@ async function createPg(url) {
       target_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       PRIMARY KEY (week_key, voter_id)
     );
+    CREATE TABLE IF NOT EXISTS decks (
+      name TEXT PRIMARY KEY,
+      seen JSONB NOT NULL
+    );
   `);
 
   const perGame = GAME_IDS.map((g) => `COALESCE(SUM(r.points) FILTER (WHERE r.game = '${g}'), 0)::int AS ${g}`).join(',\n               ');
 
   return {
     kind: 'postgres',
+    // --- rotația întrebărilor (ce s-a folosit deja, ca să nu se repete) ---
+    async getDecks() {
+      const r = await pool.query('SELECT name, seen FROM decks');
+      return Object.fromEntries(r.rows.map((x) => [x.name, x.seen]));
+    },
+    async setDeck(name, seen) {
+      await pool.query('INSERT INTO decks (name, seen) VALUES ($1, $2) ON CONFLICT (name) DO UPDATE SET seen = EXCLUDED.seen', [name, JSON.stringify(seen)]);
+    },
     // --- conturi ---
     async firstUserId() {
       return (await pool.query('SELECT MIN(id) AS id FROM users')).rows[0].id;
@@ -211,6 +223,7 @@ function createJson(file) {
   db.quizzes ||= [];
   db.nextQuizId ||= 1;
   db.votes ||= [];
+  db.decks ||= {};
 
   let timer = null;
   const save = () => {
@@ -243,6 +256,8 @@ function createJson(file) {
 
   return {
     kind: 'json',
+    async getDecks() { return { ...db.decks }; },
+    async setDeck(name, seen) { db.decks[name] = seen; save(); },
     async firstUserId() { return db.users[0]?.id ?? null; },
     async getUserByName(name) { return db.users.find((u) => u.name_lower === lower(name)) || null; },
     async getUserById(id) { return byId(id) || null; },

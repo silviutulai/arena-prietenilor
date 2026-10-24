@@ -2,16 +2,57 @@
 
 Aplicație de jocuri pentru gașca ta, gândită pentru telefon.
 
-**Jocuri 1 la 1:** X și 0, X și 0 Quiz, 4 în linie, Spânzurătoarea, Bătălia navală.
-**Jocuri de grup:** Quiz (10 niveluri × 20 de întrebări), Cine e cel mai amuzant (3–10 jucători, 30 de întrebări) și varianta 18+.
-**Extra:** mascote personalizate, vot secret pentru jucătorul săptămânii, clasament săptămânal resetabil de admin.
+**Jocuri 1 la 1:**
+- X și 0
+- X și 0 Quiz
+- 4 în linie
+- Spânzurătoarea
+- Bătălia navală
+- Zaruri
+- Piatră, hârtie, foarfecă
+
+**Jocuri de grup (3–10 jucători):**
+- Quiz: 10 niveluri × 60 de întrebări, plus „Quiz amestecat” cu toate cele 600
+- Cel mai amuzant și varianta 18+
+- Cine e cel mai...
+- Desenează!
+
+**Extra:** mascote, vot secret pentru jucătorul săptămânii, clasament săptămânal resetabil de admin.
+
+## Fără repetări
+Fiecare joc ține minte ce întrebări au ieșit deja și alege doar dintre cele nefolosite. Abia după ce s-au folosit toate, lista o ia de la capăt. Memoria se salvează în baza de date, deci nu se pierde nici când serverul repornește.
+
+| Joc | Întrebări în rotație | Pe joc | Jocuri până la prima repetare |
+|---|---|---|---|
+| Quiz pe un nivel | 60 | 20 | 3 |
+| Quiz amestecat | 600 | 20 | 30 |
+| X și 0 Quiz | 600 | câte e nevoie | toate cele 600 |
+| Cel mai amuzant | 177 | 15 | ~11 |
+| Cel mai amuzant 18+ | 149 | 15 | ~10 |
+| Cine e cel mai... | 124 | 15 | ~8 |
+| Desenează! | 120 de teme | 6 | 20 |
+
+## Zaruri și Piatră, hârtie, foarfecă
+Amândoi jucați în același timp. La Zaruri, fiecare aruncă două zaruri și câștigă runda suma mai mare. La Piatră, hârtie, foarfecă, alegerea ta rămâne ascunsă până alege și celălalt. Meciul îl câștigă primul care ajunge la 3 runde câștigate. La egal, runda se rejoacă.
+
+## Cine e cel mai...
+- **Runda:** la fiecare întrebare (de ex. „Cine e cel mai nebun din gașcă?”) apare lista cu toți jucătorii din cameră și fiecare votează secret pe altcineva.
+- **Titlul:** cine strânge cele mai multe voturi primește titlul rundei.
+- **Final:** vezi titlurile adunate de fiecare.
+- **Puncte:** e un joc doar de distracție, nu dă puncte în clasament.
+
+## Desenează!
+- **Runda:** toți primesc aceeași temă și au 80 de secunde să deseneze cu degetul (culori, grosimi, anulare).
+- **Votul:** desenele apar anonim și fiecare votează cel mai reușit desen, dar nu pe al lui.
+- **Desfășurare:** sunt 6 runde. Când se termină timpul, desenul se trimite automat.
 
 ## Cine e cel mai amuzant
 - **Desfășurare:** organizatorul pornește jocul când sunt cel puțin 3 jucători (maxim 10).
+- **Întrebări:** 15 pe joc.
 - **Runda:** la fiecare întrebare toți scriu un răspuns în 60 de secunde. Apoi răspunsurile apar anonim și fiecare votează în 30 de secunde cel mai amuzant (nu pe al lui). Câștigă runda cine are cele mai multe voturi.
-- **Final:** după 30 de întrebări, sau când organizatorul apasă „Închei”, câștigă cine a strâns cele mai multe voturi în total.
+- **Final:** după 15 întrebări, sau când organizatorul apasă „Închei”, câștigă cine a strâns cele mai multe voturi în total.
 - **Varianta 18+:** are întrebări vulgare și cere confirmarea vârstei.
-- **Întrebări noi:** le adaugi în `party-prompts.js`.
+- **Întrebări noi:** le adaugi în `party-prompts.js`, unde sunt și temele pentru „Cine e cel mai...” și „Desenează!”.
 
 ## Bătălia navală
 Tablă 8×8, cu navele de 4, 3, 3, 2 și 2. Navele se așază singure, iar cu „Amestecă” le rearanjezi până îți place. Când lovești o navă, mai tragi o dată.
@@ -23,7 +64,7 @@ Fiecare votează secret pe cineva din gașcă, în fila **Vot**. Votul se poate 
 La prima intrare, fiecare jucător își construiește mascota: formă, culoare, ochi, gură și accesoriu. Mascota apare peste tot în aplicație și se poate schimba din fila **Eu**.
 
 ## Clasament
-Victorie 3 p, remiză 1 p. La jocurile de grup, locurile 1, 2 și 3 primesc 3, 2 și 1 p, iar ultimul loc nu primește puncte. Abandonul sau o deconectare mai lungă de 30 de secunde contează ca înfrângere. Clasamentul pornește de la zero în fiecare luni. Ca admin, îl poți reseta oricând din fila **Clasament** (butonul de jos).
+Clasamentul arată doar punctele. La 1 la 1: victorie 3 p, egal 1 p. La jocurile de grup (Quiz, Cel mai amuzant, Desenează!), locurile 1, 2 și 3 primesc 3, 2 și 1 p, iar ultimul loc nu primește puncte. Abandonul sau o deconectare mai lungă de 30 de secunde contează ca înfrângere. Clasamentul pornește de la zero în fiecare luni. Ca admin, îl poți reseta oricând din fila **Clasament** (butonul de jos).
 
 ## Conturi
 - **Primul cont** creat pe site devine administrator. După aceea, nimeni nu-și mai poate face cont singur.

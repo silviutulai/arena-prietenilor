@@ -282,4 +282,64 @@ const battleship = {
   }
 };
 
-module.exports = { GAMES: { ttt, tttq, c4, hangman, battleship } };
+// Jocuri de noroc: amândoi acționează în aceeași rundă; câștigă primul care ajunge la 3 runde.
+const WIN_ROUNDS = 3;
+
+const dice = {
+  name: 'Zaruri',
+  init() {
+    return { rolls: [null, null], wins: [0, 0], round: 1, history: [] };
+  },
+  anyTurn: () => true,
+  move(st, p, payload) {
+    if (payload.action !== 'roll') return 'Mutare invalidă';
+    if (st.rolls[p]) return 'Ai aruncat deja în runda asta.';
+    st.rolls[p] = [1 + rand(6), 1 + rand(6)];
+    if (st.rolls[0] && st.rolls[1]) {
+      const s0 = st.rolls[0][0] + st.rolls[0][1];
+      const s1 = st.rolls[1][0] + st.rolls[1][1];
+      const w = s0 === s1 ? null : s0 > s1 ? 0 : 1;
+      if (w !== null) st.wins[w]++;
+      st.history.push({ round: st.round, rolls: st.rolls, winner: w });
+      st.rolls = [null, null];
+      st.round++;
+      if (w !== null && st.wins[w] >= WIN_ROUNDS) return { winner: w };
+    }
+    return { keep: true };
+  },
+  view(st, me) {
+    if (me !== 0 && me !== 1) me = 0;
+    return { wins: st.wins, round: st.round, target: WIN_ROUNDS, history: st.history, myRoll: st.rolls[me], oppRolled: Boolean(st.rolls[1 - me]) };
+  }
+};
+
+const BEATS = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
+const rps = {
+  name: 'Piatră, hârtie, foarfecă',
+  init() {
+    return { picks: [null, null], wins: [0, 0], round: 1, history: [] };
+  },
+  anyTurn: () => true,
+  move(st, p, payload) {
+    const c = payload.choice;
+    if (!BEATS[c]) return 'Alegere invalidă';
+    if (st.picks[p]) return 'Ai ales deja în runda asta.';
+    st.picks[p] = c;
+    if (st.picks[0] && st.picks[1]) {
+      const [a, b] = st.picks;
+      const w = a === b ? null : BEATS[a] === b ? 0 : 1;
+      if (w !== null) st.wins[w]++;
+      st.history.push({ round: st.round, picks: st.picks, winner: w });
+      st.picks = [null, null];
+      st.round++;
+      if (w !== null && st.wins[w] >= WIN_ROUNDS) return { winner: w };
+    }
+    return { keep: true };
+  },
+  view(st, me) {
+    if (me !== 0 && me !== 1) me = 0;
+    return { wins: st.wins, round: st.round, target: WIN_ROUNDS, history: st.history, myPick: st.picks[me], oppPicked: Boolean(st.picks[1 - me]) };
+  }
+};
+
+module.exports = { GAMES: { ttt, tttq, c4, hangman, battleship, dice, rps } };

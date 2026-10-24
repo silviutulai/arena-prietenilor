@@ -52,7 +52,8 @@ function cleanQuiz(raw) {
     if (new Set(a).size !== a.length) return { error: `Întrebarea ${i + 1} are răspunsuri identice.` };
     questions.push({ q, a });
   }
-  return { quiz: { title, level, seconds, questions } };
+  const perGame = Math.min(Math.max(Number(raw.perGame) || 20, 1), 100);
+  return { quiz: { title, level, seconds, perGame, questions } };
 }
 
 function loadBuiltinQuizzes() {
@@ -96,22 +97,63 @@ async function main() {
 
   const getQuiz = (id) => builtinQuizzes.get(id) || customQuizzes.get(id);
   const quizCatalog = () => [...builtinQuizzes, ...customQuizzes]
-    .map(([id, q]) => ({ id, title: q.title, level: q.level, seconds: q.seconds, count: q.questions.length, custom: q.custom }))
+    .map(([id, q]) => ({ id, title: q.title, level: q.level, seconds: q.seconds, count: q.questions.length, perGame: Math.min(q.perGame || 20, q.questions.length), custom: q.custom }))
     .sort((a, b) => a.level - b.level || a.title.localeCompare(b.title, 'ro'));
 
-  // Întrebare aleatorie din toate quizurile (pentru X și 0 Quiz), fără repetări în același meci.
-  function randomQuestion(used) {
-    const pool = [];
-    for (const [id, q] of [...builtinQuizzes, ...customQuizzes]) {
-      q.questions.forEach((item, i) => {
-        const key = id + ':' + i;
-        if (!used.includes(key)) pool.push({ key, item });
-      });
+  // ---------- Rotația fără repetări ----------
+  // Pentru fiecare listă (un quiz, X și 0 Quiz, fiecare joc de grup) ținem minte ce s-a folosit deja.
+  // Se alege doar din ce n-a ieșit încă; abia când s-a folosit tot, lista începe din nou.
+  // Se salvează în baza de date, deci nu se pierde nici când serverul repornește.
+  const decks = new Map(Object.entries(await storage.getDecks()));
+  const dirtyDecks = new Set();
+  let deckTimer = null;
+  function saveDeckSoon(name) {
+    dirtyDecks.add(name);
+    clearTimeout(deckTimer);
+    deckTimer = setTimeout(async () => {
+      const names = [...dirtyDecks];
+      dirtyDecks.clear();
+      for (const n of names) {
+        try { await storage.setDeck(n, decks.get(n)); } catch (e) { console.error('Nu am putut salva rotația', n, e); }
+      }
+    }, 800);
+  }
+  function deckTake(name, allKeys, n) {
+    const all = new Set(allKeys);
+    let seen = new Set((decks.get(name) || []).filter((k) => all.has(k)));
+    const out = [];
+    const want = Math.min(n, allKeys.length);
+    while (out.length < want) {
+      let pool = allKeys.filter((k) => !seen.has(k));
+      if (!pool.length) {
+        seen = new Set(out); // s-a terminat lista: o luăm de la capăt, fără ce tocmai am ales
+        pool = allKeys.filter((k) => !seen.has(k));
+        if (!pool.length) break;
+      }
+      const k = pool[Math.floor(Math.random() * pool.length)];
+      out.push(k);
+      seen.add(k);
     }
-    if (!pool.length) return null;
-    const { key, item } = pool[Math.floor(Math.random() * pool.length)];
+    decks.set(name, [...seen]);
+    saveDeckSoon(name);
+    return out;
+  }
+  const allQuizzes = () => [...builtinQuizzes, ...customQuizzes];
+  const allQuestionKeys = () => allQuizzes().flatMap(([id, q]) => q.questions.map((_, i) => id + ':' + i));
+  function questionByKey(key) {
+    const at = key.lastIndexOf(':');
+    return getQuiz(key.slice(0, at))?.questions[Number(key.slice(at + 1))] || null;
+  }
+  function asPlayable(item) {
     const options = shuffle(item.a);
-    return { key, text: item.q, options, correct: options.indexOf(item.a[0]) };
+    return { text: item.q, options, correct: options.indexOf(item.a[0]) };
+  }
+
+  // Întrebare aleatorie din toate quizurile (pentru X și 0 Quiz), fără repetări în același meci.
+  function randomQuestion() {
+    const [key] = deckTake('tttq', allQuestionKeys(), 1);
+    const item = key && questionByKey(key);
+    return item ? { key, ...asPlayable(item) } : null;
   }
   const gameCtx = { randomQuestion };
 
@@ -122,7 +164,7 @@ async function main() {
 
   const app = express();
   const server = http.createServer(app);
-  const io = new Server(server, { pingInterval: 20_000, pingTimeout: 20_000 });
+  const io = new Server(server, { pingInterval: 20_000, pingTimeout: 20_000, maxHttpBufferSize: 2e6 });
   app.set('trust proxy', 1);
   app.use(express.json({ limit: '10kb' }));
   app.use(express.static(path.join(__dirname, 'public')));
@@ -546,11 +588,12 @@ async function main() {
   }
 
   // ---------- Quiz pentru toți ----------
-  function prepareQuestions(def) {
-    return shuffle(def.questions).map(({ q, a }) => {
-      const options = shuffle(a);
-      return { text: q, options, correct: options.indexOf(a[0]) };
-    });
+  // 20 de întrebări (sau cât are quizul) care n-au mai ieșit de curând.
+  function prepareQuestions(quizId) {
+    if (quizId === 'mix') return deckTake('quiz:mix', allQuestionKeys(), 20).map(questionByKey).filter(Boolean).map(asPlayable);
+    const def = getQuiz(quizId);
+    const keys = def.questions.map((_, i) => quizId + ':' + i);
+    return deckTake('quiz:' + quizId, keys, def.perGame || 20).map(questionByKey).filter(Boolean).map(asPlayable);
   }
 
   function quizView() {
@@ -669,19 +712,26 @@ async function main() {
     broadcastLobby();
   }
 
-  // ---------- Cine e cel mai amuzant ----------
+  // ---------- Jocurile de grup: Cel mai amuzant (+18), Cine e cel mai..., Desenează! ----------
   const PARTY_MAX = 10;
   const PARTY_MIN = 3;
-  const PARTY_ROUNDS = 30;
-  const ANSWER_MS = 60_000;
-  const VOTE_MS = 30_000;
-  const RESULT_MS = 8_000;
+  const PARTY_MODES = {
+    funny: { title: 'Cel mai amuzant', bank: 'normal', kind: 'text', rounds: 15, answerMs: 60_000, voteMs: 30_000, resultMs: 8_000, adult: false, game: 'funny' },
+    funny18: { title: 'Cel mai amuzant 18+', bank: 'adult', kind: 'text', rounds: 15, answerMs: 60_000, voteMs: 30_000, resultMs: 8_000, adult: true, game: 'funny' },
+    who: { title: 'Cine e cel mai...', bank: 'who', kind: 'who', rounds: 15, voteMs: 25_000, resultMs: 7_000, adult: false, game: null },
+    draw: { title: 'Desenează!', bank: 'draw', kind: 'draw', rounds: 6, answerMs: 80_000, voteMs: 30_000, resultMs: 9_000, adult: false, game: 'draw' }
+  };
+  const MAX_IMAGE = 400_000;
+
+  const pmode = () => PARTY_MODES[party.mode];
 
   function partyView(uid) {
     if (!party) return null;
     const p = party;
+    const m = pmode();
     const v = {
-      id: p.id, adult: p.adult, phase: p.phase, hostId: p.hostId, index: p.index, total: p.prompts.length,
+      id: p.id, mode: p.mode, title: m.title, kind: m.kind, adult: m.adult, phase: p.phase, hostId: p.hostId,
+      index: p.index, total: p.prompts.length,
       players: [...p.players.values()].map((x) => ({
         id: x.id, name: x.name, score: x.score, rounds: x.rounds,
         answered: p.answers.has(x.id), voted: p.votes.has(x.id), online: online.has(x.id)
@@ -690,11 +740,15 @@ async function main() {
     if (['answer', 'vote', 'result'].includes(p.phase)) {
       v.prompt = p.prompts[p.index];
       v.remainingMs = Math.max(0, p.deadline - Date.now());
-      v.durationMs = p.phase === 'answer' ? ANSWER_MS : p.phase === 'vote' ? VOTE_MS : RESULT_MS;
+      v.durationMs = p.phase === 'answer' ? m.answerMs : p.phase === 'vote' ? m.voteMs : m.resultMs;
     }
-    if (p.phase === 'answer' && p.answers.has(uid)) v.myAnswer = p.answers.get(uid);
+    if (p.phase === 'answer' && p.answers.has(uid)) v.myAnswer = m.kind === 'draw' ? true : p.answers.get(uid);
     if (p.phase === 'vote') {
-      v.ballot = p.ballot.map((b) => ({ key: b.key, text: b.text, mine: b.authorId === uid }));
+      v.ballot = p.ballot.map((b) => ({
+        key: b.key, mine: b.authorId === uid,
+        text: m.kind === 'text' ? b.text : undefined,
+        authorId: m.kind === 'who' ? b.authorId : undefined
+      }));
       v.myVote = p.votes.get(uid) ?? null;
     }
     if (p.phase === 'result') v.results = p.results;
@@ -706,35 +760,53 @@ async function main() {
     for (const id of online.keys()) toUser(id).emit('party', partyView(id));
   }
 
+  // Desenele se trimit o singură dată pe rundă (sunt mari), nu la fiecare vot.
+  function partyImages() {
+    return { id: party.id, index: party.index, images: Object.fromEntries(party.ballot.map((b) => [b.key, b.text])) };
+  }
+
   function partyNext() {
     if (!party) return;
     clearTimeout(party.timer);
     party.index++;
     if (party.index >= party.prompts.length) return partyFinish();
-    party.phase = 'answer';
+    const m = pmode();
     party.answers = new Map();
     party.votes = new Map();
     party.ballot = [];
     party.results = null;
-    party.deadline = Date.now() + ANSWER_MS;
-    party.timer = setTimeout(partyToVote, ANSWER_MS);
+    if (m.kind === 'who') {
+      // se votează direct jucătorii din cameră
+      party.ballot = [...party.players.values()].map((x) => ({ key: 'p' + x.id, authorId: x.id }));
+      party.phase = 'vote';
+      party.deadline = Date.now() + m.voteMs;
+      party.timer = setTimeout(partyResult, m.voteMs);
+    } else {
+      party.phase = 'answer';
+      party.deadline = Date.now() + m.answerMs;
+      party.timer = setTimeout(partyToVote, m.answerMs + (m.kind === 'draw' ? 2_500 : 0));
+    }
     sendParty();
   }
 
   function partyToVote() {
     if (!party || party.phase !== 'answer') return;
     clearTimeout(party.timer);
+    const m = pmode();
     party.ballot = shuffle([...party.answers].map(([authorId, text]) => ({ key: newId(), authorId, text })));
     if (party.ballot.length < 2) return partyResult();
     party.phase = 'vote';
-    party.deadline = Date.now() + VOTE_MS;
-    party.timer = setTimeout(partyResult, VOTE_MS);
+    party.deadline = Date.now() + m.voteMs;
+    party.timer = setTimeout(partyResult, m.voteMs);
+    if (m.kind === 'draw') io.emit('partyImages', partyImages());
     sendParty();
   }
 
   function partyResult() {
     if (!party || (party.phase !== 'vote' && party.phase !== 'answer')) return;
     clearTimeout(party.timer);
+    const m = pmode();
+    if (m.kind === 'draw' && party.phase === 'answer') io.emit('partyImages', partyImages());
     const counts = new Map(party.ballot.map((b) => [b.key, 0]));
     for (const key of party.votes.values()) counts.set(key, (counts.get(key) || 0) + 1);
     const max = Math.max(0, ...counts.values());
@@ -744,13 +816,19 @@ async function main() {
       const winner = max > 0 && votes === max;
       if (pl) {
         pl.score += votes;
-        if (winner) pl.rounds++;
+        if (winner) {
+          pl.rounds++;
+          if (m.kind === 'who') pl.titles.push(party.prompts[party.index]);
+        }
       }
-      return { text: b.text, authorId: b.authorId, name: party.names.get(b.authorId) || '?', votes, winner };
+      return {
+        key: b.key, authorId: b.authorId, name: party.names.get(b.authorId) || '?', votes, winner,
+        text: m.kind === 'text' ? b.text : undefined
+      };
     }).sort((a, b) => b.votes - a.votes);
     party.phase = 'result';
-    party.deadline = Date.now() + RESULT_MS;
-    party.timer = setTimeout(partyNext, RESULT_MS);
+    party.deadline = Date.now() + m.resultMs;
+    party.timer = setTimeout(partyNext, m.resultMs);
     sendParty();
   }
 
@@ -774,18 +852,21 @@ async function main() {
   function partyFinish() {
     clearTimeout(party.timer);
     party.phase = 'finished';
-    const list = [...party.players.values()].sort((a, b) => b.score - a.score || b.rounds - a.rounds);
-    const n = list.length;
+    const m = pmode();
+    const list = [...party.players.values()].sort((a, b) => b.rounds - a.rounds || b.score - a.score);
+    const byScore = m.kind === 'who' ? list : [...party.players.values()].sort((a, b) => b.score - a.score || b.rounds - a.rounds);
+    const n = byScore.length;
     let rank = 0;
-    const ranked = list.map((p, i) => {
-      if (i === 0 || p.score !== list[i - 1].score || p.rounds !== list[i - 1].rounds) rank = i + 1;
-      const points = rank <= 3 && rank < n ? 4 - rank : 0;
-      return { id: p.id, name: p.name, score: p.score, rounds: p.rounds, rank, points };
+    const ranked = byScore.map((p, i) => {
+      const prev = byScore[i - 1];
+      if (i === 0 || p.score !== prev.score || p.rounds !== prev.rounds) rank = i + 1;
+      const points = m.game && rank <= 3 && rank < n ? 4 - rank : 0;
+      return { id: p.id, name: p.name, score: p.score, rounds: p.rounds, titles: p.titles, rank, points };
     });
     party.ranking = ranked;
-    if (n >= 2 && ranked.some((r) => r.score > 0)) {
+    if (m.game && n >= 2 && ranked.some((r) => r.score > 0)) {
       const firsts = ranked.filter((r) => r.rank === 1).length;
-      record(ranked.map((r) => [{ id: r.id }, r.rank === 1 ? (firsts > 1 ? 'draw' : 'win') : 'loss', r.points]), 'funny');
+      record(ranked.map((r) => [{ id: r.id }, r.rank === 1 ? (firsts > 1 ? 'draw' : 'win') : 'loss', r.points]), m.game);
     }
     const id = party.id;
     party.timer = setTimeout(() => {
@@ -807,11 +888,14 @@ async function main() {
     } else {
       if (party.hostId === uid) party.hostId = party.players.keys().next().value;
       if (party.phase !== 'lobby' && party.players.size < 2) return partyFinish();
+      if (party.phase === 'vote' && pmode().kind === 'who') party.ballot = party.ballot.filter((b) => b.authorId !== uid);
       partyCheckEarly();
     }
     sendParty();
     broadcastLobby();
   }
+
+  const newPartyPlayer = (u) => ({ id: u.id, name: u.name, score: 0, rounds: 0, titles: [] });
 
   // ---------- Conexiuni ----------
   io.on('connection', (socket) => {
@@ -835,6 +919,7 @@ async function main() {
     if (current) socket.emit('match', matchView(current, u.id));
     socket.emit('quiz', quizView());
     socket.emit('party', partyView(u.id));
+    if (party && pmode().kind === 'draw' && ['vote', 'result'].includes(party.phase)) socket.emit('partyImages', partyImages());
     broadcastLobby();
 
     socket.on('challenge', (data) => {
@@ -922,13 +1007,16 @@ async function main() {
     socket.on('leaveMatch', () => leaveMatch(u.id));
 
     socket.on('quizCreate', (data) => {
-      const def = getQuiz(data?.quizId);
+      const quizId = data?.quizId;
+      const def = quizId === 'mix'
+        ? { title: 'Quiz amestecat', level: null, seconds: 20 }
+        : getQuiz(quizId);
       if (!def) return err('Quizul ales nu mai există.');
       if (quiz && quiz.phase !== 'finished') return err('Există deja un quiz. Intră în el!');
       if (userMatch.has(u.id) || inParty(u.id)) return err('Termină întâi jocul în care ești.');
       if (quiz) clearTimeout(quiz.timer);
       quiz = {
-        id: newId(), phase: 'lobby', hostId: u.id, players: new Map(), questions: prepareQuestions(def),
+        id: newId(), phase: 'lobby', hostId: u.id, players: new Map(), questions: prepareQuestions(quizId),
         title: def.title, level: def.level, questionMs: def.seconds * 1000,
         index: -1, answers: new Map(), current: null, timer: null, deadline: 0
       };
@@ -967,22 +1055,24 @@ async function main() {
     });
 
     socket.on('partyCreate', (data) => {
-      const adult = Boolean(data?.adult);
-      if (party && party.phase !== 'finished') return err('Există deja un joc „Cel mai amuzant”. Intră în el!');
+      const mode = PARTY_MODES[data?.mode] ? data.mode : (data?.adult ? 'funny18' : 'funny');
+      const m = PARTY_MODES[mode];
+      if (party && party.phase !== 'finished') return err(`Există deja un joc de grup („${PARTY_MODES[party.mode].title}”). Intră în el!`);
       if (isBusy(u.id)) return err('Termină întâi jocul în care ești.');
-      if (adult && !data?.confirm18) return err('Confirmă că ai peste 18 ani.');
+      if (m.adult && !data?.confirm18) return err('Confirmă că ai peste 18 ani.');
       if (party) clearTimeout(party.timer);
-      const bank = adult ? PARTY_PROMPTS.adult : PARTY_PROMPTS.normal;
+      const bank = PARTY_PROMPTS[m.bank];
+      const picked = deckTake('party:' + m.bank, bank.map((_, i) => String(i)), m.rounds).map((i) => bank[Number(i)]);
       party = {
-        id: newId(), adult, phase: 'lobby', hostId: u.id, players: new Map(), names: new Map(),
-        prompts: shuffle(bank).slice(0, PARTY_ROUNDS), index: -1,
+        id: newId(), mode, phase: 'lobby', hostId: u.id, players: new Map(), names: new Map(),
+        prompts: picked, index: -1,
         answers: new Map(), votes: new Map(), ballot: [], results: null, ranking: null, timer: null, deadline: 0
       };
-      party.players.set(u.id, { id: u.id, name: u.name, score: 0, rounds: 0 });
+      party.players.set(u.id, newPartyPlayer(u));
       party.names.set(u.id, u.name);
       cancelChallengesOf(u.id);
       sendParty();
-      io.except('u:' + u.id).emit('partyInvite', { from: u.name, adult });
+      io.except('u:' + u.id).emit('partyInvite', { from: u.name, mode, title: m.title });
       broadcastLobby();
     });
 
@@ -991,8 +1081,8 @@ async function main() {
       if (party.players.has(u.id)) return;
       if (party.players.size >= PARTY_MAX) return err(`Sala e plină (maxim ${PARTY_MAX}).`);
       if (isBusy(u.id)) return err('Termină întâi jocul în care ești.');
-      if (party.adult && !data?.confirm18) return err('Confirmă că ai peste 18 ani.');
-      party.players.set(u.id, { id: u.id, name: u.name, score: 0, rounds: 0 });
+      if (pmode().adult && !data?.confirm18) return err('Confirmă că ai peste 18 ani.');
+      party.players.set(u.id, newPartyPlayer(u));
       party.names.set(u.id, u.name);
       cancelChallengesOf(u.id);
       sendParty();
@@ -1009,9 +1099,16 @@ async function main() {
     });
 
     socket.on('partyAnswer', (data) => {
-      const text = String(data?.text || '').trim().replace(/\s+/g, ' ').slice(0, 140);
-      if (!party || party.phase !== 'answer' || !party.players.has(u.id) || party.answers.has(u.id) || !text) return;
-      party.answers.set(u.id, text);
+      if (!party || party.phase !== 'answer' || !party.players.has(u.id) || party.answers.has(u.id)) return;
+      let value;
+      if (pmode().kind === 'draw') {
+        value = String(data?.image || '');
+        if (!/^data:image\/(png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(value) || value.length > MAX_IMAGE) return err('Desenul nu a putut fi trimis.');
+      } else {
+        value = String(data?.text || '').trim().replace(/\s+/g, ' ').slice(0, 140);
+        if (!value) return;
+      }
+      party.answers.set(u.id, value);
       if (!partyCheckEarly()) sendParty();
     });
 
@@ -1019,7 +1116,7 @@ async function main() {
       if (!party || party.phase !== 'vote' || !party.players.has(u.id) || party.votes.has(u.id)) return;
       const b = party.ballot.find((x) => x.key === data?.key);
       if (!b) return;
-      if (b.authorId === u.id) return err('Nu poți vota propriul răspuns. 😄');
+      if (b.authorId === u.id) return err(pmode().kind === 'who' ? 'Votează pe altcineva. 😄' : 'Nu poți vota propriul răspuns. 😄');
       party.votes.set(u.id, b.key);
       if (!partyCheckEarly()) sendParty();
     });
