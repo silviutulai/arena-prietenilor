@@ -444,6 +444,64 @@ button.bs-cell:active { transform: scale(.85); }
 .ranking .rname small { font: 700 .75rem var(--body); }
 .ranking .rpts { font: 700 1.1rem var(--display); color: var(--good); }
 
+/* ---------- Zaruri și piatră-hârtie-foarfecă ---------- */
+.duel { width: 100%; display: grid; gap: .9rem; justify-items: center; }
+.duel-score { display: flex; align-items: baseline; gap: .5rem; font: 700 2.6rem var(--display); }
+.duel-score .small { font: 700 .8rem var(--body); margin-left: .4rem; }
+.duel-last { width: 100%; background: var(--surface); border: 2px solid var(--line); border-radius: 24px; padding: .8rem; box-shadow: 0 4px 0 var(--line); }
+.duel-row { display: flex; align-items: center; justify-content: space-around; gap: .5rem; }
+.duel-side { display: grid; justify-items: center; gap: .2rem; padding: .4rem .6rem; border-radius: 18px; transition: background .3s; }
+.duel-side.won { background: color-mix(in srgb, var(--good) 16%, transparent); box-shadow: inset 0 0 0 2px var(--good); }
+.duel-verdict { font: 700 1rem var(--display); margin: .4rem 0 0; }
+.dice-pair { display: inline-flex; align-items: center; gap: .15rem; }
+.dice-pair b { font: 700 1.2rem var(--display); margin-left: .35rem; }
+.die { font-size: 2.6rem; line-height: 1; color: var(--ink); }
+.dice-pair.big .die { font-size: 5rem; }
+.die.rolled { animation: roll-in .6s cubic-bezier(.3, 1.4, .5, 1); display: inline-block; }
+@keyframes roll-in { from { transform: rotate(-540deg) scale(.3); opacity: 0; } }
+.roll-btn { font-size: 1.3rem; padding: 1em; }
+.roll-btn.shaking { animation: shake .4s; }
+.rps-big { font-size: 3rem; line-height: 1.1; }
+.rps-choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; width: 100%; }
+.rps-btn { display: grid; justify-items: center; gap: .2rem; padding: .9rem .3rem; background: var(--surface); border: 2px solid var(--line); border-radius: 22px; box-shadow: 0 4px 0 var(--line); font: 700 .9rem var(--display); color: var(--ink); cursor: pointer; transition: transform .1s; }
+.rps-btn:active { transform: translateY(3px) scale(.97); box-shadow: 0 1px 0 var(--line); }
+.rps-btn .rps-big { transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); }
+.rps-btn:hover .rps-big { transform: scale(1.15) rotate(-8deg); }
+.rps-chosen { display: grid; justify-items: center; gap: .2rem; }
+.rps-chosen .rps-big { font-size: 4.5rem; animation: bob 1.4s ease-in-out infinite; }
+.quiz-pick.mix { background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 14%, var(--surface)), color-mix(in srgb, var(--pink) 12%, var(--surface))); border-color: color-mix(in srgb, var(--accent) 45%, var(--surface)); }
+
+/* ---------- Desenează! ---------- */
+.pad { width: 100%; display: grid; gap: .6rem; }
+.pad-canvas { width: 100%; aspect-ratio: 1; background: #fff; border-radius: 22px; border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); touch-action: none; cursor: crosshair; }
+.pad-colors { display: grid; grid-template-columns: repeat(9, 1fr); gap: .35rem; }
+.pad-color { aspect-ratio: 1; border-radius: 50%; background: var(--sw); border: 3px solid var(--surface); box-shadow: 0 0 0 2px var(--line); cursor: pointer; }
+.pad-color.sel { box-shadow: 0 0 0 3px var(--ink); transform: scale(1.12); }
+.pad-tools { display: flex; gap: .4rem; align-items: center; }
+.pad-size { width: 40px; height: 40px; display: grid; place-items: center; background: var(--surface); border: 2px solid var(--line); border-radius: 12px; cursor: pointer; }
+.pad-size i { display: block; border-radius: 50%; background: var(--ink); }
+.pad-size.sel { border-color: var(--accent); background: var(--accent-soft); }
+.drawing { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 18px; background: #fff; }
+.drawing.mine { max-width: 260px; margin: 0 auto; border: 2px solid var(--line); }
+.drawing.loading { display: grid; place-items: center; color: #999; font-size: 2rem; }
+.drawings { display: grid; grid-template-columns: repeat(2, 1fr); gap: .6rem; width: 100%; }
+.drawing-btn { position: relative; padding: 6px; background: var(--surface); border: 3px solid var(--line); border-radius: 22px; box-shadow: 0 4px 0 var(--line); cursor: pointer; animation: pop-in .4s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(var(--i) * 70ms); }
+.drawing-btn:disabled { cursor: default; }
+.drawing-btn.mine { opacity: .55; }
+.drawing-btn.voted { border-color: var(--pink); box-shadow: 0 4px 0 var(--pink); }
+.drawing-btn .bubble-tag { position: absolute; left: 10px; bottom: 10px; margin: 0; background: var(--surface); padding: .1em .5em; border-radius: 999px; }
+.drawings-results { grid-template-columns: repeat(2, 1fr); }
+.drawings-results .result-head { font-size: .85rem; flex-wrap: wrap; }
+
+/* ---------- Cine e cel mai... ---------- */
+.who-winner { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.champion.small b { font-size: 1.3rem; }
+.titles { display: grid; gap: .6rem; width: 100%; }
+.title-card { background: var(--surface); border: 2px solid var(--line); border-radius: 22px; padding: .7rem .9rem; box-shadow: 0 4px 0 var(--line); animation: rise .4s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 80ms); }
+.title-card ul { margin: .4rem 0 0; padding-left: 1.1rem; font-size: .95rem; }
+.title-card li { margin: .15rem 0; }
+.banner-card[style*="--gc"] { background: linear-gradient(120deg, var(--gc), color-mix(in srgb, var(--gc) 55%, #FFC93C)); box-shadow: 0 4px 0 color-mix(in srgb, var(--gc) 70%, black); }
+
 /* ---------- Vot ---------- */
 .page-head { display: flex; align-items: center; gap: .8rem; }
 .last-winner { display: flex; align-items: center; gap: 1rem; background: linear-gradient(135deg, color-mix(in srgb, var(--yellow) 25%, var(--surface)), var(--surface)); border-color: color-mix(in srgb, var(--yellow) 60%, var(--surface)); box-shadow: 0 4px 0 color-mix(in srgb, var(--yellow) 60%, var(--surface)); }
@@ -508,3 +566,4 @@ button.bs-cell:active { transform: scale(.85); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+.cand:disabled:not(.sel) { opacity: .5; cursor: default; }

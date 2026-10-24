@@ -26,11 +26,16 @@ const GAMES = {
   c4: { name: '4 în linie', emoji: '🔴', color: '#FFB800', desc: 'Aliniază patru piese', mode: 'duel' },
   hangman: { name: 'Spânzurătoarea', emoji: '🔤', color: '#16B97A', desc: 'Ghiciți cuvântul pe rând', mode: 'duel' },
   battleship: { name: 'Bătălia navală', emoji: '🚢', color: '#2D9CFF', desc: 'Scufundă-i flota', mode: 'duel' },
-  quiz: { name: 'Quiz', emoji: '🎯', color: '#FF8A3D', desc: '10 niveluri, toți odată', mode: 'group' },
-  funny: { name: 'Cel mai amuzant', emoji: '😂', color: '#FF4FA0', desc: '3–10 jucători', mode: 'group' },
-  funny18: { name: 'Cel mai amuzant 18+', emoji: '🌶️', color: '#E0245E', desc: 'Doar pentru adulți', mode: 'group' }
+  dice: { name: 'Zaruri', emoji: '🎲', color: '#00B8A9', desc: 'Cine dă mai mult? Până la 3', mode: 'duel' },
+  rps: { name: 'Piatră, hârtie, foarfecă', emoji: '✊', color: '#8E6CFF', desc: 'Până la 3 runde câștigate', mode: 'duel' },
+  quiz: { name: 'Quiz', emoji: '🎯', color: '#FF8A3D', desc: '10 niveluri sau amestecat', mode: 'group' },
+  funny: { name: 'Cel mai amuzant', emoji: '😂', color: '#FF4FA0', desc: '15 întrebări · 3–10 jucători', mode: 'group' },
+  funny18: { name: 'Cel mai amuzant 18+', emoji: '🌶️', color: '#E0245E', desc: 'Doar pentru adulți', mode: 'group' },
+  who: { name: 'Cine e cel mai...', emoji: '🤪', color: '#F59E0B', desc: 'Votați pe cineva din gașcă', mode: 'group' },
+  draw: { name: 'Desenează!', emoji: '🎨', color: '#10B981', desc: 'Desenați, apoi votați', mode: 'group' }
 };
-const BOARD_GAMES = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'quiz', 'funny'];
+const BOARD_GAMES = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps', 'quiz', 'funny', 'draw'];
+const MODE_EMOJI = { funny: '😂', funny18: '🌶️', who: '🤪', draw: '🎨' };
 const TIERS = ['Ușor', 'Ușor', 'Mediu', 'Mediu', 'Dificil', 'Dificil', 'Greu', 'Greu', 'Foarte greu', 'Foarte greu'];
 
 const S = {
@@ -51,6 +56,8 @@ const S = {
   dismissedParty: null,
   myAnswers: {},
   partyDraft: '',
+  partyImages: null,
+  pad: null,
   partyDraftKey: '',
   confettiKey: '',
   vote: null,
@@ -139,7 +146,9 @@ function meter(level) {
   for (let i = 1; i <= 10; i++) bars.push(el('i', { class: i <= level ? 'on' : '' }));
   return el('span', { class: 'meter t' + Math.ceil(level / 2), 'aria-label': `Nivel ${level} din 10` }, bars);
 }
-const levelTag = (level) => el('span', { class: 'level t' + Math.ceil(level / 2) }, meter(level), el('span', {}, `${level} · ${TIERS[level - 1]}`));
+const levelTag = (level) => level
+  ? el('span', { class: 'level t' + Math.ceil(level / 2) }, meter(level), el('span', {}, `${level} · ${TIERS[level - 1]}`))
+  : el('span', { class: 'level' }, '🎲 Toate nivelurile');
 
 // ============ Foi de jos și ferestre ============
 function openSheet(...nodes) {
@@ -324,7 +333,8 @@ async function startApp() {
     refresh('party', 'play');
   });
   s.on('quizInvite', ({ from, title }) => { if (!S.match) toast(`🎯 ${from} a pornit quizul „${title}”!`); });
-  s.on('partyInvite', ({ from, adult }) => { if (!S.match) toast(`${adult ? '🌶️' : '😂'} ${from} te cheamă la „Cel mai amuzant${adult ? ' 18+' : ''}”!`); });
+  s.on('partyInvite', ({ from, mode, title }) => { if (!S.match) toast(`${MODE_EMOJI[mode] || '🎉'} ${from} te cheamă la „${title}”!`); });
+  s.on('partyImages', (data) => { S.partyImages = data; refresh('party'); });
   s.on('quizzesChanged', async () => { await loadQuizzes(); refresh('play'); });
   s.on('playersChanged', async () => { await loadPlayers(); updateNavMascot(); refresh('play', 'vote', 'board', 'me'); });
   s.on('challenged', (c) => { S.incoming.push(c); showIncoming(); });
@@ -446,16 +456,16 @@ function renderPlay() {
   const banners = [];
   if (p && p.phase === 'lobby' && !myParty()) {
     const host = p.players.find((x) => x.id === p.hostId);
-    banners.push(el('button', { class: 'banner-card pink' + (p.adult ? ' spicy' : ''), onclick: () => {
+    banners.push(el('button', { class: 'banner-card pink' + (p.adult ? ' spicy' : ''), style: `--gc:${GAMES[p.mode]?.color || ''}`, onclick: () => {
       const join = () => { S.dismissedParty = null; S.socket.emit('partyJoin', { confirm18: true }); };
       if (p.adult) confirm18(join); else join();
     } },
-    el('span', { class: 'bc-emoji' }, p.adult ? '🌶️' : '😂'),
-    el('span', { class: 'bc-text' }, el('b', {}, `Cel mai amuzant${p.adult ? ' 18+' : ''}`), el('span', {}, `${host ? host.name : 'Cineva'} te așteaptă · ${p.players.length}/10`)),
+    el('span', { class: 'bc-emoji' }, MODE_EMOJI[p.mode] || '🎉'),
+    el('span', { class: 'bc-text' }, el('b', {}, p.title), el('span', {}, `${host ? host.name : 'Cineva'} te așteaptă · ${p.players.length}/10`)),
     el('span', { class: 'bc-go' }, 'Intră')));
   } else if (p && p.phase !== 'finished' && !myParty()) {
-    banners.push(el('div', { class: 'banner-card muted-card' }, el('span', { class: 'bc-emoji' }, p.adult ? '🌶️' : '😂'),
-      el('span', { class: 'bc-text' }, el('b', {}, 'Cel mai amuzant e în desfășurare'), el('span', {}, `Întrebarea ${p.index + 1} din ${p.total}`))));
+    banners.push(el('div', { class: 'banner-card muted-card' }, el('span', { class: 'bc-emoji' }, MODE_EMOJI[p.mode] || '🎉'),
+      el('span', { class: 'bc-text' }, el('b', {}, `${p.title} e în desfășurare`), el('span', {}, `Runda ${p.index + 1} din ${p.total}`))));
   }
   if (q && q.phase === 'lobby' && !myQuiz()) {
     const host = q.players.find((x) => x.id === q.hostId);
@@ -497,10 +507,10 @@ function renderPlay() {
         : el('p', { class: 'muted empty-note' }, 'Trimite-le linkul ca să intre și ei. 😉')),
     el('section', {},
       el('h2', { class: 'section-title' }, '1 la 1'),
-      el('div', { class: 'game-grid' }, ['ttt', 'tttq', 'c4', 'hangman', 'battleship'].map(gameCard))),
+      el('div', { class: 'game-grid' }, ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps'].map(gameCard))),
     el('section', {},
       el('h2', { class: 'section-title' }, 'Cu toată gașca'),
-      el('div', { class: 'game-grid' }, ['quiz', 'funny', 'funny18'].map((id, i) => gameCard(id, i + 5)))),
+      el('div', { class: 'game-grid' }, ['quiz', 'funny', 'who', 'draw', 'funny18'].map((id, i) => gameCard(id, i + 7)))),
     free.length === 0 && others.length ? el('p', { class: 'muted small center' }, 'Toți prietenii online sunt într-un joc acum.') : null);
 }
 
@@ -519,13 +529,17 @@ function pickGame(id) {
   if (id === 'quiz') {
     openSheet(
       el('div', { class: 'sheet-head' }, el('span', { class: 'sheet-emoji' }, '🎯'), el('div', {}, el('h2', {}, 'Alege quizul'), el('p', { class: 'muted small' }, 'Toți cei online primesc invitația'))),
-      el('div', { class: 'pick-list' }, S.quizzes.map((z) => el('button', { class: 'pick quiz-pick', onclick: () => { S.socket.emit('quizCreate', { quizId: z.id }); closeSheet(); } },
-        el('span', { class: 'grow' }, el('b', {}, z.title), el('span', { class: 'muted small block' }, `${z.count} întrebări · ${z.seconds} s`)),
-        levelTag(z.level)))));
+      el('div', { class: 'pick-list' },
+        el('button', { class: 'pick quiz-pick mix', onclick: () => { S.socket.emit('quizCreate', { quizId: 'mix' }); closeSheet(); } },
+          el('span', { class: 'grow' }, el('b', {}, '🎲 Quiz amestecat'), el('span', { class: 'muted small block' }, `${S.quizzes.reduce((a, z) => a + z.count, 0)} întrebări din toate nivelurile · 20 pe joc`))),
+        S.quizzes.map((z) => el('button', { class: 'pick quiz-pick', onclick: () => { S.socket.emit('quizCreate', { quizId: z.id }); closeSheet(); } },
+          el('span', { class: 'grow' }, el('b', {}, z.title), el('span', { class: 'muted small block' }, `${z.count} în rotație · ${z.perGame} pe joc · ${z.seconds} s`)),
+          levelTag(z.level)))),
+      el('p', { class: 'muted small center' }, 'Întrebările nu se repetă până nu ies toate din quizul ales.'));
     return;
   }
-  if (id === 'funny') return S.socket.emit('partyCreate', { adult: false });
-  if (id === 'funny18') return confirm18(() => S.socket.emit('partyCreate', { adult: true, confirm18: true }));
+  if (id === 'funny18') return confirm18(() => S.socket.emit('partyCreate', { mode: 'funny18', confirm18: true }));
+  S.socket.emit('partyCreate', { mode: id });
 }
 
 function showIncoming() {
@@ -548,11 +562,13 @@ function showIncoming() {
 // ============ Meci 1 la 1 ============
 function chip(m, i) {
   const p = m.players[i];
-  const isTurn = !m.over && m.turn === i && !(m.game === 'battleship' && m.state.phase === 'setup');
+  const simultaneous = m.game === 'dice' || m.game === 'rps' || (m.game === 'battleship' && m.state.phase === 'setup');
+  const isTurn = !m.over && m.turn === i && !simultaneous;
   let mark = null;
   if (m.game === 'ttt' || m.game === 'tttq') mark = el('span', { class: 'mark m' + i }, i === 0 ? 'X' : 'O');
   else if (m.game === 'c4') mark = el('span', { class: 'disc p' + i });
   else if (m.game === 'hangman') mark = el('span', { class: 'score-pill' }, m.state.scores[i]);
+  else if (m.game === 'dice' || m.game === 'rps') mark = el('span', { class: 'score-pill' }, m.state.wins[i]);
   else if (m.game === 'battleship') mark = el('span', { class: 'score-pill' }, `${(i === m.players.findIndex((x) => x.id === S.me.id) ? m.state.myLeft : m.state.enemyLeft).length}🚢`);
   return el('div', { class: 'player-chip' + (isTurn ? ' turn' : '') + (m.away.includes(p.id) ? ' away' : '') },
     mascot(p.id, 'sm', isTurn ? 'bob' : ''),
@@ -573,6 +589,8 @@ function statusText(m, me, opp) {
     if (st.ready[me]) return [st.ready[1 - me] ? 'Începe lupta!' : `Aștepți ca ${opp.name} să-și așeze flota…`, 'wait'];
     return ['Așază-ți flota și apasă Gata', 'mine'];
   }
+  if (m.game === 'dice') return st.myRoll ? [`Aștepți ca ${opp.name} să arunce…`, 'wait'] : [st.oppRolled ? `${opp.name} a aruncat. Rândul tău!` : 'Aruncă zarurile!', 'mine'];
+  if (m.game === 'rps') return st.myPick ? [`Aștepți alegerea lui ${opp.name}…`, 'wait'] : [st.oppPicked ? `${opp.name} a ales. Alege și tu!` : 'Alege: piatră, hârtie sau foarfecă', 'mine'];
   if (m.game === 'tttq' && st.pending) {
     return st.pending.by === me ? ['Răspunde corect ca să-ți pui semnul!', 'mine'] : [`${opp.name} răspunde la întrebare…`, 'wait'];
   }
@@ -593,7 +611,7 @@ function renderMatch(fresh) {
   const myTurn = !m.over && m.turn === me;
   const [status, cls] = statusText(m, me, opp);
   const g = GAMES[m.game] || {};
-  const board = { ttt: tttBoard, tttq: tttqBoard, c4: c4Board, hangman: hangBoard, battleship: bsBoard }[m.game](m, myTurn, fresh);
+  const board = { ttt: tttBoard, tttq: tttqBoard, c4: c4Board, hangman: hangBoard, battleship: bsBoard, dice: diceBoard, rps: rpsBoard }[m.game](m, myTurn, fresh);
 
   let actions;
   if (!m.over) {
@@ -770,6 +788,43 @@ function bsBoard(m, myTurn) {
       fleetRow(st.myLeft, 'Mai ai:')));
 }
 
+// ============ Zaruri și Piatră-hârtie-foarfecă ============
+const DIE = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+const RPS = { rock: ['✊', 'Piatră'], paper: ['✋', 'Hârtie'], scissors: ['✌️', 'Foarfecă'] };
+
+function roundLog(m, renderPick) {
+  const me = m.players.findIndex((p) => p.id === S.me.id);
+  const st = m.state;
+  const last = st.history[st.history.length - 1];
+  const lastBox = last ? el('div', { class: 'duel-last pop', key: last.round },
+    el('p', { class: 'eyebrow center' }, `Runda ${last.round}`),
+    el('div', { class: 'duel-row' },
+      el('div', { class: 'duel-side' + (last.winner === me ? ' won' : '') }, el('span', { class: 'muted small' }, 'Tu'), renderPick(last, me)),
+      el('span', { class: 'vs' }, 'vs'),
+      el('div', { class: 'duel-side' + (last.winner === 1 - me ? ' won' : '') }, el('span', { class: 'muted small' }, m.players[1 - me].name), renderPick(last, 1 - me))),
+    el('p', { class: 'center duel-verdict' }, last.winner === null ? 'Egal! Se rejoacă runda. 🤝' : last.winner === me ? 'Ai câștigat runda! 🎉' : `Runda e a lui ${m.players[1 - me].name}.`)) : null;
+  const score = el('div', { class: 'duel-score' }, el('b', {}, st.wins[me]), el('span', {}, '–'), el('b', {}, st.wins[1 - me]), el('span', { class: 'muted small' }, `primul la ${st.target}`));
+  return [score, lastBox];
+}
+
+function diceBoard(m) {
+  const st = m.state;
+  const pick = (h, i) => el('span', { class: 'dice-pair' }, h.rolls[i].map((d) => el('span', { class: 'die' }, DIE[d - 1])), el('b', {}, h.rolls[i][0] + h.rolls[i][1]));
+  return el('div', { class: 'duel' }, roundLog(m, pick),
+    m.over ? null : st.myRoll
+      ? el('div', { class: 'dice-pair big' }, st.myRoll.map((d) => el('span', { class: 'die rolled' }, DIE[d - 1])))
+      : el('button', { class: 'btn primary big roll-btn', onclick: (e) => { e.currentTarget.classList.add('shaking'); S.socket.emit('move', { action: 'roll' }); } }, '🎲 Aruncă zarurile'));
+}
+
+function rpsBoard(m) {
+  const st = m.state;
+  const pick = (h, i) => el('span', { class: 'rps-big' }, RPS[h.picks[i]][0]);
+  return el('div', { class: 'duel' }, roundLog(m, pick),
+    m.over ? null : st.myPick
+      ? el('div', { class: 'rps-chosen pop' }, el('span', { class: 'rps-big' }, RPS[st.myPick][0]), el('span', { class: 'muted' }, `Ai ales ${RPS[st.myPick][1].toLowerCase()}`))
+      : el('div', { class: 'rps-choices' }, Object.entries(RPS).map(([k, [emo, label]]) => el('button', { class: 'rps-btn', onclick: () => S.socket.emit('move', { choice: k }) }, el('span', { class: 'rps-big' }, emo), el('span', {}, label)))));
+}
+
 // ============ Quiz ============
 function renderQuiz() {
   const q = myQuiz();
@@ -835,7 +890,9 @@ function rankingList(rows) {
 function renderParty() {
   const p = myParty();
   const isHost = p.hostId === S.me.id;
-  const title = p.adult ? '🌶️ Cel mai amuzant 18+' : '😂 Cel mai amuzant';
+  const emoji = MODE_EMOJI[p.mode] || '🎉';
+  const title = `${emoji} ${p.title}`;
+  const cls = 'stage party mode-' + p.mode + (p.adult ? ' spicy' : '');
   const leave = el('button', { class: 'btn ghost small', onclick: () => { S.socket.emit('partyLeave'); S.dismissedParty = p.id; render(); } }, 'Ieși');
   const endBtn = isHost && ['answer', 'vote', 'result'].includes(p.phase)
     ? el('button', { class: 'btn ghost small', onclick: () => {
@@ -843,6 +900,11 @@ function renderParty() {
         el('div', { class: 'stack' }, el('button', { class: 'btn primary big', onclick: () => { closeModal(); S.socket.emit('partyEnd'); } }, 'Da, închei'),
           el('button', { class: 'btn ghost', onclick: closeModal }, 'Mai jucăm')));
     } }, 'Închei') : null;
+  const rules = {
+    text: `${p.total} întrebări haioase. Fiecare scrie un răspuns, apoi votați anonim cel mai amuzant. Nu te poți vota pe tine.`,
+    who: `${p.total} întrebări despre voi. La fiecare, votați secret pe cineva din cameră. Cine adună cele mai multe voturi primește titlul.`,
+    draw: `${p.total} runde. Toți desenați același lucru în 80 de secunde, apoi votați anonim cel mai reușit desen.`
+  }[p.kind];
 
   if (p.phase === 'lobby') {
     const slots = [];
@@ -852,78 +914,214 @@ function renderParty() {
         ? el('div', { class: 'crowd-p', style: `--i:${i}` }, mascot(pl.id, 'md', 'bob d' + (i % 5)), el('span', {}, pl.name, pl.id === p.hostId ? ' ⭐' : ''))
         : el('div', { class: 'crowd-p empty' }, el('span', { class: 'slot' }, '?'), el('span', {}, 'liber')));
     }
-    return el('div', { class: 'stage party' + (p.adult ? ' spicy' : '') },
+    return el('div', { class: cls },
       el('div', { class: 'room-top' }, el('span', { class: 'room-title' }, title), leave),
       el('div', { class: 'card center' },
         el('p', { class: 'eyebrow' }, `Sala de așteptare · ${p.players.length}/10`),
         el('div', { class: 'crowd ten' }, slots),
-        el('p', { class: 'muted small' }, `${p.total} întrebări haioase. Toți scrieți câte un răspuns, apoi votați anonim cel mai amuzant răspuns. Nu te poți vota pe tine.`)),
+        el('p', { class: 'muted small' }, rules)),
       isHost
         ? el('button', { class: 'btn primary big', disabled: p.players.length < 3, onclick: () => S.socket.emit('partyStart') }, p.players.length < 3 ? `Mai trebuie ${3 - p.players.length} ${3 - p.players.length === 1 ? 'jucător' : 'jucători'}` : 'Pornește jocul 🎉')
         : el('p', { class: 'muted center' }, 'Așteptăm ca organizatorul să pornească jocul…'));
   }
 
   if (p.phase === 'finished') {
-    return el('div', { class: 'stage party' + (p.adult ? ' spicy' : '') },
+    const top = p.ranking[0];
+    if (p.kind === 'who') {
+      return el('div', { class: cls },
+        el('div', { class: 'room-top' }, el('span', { class: 'room-title' }, title)),
+        el('h2', { class: 'center' }, '🏅 Titlurile serii'),
+        el('div', { class: 'titles' }, p.ranking.map((r, i) => el('div', { class: 'title-card', style: `--i:${i}` },
+          el('div', { class: 'row' }, mascot(r.id, 'sm', 'bob'), el('b', { class: 'grow' }, r.name), el('span', { class: 'muted small' }, `${r.titles.length} ${r.titles.length === 1 ? 'titlu' : 'titluri'}`)),
+          r.titles.length ? el('ul', {}, r.titles.map((t) => el('li', {}, t))) : el('p', { class: 'muted small' }, 'Scăpat basma curată. 😇')))),
+        el('button', { class: 'btn primary big', onclick: () => { S.dismissedParty = p.id; render(); } }, 'Înapoi'));
+    }
+    return el('div', { class: cls },
       el('div', { class: 'room-top' }, el('span', { class: 'room-title' }, title)),
-      el('h2', { class: 'center' }, '🏆 Cel mai amuzant din gașcă'),
-      p.ranking[0] ? el('div', { class: 'champion' }, el('span', { class: 'crown' }, '👑'), mascot(p.ranking[0].id, 'xl', 'bob'), el('b', {}, p.ranking[0].name)) : null,
+      el('h2', { class: 'center' }, p.kind === 'draw' ? '🏆 Artistul serii' : '🏆 Cel mai amuzant din gașcă'),
+      top ? el('div', { class: 'champion' }, el('span', { class: 'crown' }, '👑'), mascot(top.id, 'xl', 'bob'), el('b', {}, top.name)) : null,
       rankingList(p.ranking.map((r) => ({ ...r, sub: `${r.score} ${r.score === 1 ? 'vot' : 'voturi'} · ${r.rounds} ${r.rounds === 1 ? 'rundă câștigată' : 'runde câștigate'}` }))),
       el('button', { class: 'btn primary big', onclick: () => { S.dismissedParty = p.id; render(); } }, 'Înapoi'));
   }
 
   const end = S.partyEnd;
   const head = el('div', { class: 'room-top' }, el('span', { class: 'room-title' }, `${p.index + 1}`, el('span', { class: 'muted' }, ` / ${p.total}`)), secs(end), el('span', { class: 'row-tight' }, endBtn, leave));
-  const prompt = el('div', { class: 'prompt-card pop' }, el('span', { class: 'prompt-emoji' }, p.adult ? '🌶️' : '🎤'), p.prompt);
+  const prompt = el('div', { class: 'prompt-card pop' }, el('span', { class: 'prompt-emoji' }, p.kind === 'draw' ? '🎨' : p.adult ? '🌶️' : p.kind === 'who' ? '🤪' : '🎤'),
+    p.kind === 'draw' ? el('span', {}, el('small', { class: 'muted block' }, 'Desenează:'), p.prompt) : p.prompt);
   const roster = el('div', { class: 'mini-scores' }, p.players.map((x) => el('div', { class: 'ms' + (x.id === S.me.id ? ' me' : '') + ((p.phase === 'answer' ? x.answered : x.voted) ? ' done' : '') },
-    mascot(x.id, 'xs'), el('span', {}, x.score))));
+    mascot(x.id, 'xs'), el('span', {}, p.kind === 'who' ? x.rounds : x.score))));
+  const imgs = S.partyImages && S.partyImages.id === p.id && S.partyImages.index === p.index ? S.partyImages.images : {};
+
+  if (p.phase === 'answer' && p.kind === 'draw') {
+    const key = p.id + ':' + p.index;
+    if (!S.pad || S.pad.key !== key) S.pad = makePad(key);
+    if (p.myAnswer || S.pad.sent) {
+      return el('div', { class: cls }, head, timerBar(end, p.durationMs), prompt,
+        S.pad.dataUrl ? el('img', { class: 'drawing mine pop', src: S.pad.dataUrl, alt: 'Desenul tău' }) : null,
+        el('p', { class: 'status wait' }, `Trimis! ✓ Așteptăm restul (${p.players.filter((x) => x.answered).length}/${p.players.length})`),
+        roster);
+    }
+    return el('div', { class: cls }, head, timerBar(end, p.durationMs), prompt, S.pad.wrap, roster);
+  }
 
   if (p.phase === 'answer') {
     const key = p.id + ':' + p.index;
     if (S.partyDraftKey !== key) { S.partyDraftKey = key; S.partyDraft = ''; }
     if (p.myAnswer) {
-      return el('div', { class: 'stage party' + (p.adult ? ' spicy' : '') }, head, timerBar(end, p.durationMs), prompt,
+      return el('div', { class: cls }, head, timerBar(end, p.durationMs), prompt,
         el('div', { class: 'bubble mine pop' }, p.myAnswer),
         el('p', { class: 'status wait' }, `Trimis! ✓ Așteptăm restul (${p.players.filter((x) => x.answered).length}/${p.players.length})`),
         roster);
     }
+    const counter = el('span', { class: 'muted small' }, `${S.partyDraft.length}/140`);
     const ta = el('textarea', { id: 'partyInput', maxlength: 140, rows: 3, placeholder: 'Scrie cel mai amuzant răspuns…', oninput: (e) => { S.partyDraft = e.target.value; counter.textContent = `${e.target.value.length}/140`; } });
     ta.value = S.partyDraft;
-    const counter = el('span', { class: 'muted small' }, `${S.partyDraft.length}/140`);
     const send = () => {
       const text = ta.value.trim();
       if (!text) return toast('Scrie ceva întâi. 😄');
       S.socket.emit('partyAnswer', { text });
     };
     ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
-    return el('div', { class: 'stage party' + (p.adult ? ' spicy' : '') }, head, timerBar(end, p.durationMs), prompt,
+    return el('div', { class: cls }, head, timerBar(end, p.durationMs), prompt,
       el('div', { class: 'answer-box' }, ta, el('div', { class: 'row space' }, counter, el('button', { class: 'btn primary', onclick: send }, 'Trimite 🚀'))),
       roster);
   }
 
   if (p.phase === 'vote') {
-    return el('div', { class: 'stage party' + (p.adult ? ' spicy' : '') }, head, timerBar(end, p.durationMs), prompt,
-      el('p', { class: 'eyebrow center' }, p.myVote ? 'Ai votat ✓' : 'Votează cel mai amuzant răspuns'),
-      el('div', { class: 'ballot' }, p.ballot.map((b, i) => el('button', {
-        class: 'bubble' + (b.mine ? ' mine' : '') + (p.myVote === b.key ? ' voted' : ''),
-        style: `--i:${i}`,
-        disabled: b.mine || Boolean(p.myVote),
+    const voted = Boolean(p.myVote);
+    let ballot;
+    if (p.kind === 'who') {
+      ballot = el('div', { class: 'cand-grid' }, p.ballot.map((b, i) => el('button', {
+        class: 'cand' + (p.myVote === b.key ? ' sel' : ''), style: `--i:${i}`, disabled: b.mine || voted,
         onclick: () => S.socket.emit('partyVote', { key: b.key })
-      }, b.text, b.mine ? el('span', { class: 'bubble-tag' }, 'al tău') : null, p.myVote === b.key ? el('span', { class: 'bubble-tag' }, '❤️ votul tău') : null))),
-      roster);
+      }, mascot(b.authorId, 'lg', p.myVote === b.key ? 'bob' : ''), el('span', {}, b.mine ? 'Tu' : nameOf(b.authorId)), p.myVote === b.key ? el('span', { class: 'cand-check' }, '✓') : null)));
+    } else if (p.kind === 'draw') {
+      ballot = el('div', { class: 'drawings' }, p.ballot.map((b, i) => el('button', {
+        class: 'drawing-btn' + (b.mine ? ' mine' : '') + (p.myVote === b.key ? ' voted' : ''), style: `--i:${i}`, disabled: b.mine || voted,
+        onclick: () => S.socket.emit('partyVote', { key: b.key })
+      }, imgs[b.key] ? el('img', { class: 'drawing', src: imgs[b.key], alt: 'Desen' }) : el('span', { class: 'drawing loading' }, '…'),
+      b.mine ? el('span', { class: 'bubble-tag' }, 'al tău') : null, p.myVote === b.key ? el('span', { class: 'bubble-tag' }, '❤️ votul tău') : null)));
+    } else {
+      ballot = el('div', { class: 'ballot' }, p.ballot.map((b, i) => el('button', {
+        class: 'bubble' + (b.mine ? ' mine' : '') + (p.myVote === b.key ? ' voted' : ''), style: `--i:${i}`, disabled: b.mine || voted,
+        onclick: () => S.socket.emit('partyVote', { key: b.key })
+      }, b.text, b.mine ? el('span', { class: 'bubble-tag' }, 'al tău') : null, p.myVote === b.key ? el('span', { class: 'bubble-tag' }, '❤️ votul tău') : null)));
+    }
+    const hint = p.kind === 'who' ? 'Votează secret pe cineva' : p.kind === 'draw' ? 'Votează cel mai reușit desen' : 'Votează cel mai amuzant răspuns';
+    return el('div', { class: cls }, head, timerBar(end, p.durationMs), prompt,
+      el('p', { class: 'eyebrow center' }, voted ? 'Ai votat ✓' : hint), ballot, roster);
   }
 
   // result
   const max = Math.max(1, ...p.results.map((r) => r.votes));
-  return el('div', { class: 'stage party' + (p.adult ? ' spicy' : '') }, head, timerBar(end, p.durationMs), prompt,
+  if (p.kind === 'who') {
+    const winners = p.results.filter((r) => r.winner);
+    return el('div', { class: cls }, head, timerBar(end, p.durationMs), prompt,
+      winners.length ? el('div', { class: 'who-winner' }, winners.map((w) => el('div', { class: 'champion small' }, el('span', { class: 'crown' }, '👑'), mascot(w.authorId, 'lg', 'bob wiggle'), el('b', {}, w.name))))
+        : el('p', { class: 'muted center' }, 'Nimeni n-a votat runda asta. 🤷'),
+      el('div', { class: 'results' }, p.results.filter((r) => r.votes > 0).map((r, i) => el('div', { class: 'result' + (r.winner ? ' winner' : ''), style: `--i:${i}` },
+        el('div', { class: 'result-head' }, mascot(r.authorId, 'sm'), el('b', {}, r.name), el('span', { class: 'votes' }, `${r.votes} ${r.votes === 1 ? 'vot' : 'voturi'}`)),
+        el('div', { class: 'vote-bar' }, el('span', { style: `width:${(100 * r.votes) / max}%` }))))),
+      roster);
+  }
+  return el('div', { class: cls }, head, timerBar(end, p.durationMs), prompt,
     p.results.length < 2 ? el('p', { class: 'muted center' }, 'Prea puține răspunsuri runda asta. 🤷') : null,
-    el('div', { class: 'results' }, p.results.map((r, i) => el('div', { class: 'result' + (r.winner ? ' winner' : ''), style: `--i:${i}` },
+    el('div', { class: p.kind === 'draw' ? 'results drawings-results' : 'results' }, p.results.map((r, i) => el('div', { class: 'result' + (r.winner ? ' winner' : ''), style: `--i:${i}` },
       el('div', { class: 'result-head' }, mascot(r.authorId, 'sm', r.winner ? 'bob' : ''), el('b', {}, r.name), r.winner ? el('span', { class: 'crown-s' }, '👑') : null,
         el('span', { class: 'votes' }, `${r.votes} ${r.votes === 1 ? 'vot' : 'voturi'}`)),
-      el('p', { class: 'result-text' }, r.text),
+      p.kind === 'draw' ? (imgs[r.key] ? el('img', { class: 'drawing', src: imgs[r.key], alt: `Desenul lui ${r.name}` }) : null) : el('p', { class: 'result-text' }, r.text),
       el('div', { class: 'vote-bar' }, el('span', { style: `width:${(100 * r.votes) / max}%` }))))),
     roster);
 }
+
+// Tabla de desen: păstrată între re-randări, ca să nu se piardă desenul.
+function makePad(key) {
+  const SIZE = 480;
+  const canvas = el('canvas', { class: 'pad-canvas', width: SIZE, height: SIZE });
+  const ctx = canvas.getContext('2d');
+  const COLORS = ['#1E1B3A', '#FF4D6A', '#FF8A3D', '#FFC93C', '#16B97A', '#2D9CFF', '#7C5CFF', '#8B5A2B', '#FFFFFF'];
+  const pad = { key, sent: false, dataUrl: null, strokes: [], color: COLORS[0], size: 8 };
+  const redraw = () => {
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    for (const s of pad.strokes) {
+      ctx.strokeStyle = s.color;
+      ctx.fillStyle = s.color;
+      ctx.lineWidth = s.size;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      if (s.points.length === 1) {
+        ctx.beginPath();
+        ctx.arc(s.points[0][0], s.points[0][1], s.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+        continue;
+      }
+      ctx.beginPath();
+      ctx.moveTo(s.points[0][0], s.points[0][1]);
+      for (const [x, y] of s.points.slice(1)) ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+  };
+  redraw();
+  const pos = (e) => {
+    const r = canvas.getBoundingClientRect();
+    return [((e.clientX - r.left) / r.width) * SIZE, ((e.clientY - r.top) / r.height) * SIZE];
+  };
+  let current = null;
+  canvas.addEventListener('pointerdown', (e) => {
+    canvas.setPointerCapture(e.pointerId);
+    current = { color: pad.color, size: pad.size, points: [pos(e)] };
+    pad.strokes.push(current);
+    redraw();
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!current) return;
+    current.points.push(pos(e));
+    redraw();
+  });
+  const stop = () => { current = null; };
+  canvas.addEventListener('pointerup', stop);
+  canvas.addEventListener('pointercancel', stop);
+
+  const swatches = COLORS.map((c) => {
+    const b = el('button', { class: 'pad-color' + (c === pad.color ? ' sel' : ''), style: `--sw:${c}`, 'aria-label': 'Culoare', onclick: () => {
+      pad.color = c;
+      swatches.forEach((x) => x.classList.toggle('sel', x === b));
+    } });
+    return b;
+  });
+  const sizes = [4, 8, 16, 28].map((sz) => {
+    const b = el('button', { class: 'pad-size' + (sz === pad.size ? ' sel' : ''), onclick: () => {
+      pad.size = sz;
+      sizes.forEach((x) => x.classList.toggle('sel', x === b));
+    } }, el('i', { style: `width:${Math.max(4, sz / 2)}px;height:${Math.max(4, sz / 2)}px` }));
+    return b;
+  });
+  pad.submit = () => {
+    if (pad.sent) return;
+    if (!pad.strokes.length) return toast('Desenează ceva întâi. ✏️');
+    pad.sent = true;
+    pad.dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+    S.socket.emit('partyAnswer', { image: pad.dataUrl });
+    render();
+  };
+  pad.wrap = el('div', { class: 'pad' },
+    canvas,
+    el('div', { class: 'pad-colors' }, swatches),
+    el('div', { class: 'pad-tools' }, sizes,
+      el('button', { class: 'btn small', onclick: () => { pad.strokes.pop(); redraw(); } }, '↩️'),
+      el('button', { class: 'btn small', onclick: () => { pad.strokes = []; redraw(); } }, '🗑️'),
+      el('button', { class: 'btn primary small grow', onclick: () => pad.submit() }, 'Trimite 🚀')));
+  return pad;
+}
+
+// Trimite automat desenul când se termină timpul.
+setInterval(() => {
+  const p = S.party;
+  if (!p || !S.pad || S.pad.sent || p.phase !== 'answer' || p.kind !== 'draw' || p.myAnswer) return;
+  if (S.pad.key !== p.id + ':' + p.index) return;
+  if (S.partyEnd - Date.now() < 1200 && S.pad.strokes.length) S.pad.submit();
+}, 300);
 
 // ============ Vot: jucătorul săptămânii ============
 async function loadVote() {
@@ -1002,11 +1200,11 @@ function renderBoard() {
       return el('div', { class: 'board-row' + (r.id === S.me.id ? ' me' : '') + (open ? ' open' : '') },
         el('button', { class: 'br-main', onclick: () => { S.openRow = open ? null : r.id; render(); } },
           el('span', { class: 'br-pos' }, i + 1), mascot(r.id, 'sm'),
-          el('span', { class: 'grow br-name' }, r.name, el('small', { class: 'muted' }, `${r.wins}V · ${r.draws}R · ${r.losses}Î`)),
+          el('span', { class: 'grow br-name' }, r.name),
           el('span', { class: 'br-pts' }, r.points), el('span', { class: 'br-chev' }, open ? '▴' : '▾')),
         open ? el('div', { class: 'br-detail' }, BOARD_GAMES.map((g) => el('span', { class: 'gchip', style: `--gc:${GAMES[g].color}` }, `${GAMES[g].emoji} ${GAMES[g].name}`, el('b', {}, r[g] || 0)))) : null);
     })) : null,
-    el('p', { class: 'muted small center' }, 'Victorie 3 p · Remiză 1 p · La jocurile de grup: locul 1 = 3 p, locul 2 = 2 p, locul 3 = 1 p.'),
+    el('p', { class: 'muted small center' }, '1 la 1: victorie 3 p, egal 1 p. Jocuri de grup: locul 1 = 3 p, locul 2 = 2 p, locul 3 = 1 p. Atinge un nume ca să vezi punctele pe jocuri.'),
     d.history.length ? el('section', {}, el('h2', { class: 'section-title' }, 'Campionii săptămânilor trecute'),
       el('div', { class: 'card list' }, d.history.map((w) => el('div', { class: 'list-row' }, el('span', { class: 'muted small grow' }, weekRange(w.weekKey)), mascot(w.id, 'xs'), el('b', {}, w.name), el('span', { class: 'muted small' }, `${w.points} p`))))) : null,
     resetBtn ? el('div', { class: 'center-x' }, resetBtn) : null);
