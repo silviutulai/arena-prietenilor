@@ -182,6 +182,367 @@
         "Păpușa",
         "Bucura"
       ]
+    },
+    {
+      "q": "Cine a fost primul om care a ieșit în spațiul cosmic, în afara navei?",
+      "a": [
+        "Alexei Leonov",
+        "Iuri Gagarin",
+        "Neil Armstrong",
+        "Ed White"
+      ]
+    },
+    {
+      "q": "Cât este, aproximativ, numărul lui Avogadro?",
+      "a": [
+        "6,022 × 10²³",
+        "3 × 10⁸",
+        "6,67 × 10⁻¹¹",
+        "1,6 × 10⁻¹⁹"
+      ]
+    },
+    {
+      "q": "Cine a scris romanul „Ulise” (1922)?",
+      "a": [
+        "James Joyce",
+        "Virginia Woolf",
+        "Marcel Proust",
+        "Franz Kafka"
+      ]
+    },
+    {
+      "q": "Sub ce domnitor s-a tipărit „Pravila de la Govora” (1640)?",
+      "a": [
+        "Matei Basarab",
+        "Vasile Lupu",
+        "Constantin Brâncoveanu",
+        "Mihnea Turcitul"
+      ]
+    },
+    {
+      "q": "Cine a compus „Hora staccato”?",
+      "a": [
+        "Grigoraș Dinicu",
+        "George Enescu",
+        "Ion Ivanovici",
+        "Ciprian Porumbescu"
+      ]
+    },
+    {
+      "q": "Ce element chimic are numărul atomic 26?",
+      "a": [
+        "Fierul",
+        "Cuprul",
+        "Zincul",
+        "Nichelul"
+      ]
+    },
+    {
+      "q": "Cine a câștigat primul Tur al Franței, în 1903?",
+      "a": [
+        "Maurice Garin",
+        "Lucien Petit-Breton",
+        "Henri Cornet",
+        "Jacques Anquetil"
+      ]
+    },
+    {
+      "q": "În ce an a fost fondată Universitatea din Iași?",
+      "a": [
+        "1860",
+        "1864",
+        "1848",
+        "1881"
+      ]
+    },
+    {
+      "q": "Cine a descoperit neutronul, în 1932?",
+      "a": [
+        "James Chadwick",
+        "Ernest Rutherford",
+        "Enrico Fermi",
+        "Niels Bohr"
+      ]
+    },
+    {
+      "q": "Ce limbă e vorbită de cei mai mulți elvețieni?",
+      "a": [
+        "Germana",
+        "Franceza",
+        "Italiana",
+        "Romanșa"
+      ]
+    },
+    {
+      "q": "Ce pictor român a pictat celebrele „Anemone”?",
+      "a": [
+        "Ștefan Luchian",
+        "Nicolae Grigorescu",
+        "Theodor Pallady",
+        "Nicolae Tonitza"
+      ]
+    },
+    {
+      "q": "Cine a demonstrat conjectura lui Poincaré?",
+      "a": [
+        "Grigori Perelman",
+        "Andrew Wiles",
+        "Terence Tao",
+        "Alexander Grothendieck"
+      ]
+    },
+    {
+      "q": "Cine a scris „Un veac de singurătate”?",
+      "a": [
+        "Gabriel García Márquez",
+        "Jorge Luis Borges",
+        "Mario Vargas Llosa",
+        "Julio Cortázar"
+      ]
+    },
+    {
+      "q": "Ce proteină din globulele roșii transportă oxigenul?",
+      "a": [
+        "Hemoglobina",
+        "Mioglobina",
+        "Colagenul",
+        "Keratina"
+      ]
+    },
+    {
+      "q": "În ce an s-a unit Basarabia cu România?",
+      "a": [
+        "1918",
+        "1859",
+        "1940",
+        "1812"
+      ]
+    },
+    {
+      "q": "Care este capitala Nigeriei?",
+      "a": [
+        "Abuja",
+        "Lagos",
+        "Kano",
+        "Ibadan"
+      ]
+    },
+    {
+      "q": "Ce matematician a introdus notația f(x)?",
+      "a": [
+        "Leonhard Euler",
+        "Isaac Newton",
+        "Gottfried Leibniz",
+        "René Descartes"
+      ]
+    },
+    {
+      "q": "Cine a scris poezia „Moartea căprioarei”?",
+      "a": [
+        "Nicolae Labiș",
+        "Nichita Stănescu",
+        "Marin Sorescu",
+        "Ion Pillat"
+      ]
+    },
+    {
+      "q": "Ce popor antic a construit orașul Petra?",
+      "a": [
+        "Nabateenii",
+        "Romanii",
+        "Fenicienii",
+        "Egiptenii"
+      ]
+    },
+    {
+      "q": "Care e cel mai răspândit gaz nobil din atmosfera Pământului?",
+      "a": [
+        "Argonul",
+        "Neonul",
+        "Heliul",
+        "Kriptonul"
+      ]
+    },
+    {
+      "q": "Cine a primit primul Premiu Nobel pentru Literatură, în 1901?",
+      "a": [
+        "Sully Prudhomme",
+        "Lev Tolstoi",
+        "Henrik Ibsen",
+        "Rudyard Kipling"
+      ]
+    },
+    {
+      "q": "Ce oraș a fost reședința domnească a Țării Românești înaintea Bucureștiului?",
+      "a": [
+        "Târgoviște",
+        "Câmpulung",
+        "Curtea de Argeș",
+        "Craiova"
+      ]
+    },
+    {
+      "q": "Care e cea mai strălucitoare stea de pe cerul nopții?",
+      "a": [
+        "Sirius",
+        "Steaua Polară",
+        "Vega",
+        "Betelgeuse"
+      ]
+    },
+    {
+      "q": "Cam câți ani a domnit regina Elisabeta a II-a?",
+      "a": [
+        "70",
+        "63",
+        "65",
+        "75"
+      ]
+    },
+    {
+      "q": "Care e cea mai cunoscută simfonie supranumită „a Destinului”?",
+      "a": [
+        "Simfonia a 5-a de Beethoven",
+        "Simfonia a 40-a de Mozart",
+        "Simfonia a 9-a de Dvořák",
+        "Simfonia „Surpriza” de Haydn"
+      ]
+    },
+    {
+      "q": "Care e cel mai lung fluviu din Asia?",
+      "a": [
+        "Yangtze",
+        "Gange",
+        "Mekong",
+        "Fluviul Galben"
+      ]
+    },
+    {
+      "q": "În ce an a lansat URSS satelitul Sputnik 1?",
+      "a": [
+        "1957",
+        "1961",
+        "1955",
+        "1969"
+      ]
+    },
+    {
+      "q": "În ce sport a strălucit Ivan Patzaichin?",
+      "a": [
+        "Canoe",
+        "Canotaj",
+        "Înot",
+        "Atletism"
+      ]
+    },
+    {
+      "q": "Pentru ce a primit Einstein Premiul Nobel?",
+      "a": [
+        "Explicarea efectului fotoelectric",
+        "Teoria relativității",
+        "Bomba atomică",
+        "Descoperirea electronului"
+      ]
+    },
+    {
+      "q": "Ce rege a fost încoronat la Alba Iulia, în 1922?",
+      "a": [
+        "Ferdinand I",
+        "Carol I",
+        "Carol al II-lea",
+        "Mihai I"
+      ]
+    },
+    {
+      "q": "Cine a scris „Procesul”?",
+      "a": [
+        "Franz Kafka",
+        "Albert Camus",
+        "Thomas Mann",
+        "Hermann Hesse"
+      ]
+    },
+    {
+      "q": "Câte laturi are un dodecagon?",
+      "a": [
+        "12",
+        "10",
+        "20",
+        "14"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Grădina deliciilor pământești”?",
+      "a": [
+        "Hieronymus Bosch",
+        "Pieter Bruegel cel Bătrân",
+        "Jan van Eyck",
+        "Peter Paul Rubens"
+      ]
+    },
+    {
+      "q": "Cu ce gaz era umplut dirijabilul Hindenburg?",
+      "a": [
+        "Hidrogen",
+        "Heliu",
+        "Metan",
+        "Aer cald"
+      ]
+    },
+    {
+      "q": "În ce oraș a avut loc Conferința de Pace din 1919–1920?",
+      "a": [
+        "Paris",
+        "Viena",
+        "Londra",
+        "Geneva"
+      ]
+    },
+    {
+      "q": "Ce animal are cei mai mari ochi din lume?",
+      "a": [
+        "Calmarul colosal",
+        "Balena albastră",
+        "Struțul",
+        "Elefantul"
+      ]
+    },
+    {
+      "q": "Ce constelație conține Steaua Polară?",
+      "a": [
+        "Ursa Mică",
+        "Ursa Mare",
+        "Orion",
+        "Casiopeea"
+      ]
+    },
+    {
+      "q": "Ce înseamnă prescurtarea CPU?",
+      "a": [
+        "Central Processing Unit",
+        "Computer Personal Unit",
+        "Central Program Utility",
+        "Core Power Unit"
+      ]
+    },
+    {
+      "q": "În ce lanț muntos se află Everestul?",
+      "a": [
+        "Himalaya",
+        "Karakoram",
+        "Anzi",
+        "Hindu Kush"
+      ]
+    },
+    {
+      "q": "Ce mare se află între Grecia și Turcia?",
+      "a": [
+        "Marea Egee",
+        "Marea Ionică",
+        "Marea Adriatică",
+        "Marea Marmara"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

@@ -182,6 +182,367 @@
         "Aberdeen",
         "Dundee"
       ]
+    },
+    {
+      "q": "Cine a scris romanul „1984”?",
+      "a": [
+        "George Orwell",
+        "Aldous Huxley",
+        "Ray Bradbury",
+        "H.G. Wells"
+      ]
+    },
+    {
+      "q": "Care este capitala Islandei?",
+      "a": [
+        "Reykjavík",
+        "Oslo",
+        "Helsinki",
+        "Nuuk"
+      ]
+    },
+    {
+      "q": "Cine a descoperit legile eredității lucrând cu mazăre?",
+      "a": [
+        "Gregor Mendel",
+        "Charles Darwin",
+        "Louis Pasteur",
+        "Carl Linné"
+      ]
+    },
+    {
+      "q": "În ce an a început Al Doilea Război Mondial?",
+      "a": [
+        "1939",
+        "1941",
+        "1937",
+        "1914"
+      ]
+    },
+    {
+      "q": "Cine l-a creat pe Don Quijote?",
+      "a": [
+        "Miguel de Cervantes",
+        "Lope de Vega",
+        "Dante Alighieri",
+        "William Shakespeare"
+      ]
+    },
+    {
+      "q": "În ce organ se află alveolele pulmonare?",
+      "a": [
+        "Plămâni",
+        "Rinichi",
+        "Ficat",
+        "Inimă"
+      ]
+    },
+    {
+      "q": "Care e cea mai înaltă cascadă din lume?",
+      "a": [
+        "Salto Ángel",
+        "Niagara",
+        "Victoria",
+        "Iguazú"
+      ]
+    },
+    {
+      "q": "Cine a compus opera „Flautul fermecat”?",
+      "a": [
+        "Wolfgang Amadeus Mozart",
+        "Ludwig van Beethoven",
+        "Richard Wagner",
+        "Giuseppe Verdi"
+      ]
+    },
+    {
+      "q": "Care este simbolul chimic al argintului?",
+      "a": [
+        "Ag",
+        "Au",
+        "Ar",
+        "Si"
+      ]
+    },
+    {
+      "q": "Ce domnitor a fost executat la Constantinopol în 1714, împreună cu fiii săi?",
+      "a": [
+        "Constantin Brâncoveanu",
+        "Dimitrie Cantemir",
+        "Matei Basarab",
+        "Vasile Lupu"
+      ]
+    },
+    {
+      "q": "Ce oraș a fost capitala Japoniei vreme de peste 1000 de ani, înainte de Tokyo?",
+      "a": [
+        "Kyoto",
+        "Osaka",
+        "Nara",
+        "Hiroshima"
+      ]
+    },
+    {
+      "q": "Cât este suma unghiurilor unui triunghi?",
+      "a": [
+        "180°",
+        "360°",
+        "90°",
+        "270°"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Persistența memoriei”, cu ceasurile topite?",
+      "a": [
+        "Salvador Dalí",
+        "René Magritte",
+        "Joan Miró",
+        "Pablo Picasso"
+      ]
+    },
+    {
+      "q": "Ce mare se află între Italia și Peninsula Balcanică?",
+      "a": [
+        "Marea Adriatică",
+        "Marea Egee",
+        "Marea Tireniană",
+        "Marea Baltică"
+      ]
+    },
+    {
+      "q": "În ce țară se consideră că a apărut jocul de șah?",
+      "a": [
+        "India",
+        "China",
+        "Grecia",
+        "Egipt"
+      ]
+    },
+    {
+      "q": "Cine a scris „Amintiri din casa morților”?",
+      "a": [
+        "Feodor Dostoievski",
+        "Lev Tolstoi",
+        "Nikolai Gogol",
+        "Ivan Turgheniev"
+      ]
+    },
+    {
+      "q": "Care e cel mai mare lac din Europa?",
+      "a": [
+        "Ladoga",
+        "Balaton",
+        "Lemanul (Geneva)",
+        "Onega"
+      ]
+    },
+    {
+      "q": "Ce hormon e numit „hormonul stresului”?",
+      "a": [
+        "Cortizolul",
+        "Insulina",
+        "Melatonina",
+        "Estrogenul"
+      ]
+    },
+    {
+      "q": "Cine a fost primul președinte ales al României după 1989?",
+      "a": [
+        "Ion Iliescu",
+        "Emil Constantinescu",
+        "Traian Băsescu",
+        "Petre Roman"
+      ]
+    },
+    {
+      "q": "Ce instrument înregistrează cutremurele?",
+      "a": [
+        "Seismograful",
+        "Barometrul",
+        "Anemometrul",
+        "Altimetrul"
+      ]
+    },
+    {
+      "q": "Care este capitala Marocului?",
+      "a": [
+        "Rabat",
+        "Casablanca",
+        "Marrakech",
+        "Fes"
+      ]
+    },
+    {
+      "q": "În ce țară de azi se află Waterloo?",
+      "a": [
+        "Belgia",
+        "Franța",
+        "Țările de Jos",
+        "Germania"
+      ]
+    },
+    {
+      "q": "Cine a scris „Bătrânul și marea”?",
+      "a": [
+        "Ernest Hemingway",
+        "John Steinbeck",
+        "William Faulkner",
+        "Mark Twain"
+      ]
+    },
+    {
+      "q": "Ce vitamină e esențială pentru coagularea sângelui?",
+      "a": [
+        "Vitamina K",
+        "Vitamina C",
+        "Vitamina A",
+        "Vitamina E"
+      ]
+    },
+    {
+      "q": "Ce oraș românesc purta în Antichitate numele Napoca?",
+      "a": [
+        "Cluj-Napoca",
+        "Alba Iulia",
+        "Oradea",
+        "Turda"
+      ]
+    },
+    {
+      "q": "Care e cea mai mare insulă din lume?",
+      "a": [
+        "Groenlanda",
+        "Madagascar",
+        "Borneo",
+        "Noua Guinee"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Fata cu cercel de perlă”?",
+      "a": [
+        "Johannes Vermeer",
+        "Rembrandt",
+        "Rubens",
+        "Jan van Eyck"
+      ]
+    },
+    {
+      "q": "Ce limbaj descrie structura paginilor web?",
+      "a": [
+        "HTML",
+        "CSS",
+        "SQL",
+        "C++"
+      ]
+    },
+    {
+      "q": "Cine a scris „Ultima noapte de dragoste, întâia noapte de război”?",
+      "a": [
+        "Camil Petrescu",
+        "Mihail Sebastian",
+        "Liviu Rebreanu",
+        "Hortensia Papadat-Bengescu"
+      ]
+    },
+    {
+      "q": "În ce an s-a destrămat URSS?",
+      "a": [
+        "1991",
+        "1989",
+        "1993",
+        "1985"
+      ]
+    },
+    {
+      "q": "Câte camere are inima omului?",
+      "a": [
+        "4",
+        "2",
+        "3",
+        "6"
+      ]
+    },
+    {
+      "q": "Ce munți sunt considerați granița dintre Europa și Asia?",
+      "a": [
+        "Munții Ural",
+        "Munții Alpi",
+        "Munții Carpați",
+        "Munții Pirinei"
+      ]
+    },
+    {
+      "q": "Cine a compus baletul „Lacul lebedelor”?",
+      "a": [
+        "Piotr Ceaikovski",
+        "Igor Stravinski",
+        "Serghei Rahmaninov",
+        "Modest Musorgski"
+      ]
+    },
+    {
+      "q": "Care este capitala Indiei?",
+      "a": [
+        "New Delhi",
+        "Mumbai",
+        "Kolkata",
+        "Bangalore"
+      ]
+    },
+    {
+      "q": "Cine a scris „Robinson Crusoe”?",
+      "a": [
+        "Daniel Defoe",
+        "Jonathan Swift",
+        "Robert Louis Stevenson",
+        "Walter Scott"
+      ]
+    },
+    {
+      "q": "Câți jucători are o echipă de handbal pe teren, cu portar?",
+      "a": [
+        "7",
+        "6",
+        "8",
+        "11"
+      ]
+    },
+    {
+      "q": "Ce gaz din atmosferă ne protejează de razele ultraviolete?",
+      "a": [
+        "Ozonul",
+        "Azotul",
+        "Heliul",
+        "Metanul"
+      ]
+    },
+    {
+      "q": "Cine a scris „Hanu Ancuței”?",
+      "a": [
+        "Mihail Sadoveanu",
+        "Ion Creangă",
+        "Calistrat Hogaș",
+        "Vasile Voiculescu"
+      ]
+    },
+    {
+      "q": "În ce oraș se află statuia Cristo Redentor?",
+      "a": [
+        "Rio de Janeiro",
+        "São Paulo",
+        "Lisabona",
+        "Buenos Aires"
+      ]
+    },
+    {
+      "q": "Ce număr reprezintă cifrele romane XC?",
+      "a": [
+        "90",
+        "110",
+        "140",
+        "60"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

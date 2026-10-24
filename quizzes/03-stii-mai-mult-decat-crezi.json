@@ -182,6 +182,367 @@
         "Rinul",
         "Ronul"
       ]
+    },
+    {
+      "q": "Câte ore are o săptămână?",
+      "a": [
+        "168",
+        "148",
+        "120",
+        "186"
+      ]
+    },
+    {
+      "q": "Care este capitala Greciei?",
+      "a": [
+        "Atena",
+        "Salonic",
+        "Sparta",
+        "Heraklion"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare continent?",
+      "a": [
+        "Asia",
+        "Africa",
+        "America de Nord",
+        "Europa"
+      ]
+    },
+    {
+      "q": "Cine a scris „O scrisoare pierdută”?",
+      "a": [
+        "Ion Luca Caragiale",
+        "Mihai Eminescu",
+        "Ion Creangă",
+        "Vasile Alecsandri"
+      ]
+    },
+    {
+      "q": "Ce oraș e numit „Orașul Luminilor”?",
+      "a": [
+        "Paris",
+        "Roma",
+        "Londra",
+        "Viena"
+      ]
+    },
+    {
+      "q": "Câți jucători are o echipă de baschet pe teren?",
+      "a": [
+        "5",
+        "6",
+        "7",
+        "11"
+      ]
+    },
+    {
+      "q": "Ce metal ieftin se folosește cel mai des în firele electrice?",
+      "a": [
+        "Cuprul",
+        "Aurul",
+        "Fierul",
+        "Plumbul"
+      ]
+    },
+    {
+      "q": "Care este capitala Portugaliei?",
+      "a": [
+        "Lisabona",
+        "Porto",
+        "Madrid",
+        "Faro"
+      ]
+    },
+    {
+      "q": "Cât face 9 × 7?",
+      "a": [
+        "63",
+        "56",
+        "72",
+        "64"
+      ]
+    },
+    {
+      "q": "Care e cel mai înalt animal din lume?",
+      "a": [
+        "Girafa",
+        "Elefantul",
+        "Struțul",
+        "Cămila"
+      ]
+    },
+    {
+      "q": "Ce fluviu trece prin Viena și Budapesta?",
+      "a": [
+        "Dunărea",
+        "Rinul",
+        "Tisa",
+        "Elba"
+      ]
+    },
+    {
+      "q": "Cine a scris versurile „Horei Unirii”?",
+      "a": [
+        "Vasile Alecsandri",
+        "Mihai Eminescu",
+        "George Coșbuc",
+        "Ion Creangă"
+      ]
+    },
+    {
+      "q": "Ce limbă oficială se vorbește în Austria?",
+      "a": [
+        "Germana",
+        "Austriaca",
+        "Franceza",
+        "Italiana"
+      ]
+    },
+    {
+      "q": "De la ce vârstă ești major în România?",
+      "a": [
+        "18",
+        "16",
+        "21",
+        "14"
+      ]
+    },
+    {
+      "q": "Ce organe filtrează sângele și produc urina?",
+      "a": [
+        "Rinichii",
+        "Plămânii",
+        "Inima",
+        "Stomacul"
+      ]
+    },
+    {
+      "q": "Cine a pictat seria „Floarea-soarelui”?",
+      "a": [
+        "Vincent van Gogh",
+        "Claude Monet",
+        "Pablo Picasso",
+        "Rembrandt"
+      ]
+    },
+    {
+      "q": "Câte grade are un cerc complet?",
+      "a": [
+        "360",
+        "180",
+        "90",
+        "100"
+      ]
+    },
+    {
+      "q": "Care este moneda României?",
+      "a": [
+        "Leul",
+        "Euro",
+        "Forintul",
+        "Dinarul"
+      ]
+    },
+    {
+      "q": "Ce ocean se află între Europa și America?",
+      "a": [
+        "Atlanticul",
+        "Pacificul",
+        "Indianul",
+        "Arcticul"
+      ]
+    },
+    {
+      "q": "În ce oraș se află Big Ben?",
+      "a": [
+        "Londra",
+        "Paris",
+        "Dublin",
+        "Edinburgh"
+      ]
+    },
+    {
+      "q": "Care este capitala Ungariei?",
+      "a": [
+        "Budapesta",
+        "Debrecen",
+        "Viena",
+        "Szeged"
+      ]
+    },
+    {
+      "q": "De la ce animal provine cea mai mare parte a lânii?",
+      "a": [
+        "Oaia",
+        "Vaca",
+        "Capra",
+        "Porcul"
+      ]
+    },
+    {
+      "q": "Cine a fost primul președinte al SUA?",
+      "a": [
+        "George Washington",
+        "Abraham Lincoln",
+        "Thomas Jefferson",
+        "John Adams"
+      ]
+    },
+    {
+      "q": "Ce sport a practicat Ilie Năstase?",
+      "a": [
+        "Tenis",
+        "Fotbal",
+        "Box",
+        "Handbal"
+      ]
+    },
+    {
+      "q": "Ce înseamnă „www” din adresele de internet?",
+      "a": [
+        "World Wide Web",
+        "Web World Wide",
+        "Wide World Web",
+        "World Web Wire"
+      ]
+    },
+    {
+      "q": "Cât face 25% din 80?",
+      "a": [
+        "20",
+        "25",
+        "40",
+        "16"
+      ]
+    },
+    {
+      "q": "Care e cea mai rapidă pasăre în picaj?",
+      "a": [
+        "Șoimul călător",
+        "Vulturul pleșuv",
+        "Rândunica",
+        "Albatrosul"
+      ]
+    },
+    {
+      "q": "Ce oraș era supranumit „Micul Paris”?",
+      "a": [
+        "București",
+        "Iași",
+        "Cluj-Napoca",
+        "Timișoara"
+      ]
+    },
+    {
+      "q": "Ce culoare are, de fapt, „cutia neagră” a avioanelor?",
+      "a": [
+        "Portocalie",
+        "Neagră",
+        "Albă",
+        "Gri"
+      ]
+    },
+    {
+      "q": "Cine a scris „Fram, ursul polar”?",
+      "a": [
+        "Cezar Petrescu",
+        "Ion Creangă",
+        "Mihail Sadoveanu",
+        "Ionel Teodoreanu"
+      ]
+    },
+    {
+      "q": "Ce țară e renumită pentru lalele și mori de vânt?",
+      "a": [
+        "Țările de Jos",
+        "Danemarca",
+        "Belgia",
+        "Elveția"
+      ]
+    },
+    {
+      "q": "Ce vitamină se găsește din belșug în citrice?",
+      "a": [
+        "Vitamina C",
+        "Vitamina D",
+        "Vitamina K",
+        "Vitamina B12"
+      ]
+    },
+    {
+      "q": "În ce țară se află Machu Picchu?",
+      "a": [
+        "Peru",
+        "Mexic",
+        "Chile",
+        "Bolivia"
+      ]
+    },
+    {
+      "q": "Cât este radical din 81?",
+      "a": [
+        "9",
+        "8",
+        "7",
+        "18"
+      ]
+    },
+    {
+      "q": "Ce instrument are tuburi și pedale și se aude des în catedrale?",
+      "a": [
+        "Orga",
+        "Pianul",
+        "Acordeonul",
+        "Harpa"
+      ]
+    },
+    {
+      "q": "Care este capitala Belgiei?",
+      "a": [
+        "Bruxelles",
+        "Anvers",
+        "Amsterdam",
+        "Bruges"
+      ]
+    },
+    {
+      "q": "Ce mamifer poate zbura cu adevărat?",
+      "a": [
+        "Liliacul",
+        "Veverița",
+        "Pinguinul",
+        "Struțul"
+      ]
+    },
+    {
+      "q": "Câte litere are alfabetul limbii române?",
+      "a": [
+        "31",
+        "26",
+        "28",
+        "33"
+      ]
+    },
+    {
+      "q": "În ce munți se află Vârful Omu?",
+      "a": [
+        "Bucegi",
+        "Făgăraș",
+        "Retezat",
+        "Rodnei"
+      ]
+    },
+    {
+      "q": "Câte zile are un an bisect în februarie?",
+      "a": [
+        "29",
+        "28",
+        "30",
+        "31"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

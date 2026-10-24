@@ -182,6 +182,367 @@
         "Hipopotamul",
         "Cămila"
       ]
+    },
+    {
+      "q": "Ce animal face „ham”?",
+      "a": [
+        "Câinele",
+        "Pisica",
+        "Calul",
+        "Oaia"
+      ]
+    },
+    {
+      "q": "Câte ore are o zi?",
+      "a": [
+        "24",
+        "12",
+        "20",
+        "48"
+      ]
+    },
+    {
+      "q": "Ce culoare are iarba?",
+      "a": [
+        "Verde",
+        "Albastră",
+        "Roșie",
+        "Mov"
+      ]
+    },
+    {
+      "q": "Câte anotimpuri are un an?",
+      "a": [
+        "4",
+        "3",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "q": "Ce animal dă lapte la fermă, de obicei?",
+      "a": [
+        "Vaca",
+        "Găina",
+        "Porcul",
+        "Rața"
+      ]
+    },
+    {
+      "q": "Cu ce vedem?",
+      "a": [
+        "Cu ochii",
+        "Cu urechile",
+        "Cu nasul",
+        "Cu mâinile"
+      ]
+    },
+    {
+      "q": "Cât face 2 + 2?",
+      "a": [
+        "4",
+        "3",
+        "5",
+        "22"
+      ]
+    },
+    {
+      "q": "Ce legumă portocalie le place iepurilor?",
+      "a": [
+        "Morcovul",
+        "Cartoful",
+        "Varza",
+        "Ceapa"
+      ]
+    },
+    {
+      "q": "Ce animal are trompă?",
+      "a": [
+        "Elefantul",
+        "Rinocerul",
+        "Hipopotamul",
+        "Crocodilul"
+      ]
+    },
+    {
+      "q": "În ce zi vine Moș Nicolae?",
+      "a": [
+        "6 decembrie",
+        "25 decembrie",
+        "1 decembrie",
+        "31 decembrie"
+      ]
+    },
+    {
+      "q": "Ce culoare au, de obicei, norii de ploaie?",
+      "a": [
+        "Gri",
+        "Verzi",
+        "Roz",
+        "Galbeni"
+      ]
+    },
+    {
+      "q": "Câte picioare are o pisică?",
+      "a": [
+        "4",
+        "2",
+        "6",
+        "8"
+      ]
+    },
+    {
+      "q": "Ce pasăre face „cucurigu”?",
+      "a": [
+        "Cocoșul",
+        "Rața",
+        "Porumbelul",
+        "Bufnița"
+      ]
+    },
+    {
+      "q": "Unde trăiesc peștii?",
+      "a": [
+        "În apă",
+        "În copaci",
+        "În deșert",
+        "Sub pământ"
+      ]
+    },
+    {
+      "q": "Cu ce ne spălăm pe dinți?",
+      "a": [
+        "Cu periuța",
+        "Cu furculița",
+        "Cu pieptenele",
+        "Cu buretele de vase"
+      ]
+    },
+    {
+      "q": "Ce animal lent își poartă casa în spate?",
+      "a": [
+        "Melcul",
+        "Iepurele",
+        "Veverița",
+        "Șoarecele"
+      ]
+    },
+    {
+      "q": "Câte zile are februarie într-un an obișnuit?",
+      "a": [
+        "28",
+        "30",
+        "31",
+        "29"
+      ]
+    },
+    {
+      "q": "La ce sărbătoare ciocnim ouă roșii?",
+      "a": [
+        "Paștele",
+        "Crăciunul",
+        "Revelionul",
+        "1 Iunie"
+      ]
+    },
+    {
+      "q": "Ce culoare a semaforului înseamnă „stop”?",
+      "a": [
+        "Roșu",
+        "Verde",
+        "Galben",
+        "Albastru"
+      ]
+    },
+    {
+      "q": "Ce animal are dungi albe și negre?",
+      "a": [
+        "Zebra",
+        "Leul",
+        "Ursul polar",
+        "Cangurul"
+      ]
+    },
+    {
+      "q": "Ce produc albinele?",
+      "a": [
+        "Miere",
+        "Ciocolată",
+        "Gem",
+        "Zahăr"
+      ]
+    },
+    {
+      "q": "Cât face 10 − 3?",
+      "a": [
+        "7",
+        "6",
+        "8",
+        "13"
+      ]
+    },
+    {
+      "q": "Ce cade din nori când plouă?",
+      "a": [
+        "Apă",
+        "Nisip",
+        "Lapte",
+        "Frunze"
+      ]
+    },
+    {
+      "q": "Care e cel mai cald anotimp?",
+      "a": [
+        "Vara",
+        "Iarna",
+        "Toamna",
+        "Primăvara"
+      ]
+    },
+    {
+      "q": "Ce instrument cu 6 corzi se cântă des la foc de tabără?",
+      "a": [
+        "Chitara",
+        "Pianul",
+        "Toba",
+        "Flautul"
+      ]
+    },
+    {
+      "q": "Ce animal sare și are un buzunar pe burtă?",
+      "a": [
+        "Cangurul",
+        "Koala",
+        "Iepurele",
+        "Maimuța"
+      ]
+    },
+    {
+      "q": "Câte degete avem în total la mâini?",
+      "a": [
+        "10",
+        "8",
+        "12",
+        "5"
+      ]
+    },
+    {
+      "q": "Ce culoare are zăpada?",
+      "a": [
+        "Albă",
+        "Neagră",
+        "Verde",
+        "Roșie"
+      ]
+    },
+    {
+      "q": "Ce animal mănâncă banane și se cațără în copaci?",
+      "a": [
+        "Maimuța",
+        "Leul",
+        "Peștele",
+        "Vaca"
+      ]
+    },
+    {
+      "q": "Cu ce tăiem hârtia?",
+      "a": [
+        "Cu foarfeca",
+        "Cu lingura",
+        "Cu radiera",
+        "Cu lipiciul"
+      ]
+    },
+    {
+      "q": "Cât face 3 × 3?",
+      "a": [
+        "9",
+        "6",
+        "12",
+        "33"
+      ]
+    },
+    {
+      "q": "Ce astru are faze și strălucește noaptea?",
+      "a": [
+        "Luna",
+        "Soarele",
+        "Marte",
+        "Curcubeul"
+      ]
+    },
+    {
+      "q": "Ce animal are una sau două cocoașe?",
+      "a": [
+        "Cămila",
+        "Girafa",
+        "Calul",
+        "Elefantul"
+      ]
+    },
+    {
+      "q": "În ce cameră gătim?",
+      "a": [
+        "În bucătărie",
+        "În dormitor",
+        "În baie",
+        "Pe balcon"
+      ]
+    },
+    {
+      "q": "Ce culoare obții din galben și roșu?",
+      "a": [
+        "Portocaliu",
+        "Verde",
+        "Mov",
+        "Albastru"
+      ]
+    },
+    {
+      "q": "Câte roți are o mașină obișnuită?",
+      "a": [
+        "4",
+        "3",
+        "6",
+        "2"
+      ]
+    },
+    {
+      "q": "Ce zi vine după vineri?",
+      "a": [
+        "Sâmbătă",
+        "Joi",
+        "Duminică",
+        "Luni"
+      ]
+    },
+    {
+      "q": "Ce animal toarce și prinde șoareci?",
+      "a": [
+        "Pisica",
+        "Câinele",
+        "Calul",
+        "Găina"
+      ]
+    },
+    {
+      "q": "Ce fruct galben e foarte acru?",
+      "a": [
+        "Lămâia",
+        "Banana",
+        "Pepenele",
+        "Strugurele"
+      ]
+    },
+    {
+      "q": "Câte urechi are un om?",
+      "a": [
+        "2",
+        "1",
+        "3",
+        "4"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

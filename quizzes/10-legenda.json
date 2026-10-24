@@ -182,6 +182,367 @@
         "Indonezia",
         "Norvegia"
       ]
+    },
+    {
+      "q": "Cine a demonstrat primul că π este irațional, în 1761?",
+      "a": [
+        "Johann Heinrich Lambert",
+        "Leonhard Euler",
+        "Carl Friedrich Gauss",
+        "Ferdinand von Lindemann"
+      ]
+    },
+    {
+      "q": "Cine a demonstrat, în 1882, că π este transcendent?",
+      "a": [
+        "Ferdinand von Lindemann",
+        "Johann Heinrich Lambert",
+        "Georg Cantor",
+        "Charles Hermite"
+      ]
+    },
+    {
+      "q": "Ce domnitor al Moldovei era cunoscut drept „Despot Vodă”?",
+      "a": [
+        "Ioan Iacob Heraclid",
+        "Alexandru Lăpușneanu",
+        "Petru Rareș",
+        "Ioan Vodă cel Cumplit"
+      ]
+    },
+    {
+      "q": "Cine a scris romanul „Concert din muzică de Bach”?",
+      "a": [
+        "Hortensia Papadat-Bengescu",
+        "Camil Petrescu",
+        "Mateiu Caragiale",
+        "Anton Holban"
+      ]
+    },
+    {
+      "q": "Ce element are cea mai mare electronegativitate?",
+      "a": [
+        "Fluorul",
+        "Oxigenul",
+        "Clorul",
+        "Azotul"
+      ]
+    },
+    {
+      "q": "În ce an a avut loc bătălia de la Mărășești?",
+      "a": [
+        "1917",
+        "1916",
+        "1918",
+        "1914"
+      ]
+    },
+    {
+      "q": "Cine a scris „Așa grăit-a Zarathustra”?",
+      "a": [
+        "Friedrich Nietzsche",
+        "Arthur Schopenhauer",
+        "Søren Kierkegaard",
+        "Martin Heidegger"
+      ]
+    },
+    {
+      "q": "Care e cea mai înalt situată capitală (sediu de guvern) din lume?",
+      "a": [
+        "La Paz",
+        "Quito",
+        "Bogotá",
+        "Lhasa"
+      ]
+    },
+    {
+      "q": "Cine a compus opera „Tristan și Isolda”?",
+      "a": [
+        "Richard Wagner",
+        "Giuseppe Verdi",
+        "Richard Strauss",
+        "Gustav Mahler"
+      ]
+    },
+    {
+      "q": "Cine a fondat, în 1887, Institutul de Patologie și Bacteriologie din București?",
+      "a": [
+        "Victor Babeș",
+        "Ioan Cantacuzino",
+        "Nicolae Paulescu",
+        "Gheorghe Marinescu"
+      ]
+    },
+    {
+      "q": "Câte perechi de nervi cranieni are omul?",
+      "a": [
+        "12",
+        "10",
+        "31",
+        "8"
+      ]
+    },
+    {
+      "q": "Cine a fost primul laureat Nobel pentru Literatură din afara Europei (1913)?",
+      "a": [
+        "Rabindranath Tagore",
+        "Pablo Neruda",
+        "Yasunari Kawabata",
+        "Gabriela Mistral"
+      ]
+    },
+    {
+      "q": "Ce limbă a creat L. L. Zamenhof?",
+      "a": [
+        "Esperanto",
+        "Volapük",
+        "Ido",
+        "Interlingua"
+      ]
+    },
+    {
+      "q": "Cât este, aproximativ, „numărul de aur”?",
+      "a": [
+        "1,618",
+        "3,141",
+        "2,718",
+        "1,414"
+      ]
+    },
+    {
+      "q": "Ce sondă a ieșit prima din heliosferă, în 2012?",
+      "a": [
+        "Voyager 1",
+        "Pioneer 10",
+        "Voyager 2",
+        "New Horizons"
+      ]
+    },
+    {
+      "q": "Ansamblul lui Brâncuși de la Târgu Jiu cuprinde Coloana, Poarta Sărutului și:",
+      "a": [
+        "Masa Tăcerii",
+        "Cumințenia Pământului",
+        "Pasărea Măiastră",
+        "Rugăciunea"
+      ]
+    },
+    {
+      "q": "În ce an a avut loc marea răscoală țărănească din România?",
+      "a": [
+        "1907",
+        "1888",
+        "1821",
+        "1916"
+      ]
+    },
+    {
+      "q": "Ce particulă transmite forța electromagnetică?",
+      "a": [
+        "Fotonul",
+        "Gluonul",
+        "Bosonul W",
+        "Gravitonul"
+      ]
+    },
+    {
+      "q": "Cine a fost ultimul țar al Rusiei?",
+      "a": [
+        "Nicolae al II-lea",
+        "Alexandru al III-lea",
+        "Petru cel Mare",
+        "Alexandru al II-lea"
+      ]
+    },
+    {
+      "q": "Cine a scris ciclul „În căutarea timpului pierdut”?",
+      "a": [
+        "Marcel Proust",
+        "André Gide",
+        "Gustave Flaubert",
+        "Stendhal"
+      ]
+    },
+    {
+      "q": "Ce element a descoperit Marie Curie și l-a numit după țara ei natală?",
+      "a": [
+        "Poloniul",
+        "Radiul",
+        "Curiul",
+        "Franciul"
+      ]
+    },
+    {
+      "q": "Ce oraș a fost capitala Imperiului Roman de Apus din anul 402?",
+      "a": [
+        "Ravenna",
+        "Roma",
+        "Milano",
+        "Constantinopol"
+      ]
+    },
+    {
+      "q": "Al cui nume îl poartă teorema scrisă pe marginea unei cărți, nedemonstrată 350 de ani?",
+      "a": [
+        "Pierre de Fermat",
+        "Euclid",
+        "Blaise Pascal",
+        "Diofant"
+      ]
+    },
+    {
+      "q": "Care e cel mai mare vulcan cunoscut din Sistemul Solar?",
+      "a": [
+        "Olympus Mons",
+        "Mauna Loa",
+        "Etna",
+        "Maxwell Montes"
+      ]
+    },
+    {
+      "q": "Care stat a acordat primul femeilor dreptul de vot, în 1893?",
+      "a": [
+        "Noua Zeelandă",
+        "Finlanda",
+        "Australia",
+        "Norvegia"
+      ]
+    },
+    {
+      "q": "Ce poet a fost numit „poetul pătimirii noastre”?",
+      "a": [
+        "Octavian Goga",
+        "George Coșbuc",
+        "Ion Pillat",
+        "Vasile Voiculescu"
+      ]
+    },
+    {
+      "q": "Ce structură anatomică formează „mărul lui Adam”?",
+      "a": [
+        "Cartilajul tiroid",
+        "Osul hioid",
+        "Epiglota",
+        "Traheea"
+      ]
+    },
+    {
+      "q": "Care e primul număr prim după 97?",
+      "a": [
+        "101",
+        "99",
+        "103",
+        "107"
+      ]
+    },
+    {
+      "q": "În ce an a devenit World Wide Web disponibil public?",
+      "a": [
+        "1991",
+        "1989",
+        "1995",
+        "1985"
+      ]
+    },
+    {
+      "q": "Ce dirijor român a condus Filarmonica din Berlin între 1945 și 1952?",
+      "a": [
+        "Sergiu Celibidache",
+        "George Georgescu",
+        "Ionel Perlea",
+        "Constantin Silvestri"
+      ]
+    },
+    {
+      "q": "Cine a scris „Mitul lui Sisif”?",
+      "a": [
+        "Albert Camus",
+        "Jean-Paul Sartre",
+        "Simone de Beauvoir",
+        "Emil Cioran"
+      ]
+    },
+    {
+      "q": "Cine a scris „Pe culmile disperării”?",
+      "a": [
+        "Emil Cioran",
+        "Constantin Noica",
+        "Mircea Eliade",
+        "Lucian Blaga"
+      ]
+    },
+    {
+      "q": "Cât este, aproximativ, viteza sunetului în aer la 20°C?",
+      "a": [
+        "343 m/s",
+        "1.000 m/s",
+        "150 m/s",
+        "3.000 m/s"
+      ]
+    },
+    {
+      "q": "Ce imperiu a construit Angkor Wat?",
+      "a": [
+        "Imperiul Khmer",
+        "Imperiul Mogul",
+        "Regatul Siam",
+        "Dinastia Ming"
+      ]
+    },
+    {
+      "q": "În piesa cărui scriitor a apărut pentru prima dată cuvântul „robot”?",
+      "a": [
+        "Karel Čapek",
+        "Isaac Asimov",
+        "H.G. Wells",
+        "Jules Verne"
+      ]
+    },
+    {
+      "q": "Câți sateliți naturali cunoscuți are Marte?",
+      "a": [
+        "2",
+        "0",
+        "1",
+        "4"
+      ]
+    },
+    {
+      "q": "Ce domnitor a fost ucis pe Câmpia Turzii, în 1601?",
+      "a": [
+        "Mihai Viteazul",
+        "Ștefan cel Mare",
+        "Petru Rareș",
+        "Radu Șerban"
+      ]
+    },
+    {
+      "q": "Cine a întemeiat școala românească de geometrie diferențială?",
+      "a": [
+        "Gheorghe Țițeica",
+        "Traian Lalescu",
+        "Spiru Haret",
+        "Dimitrie Pompeiu"
+      ]
+    },
+    {
+      "q": "Ce operă a lui Verdi are drept personaj principal un bufon de curte?",
+      "a": [
+        "Rigoletto",
+        "La Traviata",
+        "Aida",
+        "Nabucco"
+      ]
+    },
+    {
+      "q": "Cine a formulat cele trei legi ale mișcării planetelor?",
+      "a": [
+        "Johannes Kepler",
+        "Nicolaus Copernic",
+        "Tycho Brahe",
+        "Galileo Galilei"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

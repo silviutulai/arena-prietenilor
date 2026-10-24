@@ -182,6 +182,367 @@
         "Oxigenul",
         "Carbonul"
       ]
+    },
+    {
+      "q": "Cine a scris „Mândrie și prejudecată”?",
+      "a": [
+        "Jane Austen",
+        "Charlotte Brontë",
+        "Emily Brontë",
+        "Virginia Woolf"
+      ]
+    },
+    {
+      "q": "Ce element chimic are simbolul W?",
+      "a": [
+        "Wolframul",
+        "Vanadiul",
+        "Osmiul",
+        "Zincul"
+      ]
+    },
+    {
+      "q": "Care este capitala Pakistanului?",
+      "a": [
+        "Islamabad",
+        "Karachi",
+        "Lahore",
+        "Kabul"
+      ]
+    },
+    {
+      "q": "În ce an a fost asasinat arhiducele Franz Ferdinand la Sarajevo?",
+      "a": [
+        "1914",
+        "1912",
+        "1918",
+        "1908"
+      ]
+    },
+    {
+      "q": "Cine a creat primul vaccin împotriva variolei?",
+      "a": [
+        "Edward Jenner",
+        "Louis Pasteur",
+        "Robert Koch",
+        "Joseph Lister"
+      ]
+    },
+    {
+      "q": "Ce piesă celebră a compus Ciprian Porumbescu?",
+      "a": [
+        "Balada pentru vioară și pian",
+        "Rapsodia română",
+        "Valurile Dunării",
+        "Hora staccato"
+      ]
+    },
+    {
+      "q": "Care e cel mai înalt munte din Europa, socotind și Caucazul?",
+      "a": [
+        "Elbrus",
+        "Mont Blanc",
+        "Matterhorn",
+        "Olimp"
+      ]
+    },
+    {
+      "q": "Ce fizician a formulat principiul incertitudinii?",
+      "a": [
+        "Werner Heisenberg",
+        "Erwin Schrödinger",
+        "Max Planck",
+        "Paul Dirac"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Domnișoarele din Avignon”?",
+      "a": [
+        "Pablo Picasso",
+        "Henri Matisse",
+        "Paul Cézanne",
+        "Georges Braque"
+      ]
+    },
+    {
+      "q": "Ce strâmtoare leagă Marea Neagră de Marea Marmara?",
+      "a": [
+        "Bosfor",
+        "Dardanele",
+        "Gibraltar",
+        "Kerci"
+      ]
+    },
+    {
+      "q": "Ce domnitor a luptat la Rovine împotriva sultanului Baiazid?",
+      "a": [
+        "Mircea cel Bătrân",
+        "Vlad Țepeș",
+        "Mihai Viteazul",
+        "Basarab I"
+      ]
+    },
+    {
+      "q": "Cine a scris „Faust”?",
+      "a": [
+        "Johann Wolfgang von Goethe",
+        "Friedrich Schiller",
+        "Heinrich Heine",
+        "Thomas Mann"
+      ]
+    },
+    {
+      "q": "Ce parte a celulei produce cea mai mare parte a energiei?",
+      "a": [
+        "Mitocondria",
+        "Ribozomul",
+        "Nucleul",
+        "Aparatul Golgi"
+      ]
+    },
+    {
+      "q": "Ce cântăreț a primit Premiul Nobel pentru Literatură în 2016?",
+      "a": [
+        "Bob Dylan",
+        "Leonard Cohen",
+        "Paul McCartney",
+        "Bruce Springsteen"
+      ]
+    },
+    {
+      "q": "Ce animal are cea mai lungă sarcină dintre mamiferele de uscat?",
+      "a": [
+        "Elefantul",
+        "Girafa",
+        "Rinocerul",
+        "Cămila"
+      ]
+    },
+    {
+      "q": "Ce planetă se rotește cel mai repede în jurul axei sale?",
+      "a": [
+        "Jupiter",
+        "Saturn",
+        "Mercur",
+        "Pământ"
+      ]
+    },
+    {
+      "q": "Care este moneda Japoniei?",
+      "a": [
+        "Yenul",
+        "Yuanul",
+        "Wonul",
+        "Rupia"
+      ]
+    },
+    {
+      "q": "Cine a scris „Vrăjitorul din Oz”?",
+      "a": [
+        "L. Frank Baum",
+        "Lewis Carroll",
+        "Roald Dahl",
+        "Mark Twain"
+      ]
+    },
+    {
+      "q": "Care e cel mai mare vas de sânge din corp?",
+      "a": [
+        "Aorta",
+        "Vena cavă",
+        "Artera femurală",
+        "Carotida"
+      ]
+    },
+    {
+      "q": "Ce aviator român a murit în 1913 încercând să treacă Carpații în zbor?",
+      "a": [
+        "Aurel Vlaicu",
+        "Traian Vuia",
+        "Henri Coandă",
+        "George Valentin Bibescu"
+      ]
+    },
+    {
+      "q": "Ce țară are capitala Ulaanbaatar?",
+      "a": [
+        "Mongolia",
+        "Kazahstan",
+        "Nepal",
+        "Kârgâzstan"
+      ]
+    },
+    {
+      "q": "Ce pictor și-a tăiat o parte din ureche?",
+      "a": [
+        "Vincent van Gogh",
+        "Paul Gauguin",
+        "Edvard Munch",
+        "Henri de Toulouse-Lautrec"
+      ]
+    },
+    {
+      "q": "Ce unitate măsoară rezistența electrică?",
+      "a": [
+        "Ohmul",
+        "Voltul",
+        "Faradul",
+        "Tesla"
+      ]
+    },
+    {
+      "q": "Ce cetate medievală locuită din România e în patrimoniul UNESCO?",
+      "a": [
+        "Sighișoara",
+        "Râșnov",
+        "Deva",
+        "Rupea"
+      ]
+    },
+    {
+      "q": "Cine a condus expediția din 1519 care a făcut primul înconjur al Pământului?",
+      "a": [
+        "Ferdinand Magellan",
+        "Cristofor Columb",
+        "Vasco da Gama",
+        "James Cook"
+      ]
+    },
+    {
+      "q": "Cine a scris poezia „Testament” („Nu-ți voi lăsa drept bunuri, după moarte…”)?",
+      "a": [
+        "Tudor Arghezi",
+        "George Bacovia",
+        "Lucian Blaga",
+        "Octavian Goga"
+      ]
+    },
+    {
+      "q": "În ce an a izbucnit răscoala lui Horea, Cloșca și Crișan?",
+      "a": [
+        "1784",
+        "1821",
+        "1848",
+        "1907"
+      ]
+    },
+    {
+      "q": "Ce tablou al lui Monet a dat numele impresionismului?",
+      "a": [
+        "Impresie, răsărit de soare",
+        "Nuferi",
+        "Catedrala din Rouen",
+        "Câmp cu maci"
+      ]
+    },
+    {
+      "q": "Ce gaz are formula CH₄?",
+      "a": [
+        "Metanul",
+        "Etanul",
+        "Amoniacul",
+        "Propanul"
+      ]
+    },
+    {
+      "q": "Ce oraș a găzduit primele Jocuri Olimpice de iarnă, în 1924?",
+      "a": [
+        "Chamonix",
+        "St. Moritz",
+        "Oslo",
+        "Innsbruck"
+      ]
+    },
+    {
+      "q": "Ce civilizație a construit Machu Picchu?",
+      "a": [
+        "Incașii",
+        "Aztecii",
+        "Mayașii",
+        "Olmecii"
+      ]
+    },
+    {
+      "q": "Cine a compus „Bolero”?",
+      "a": [
+        "Maurice Ravel",
+        "Claude Debussy",
+        "Erik Satie",
+        "Georges Bizet"
+      ]
+    },
+    {
+      "q": "Cam câți ani a domnit Ștefan cel Mare?",
+      "a": [
+        "47",
+        "30",
+        "60",
+        "25"
+      ]
+    },
+    {
+      "q": "Care e cel mai mare deșert din lume, socotind și deșerturile reci?",
+      "a": [
+        "Antarctica",
+        "Sahara",
+        "Gobi",
+        "Kalahari"
+      ]
+    },
+    {
+      "q": "Cine a propus teoria evoluției prin selecție naturală?",
+      "a": [
+        "Charles Darwin",
+        "Jean-Baptiste Lamarck",
+        "Gregor Mendel",
+        "Alfred Nobel"
+      ]
+    },
+    {
+      "q": "Cine a scris „Frankenstein”?",
+      "a": [
+        "Mary Shelley",
+        "Jane Austen",
+        "Emily Brontë",
+        "Bram Stoker"
+      ]
+    },
+    {
+      "q": "Cât face 7! (7 factorial)?",
+      "a": [
+        "5040",
+        "720",
+        "40320",
+        "2520"
+      ]
+    },
+    {
+      "q": "Ce oraș italian e construit pe peste 100 de insulițe?",
+      "a": [
+        "Veneția",
+        "Napoli",
+        "Genova",
+        "Trieste"
+      ]
+    },
+    {
+      "q": "Ce romancier rus a scris „Anna Karenina”?",
+      "a": [
+        "Lev Tolstoi",
+        "Feodor Dostoievski",
+        "Anton Cehov",
+        "Mihail Bulgakov"
+      ]
+    },
+    {
+      "q": "Ce poet român a scris „Mioriţa”?",
+      "a": [
+        "E o baladă populară, fără autor cunoscut",
+        "Vasile Alecsandri",
+        "Mihai Eminescu",
+        "George Coșbuc"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

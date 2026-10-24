@@ -182,6 +182,367 @@
         "20",
         "35"
       ]
+    },
+    {
+      "q": "Care este capitala Irlandei?",
+      "a": [
+        "Dublin",
+        "Belfast",
+        "Cork",
+        "Edinburgh"
+      ]
+    },
+    {
+      "q": "Cine a scris „Moromeții”?",
+      "a": [
+        "Marin Preda",
+        "Liviu Rebreanu",
+        "Zaharia Stancu",
+        "Mihail Sadoveanu"
+      ]
+    },
+    {
+      "q": "Ce gaz face bulele din băuturile carbogazoase?",
+      "a": [
+        "Dioxidul de carbon",
+        "Oxigenul",
+        "Azotul",
+        "Heliul"
+      ]
+    },
+    {
+      "q": "Care este cea mai mare țară din America de Sud?",
+      "a": [
+        "Brazilia",
+        "Argentina",
+        "Peru",
+        "Columbia"
+      ]
+    },
+    {
+      "q": "Câți jucători are o echipă de volei pe teren?",
+      "a": [
+        "6",
+        "5",
+        "7",
+        "9"
+      ]
+    },
+    {
+      "q": "În ce an și-a proclamat România independența?",
+      "a": [
+        "1877",
+        "1859",
+        "1918",
+        "1881"
+      ]
+    },
+    {
+      "q": "Ce element chimic are simbolul O?",
+      "a": [
+        "Oxigenul",
+        "Osmiul",
+        "Aurul",
+        "Ozonul"
+      ]
+    },
+    {
+      "q": "Ce scriitor l-a creat pe Tom Sawyer?",
+      "a": [
+        "Mark Twain",
+        "Charles Dickens",
+        "Jules Verne",
+        "Jack London"
+      ]
+    },
+    {
+      "q": "Care este capitala Poloniei?",
+      "a": [
+        "Varșovia",
+        "Cracovia",
+        "Gdansk",
+        "Praga"
+      ]
+    },
+    {
+      "q": "Cine a scris „Douăzeci de mii de leghe sub mări”?",
+      "a": [
+        "Jules Verne",
+        "H.G. Wells",
+        "Alexandre Dumas",
+        "Victor Hugo"
+      ]
+    },
+    {
+      "q": "Care este cel mai mare pește din lume?",
+      "a": [
+        "Rechinul-balenă",
+        "Rechinul alb",
+        "Balena albastră",
+        "Somnul"
+      ]
+    },
+    {
+      "q": "Ce planetă poartă numele zeului roman al mării?",
+      "a": [
+        "Neptun",
+        "Marte",
+        "Jupiter",
+        "Uranus"
+      ]
+    },
+    {
+      "q": "Câte kilograme are o tonă?",
+      "a": [
+        "1000",
+        "100",
+        "10000",
+        "500"
+      ]
+    },
+    {
+      "q": "Care este capitala Croației?",
+      "a": [
+        "Zagreb",
+        "Split",
+        "Dubrovnik",
+        "Belgrad"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Țipătul”?",
+      "a": [
+        "Edvard Munch",
+        "Gustav Klimt",
+        "Vincent van Gogh",
+        "Salvador Dalí"
+      ]
+    },
+    {
+      "q": "Ce țară a câștigat Campionatul Mondial de fotbal din 2018?",
+      "a": [
+        "Franța",
+        "Croația",
+        "Germania",
+        "Brazilia"
+      ]
+    },
+    {
+      "q": "Câți kilometri are un maraton?",
+      "a": [
+        "42,195",
+        "40",
+        "50",
+        "21,1"
+      ]
+    },
+    {
+      "q": "Ce oraș din România e supranumit „Orașul florilor”?",
+      "a": [
+        "Timișoara",
+        "Sibiu",
+        "Oradea",
+        "Brașov"
+      ]
+    },
+    {
+      "q": "Ce animal apare în sigla WWF?",
+      "a": [
+        "Panda uriaș",
+        "Tigrul",
+        "Elefantul",
+        "Koala"
+      ]
+    },
+    {
+      "q": "Câte corzi are o chitară clasică?",
+      "a": [
+        "6",
+        "4",
+        "5",
+        "12"
+      ]
+    },
+    {
+      "q": "Ce organ produce bila?",
+      "a": [
+        "Ficatul",
+        "Pancreasul",
+        "Splina",
+        "Stomacul"
+      ]
+    },
+    {
+      "q": "Care este capitala Cehiei?",
+      "a": [
+        "Praga",
+        "Brno",
+        "Bratislava",
+        "Viena"
+      ]
+    },
+    {
+      "q": "Cine a compus „Anotimpurile”?",
+      "a": [
+        "Antonio Vivaldi",
+        "Wolfgang Amadeus Mozart",
+        "Johann Sebastian Bach",
+        "Frédéric Chopin"
+      ]
+    },
+    {
+      "q": "Ce limbă oficială are Mexicul?",
+      "a": [
+        "Spaniola",
+        "Portugheza",
+        "Engleza",
+        "Mexicana"
+      ]
+    },
+    {
+      "q": "Câte laturi are un pentagon?",
+      "a": [
+        "5",
+        "6",
+        "7",
+        "4"
+      ]
+    },
+    {
+      "q": "Ce râu traversează Londra?",
+      "a": [
+        "Tamisa",
+        "Sena",
+        "Rinul",
+        "Dunărea"
+      ]
+    },
+    {
+      "q": "Care e cel mai mare stat al SUA ca suprafață?",
+      "a": [
+        "Alaska",
+        "Texas",
+        "California",
+        "Montana"
+      ]
+    },
+    {
+      "q": "Cine a sculptat statuia lui David din Florența?",
+      "a": [
+        "Michelangelo",
+        "Donatello",
+        "Bernini",
+        "Auguste Rodin"
+      ]
+    },
+    {
+      "q": "Ce sport se joacă la Wimbledon?",
+      "a": [
+        "Tenis",
+        "Golf",
+        "Crichet",
+        "Polo"
+      ]
+    },
+    {
+      "q": "Care este capitala Bulgariei?",
+      "a": [
+        "Sofia",
+        "Varna",
+        "Plovdiv",
+        "Burgas"
+      ]
+    },
+    {
+      "q": "Câte minute durează o repriză la fotbal?",
+      "a": [
+        "45",
+        "40",
+        "30",
+        "50"
+      ]
+    },
+    {
+      "q": "Ce pigment dă culoarea verde plantelor?",
+      "a": [
+        "Clorofila",
+        "Melanina",
+        "Hemoglobina",
+        "Carotenul"
+      ]
+    },
+    {
+      "q": "În ce țară se află Acropole?",
+      "a": [
+        "Grecia",
+        "Italia",
+        "Turcia",
+        "Cipru"
+      ]
+    },
+    {
+      "q": "Cine a scris poezia „Plumb”?",
+      "a": [
+        "George Bacovia",
+        "Tudor Arghezi",
+        "Lucian Blaga",
+        "Nichita Stănescu"
+      ]
+    },
+    {
+      "q": "Câte state are SUA?",
+      "a": [
+        "50",
+        "51",
+        "48",
+        "52"
+      ]
+    },
+    {
+      "q": "Ce oraș era capitala Moldovei pe vremea lui Ștefan cel Mare?",
+      "a": [
+        "Suceava",
+        "Iași",
+        "Vaslui",
+        "Hârlău"
+      ]
+    },
+    {
+      "q": "Ce grupă de sânge e considerată „donator universal”?",
+      "a": [
+        "0 negativ",
+        "AB pozitiv",
+        "A pozitiv",
+        "B negativ"
+      ]
+    },
+    {
+      "q": "Care e cea mai mare reptilă din lume?",
+      "a": [
+        "Crocodilul de apă sărată",
+        "Anaconda",
+        "Dragonul de Komodo",
+        "Țestoasa gigant"
+      ]
+    },
+    {
+      "q": "Care este capitala Suediei?",
+      "a": [
+        "Stockholm",
+        "Oslo",
+        "Göteborg",
+        "Copenhaga"
+      ]
+    },
+    {
+      "q": "Ce înseamnă „ONU”?",
+      "a": [
+        "Organizația Națiunilor Unite",
+        "Organizația Națională Unită",
+        "Oficiul Națiunilor Unite",
+        "Organizația Nordului Unit"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

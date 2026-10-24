@@ -182,6 +182,367 @@
         "2009",
         "2001"
       ]
+    },
+    {
+      "q": "Cine a scris „Mizerabilii”?",
+      "a": [
+        "Victor Hugo",
+        "Honoré de Balzac",
+        "Émile Zola",
+        "Gustave Flaubert"
+      ]
+    },
+    {
+      "q": "Ce organ e afectat de hepatită?",
+      "a": [
+        "Ficatul",
+        "Inima",
+        "Rinichii",
+        "Plămânii"
+      ]
+    },
+    {
+      "q": "Care este capitala Finlandei?",
+      "a": [
+        "Helsinki",
+        "Tampere",
+        "Turku",
+        "Oslo"
+      ]
+    },
+    {
+      "q": "Cine a scris „Pădurea spânzuraților”?",
+      "a": [
+        "Liviu Rebreanu",
+        "Camil Petrescu",
+        "Mihail Sadoveanu",
+        "Marin Preda"
+      ]
+    },
+    {
+      "q": "În ce an a căzut Constantinopolul sub otomani?",
+      "a": [
+        "1453",
+        "1492",
+        "1389",
+        "1526"
+      ]
+    },
+    {
+      "q": "La ce instrument a devenit celebru Gheorghe Zamfir?",
+      "a": [
+        "Nai",
+        "Vioară",
+        "Țambal",
+        "Cobză"
+      ]
+    },
+    {
+      "q": "Cine a ajuns în America în 1492?",
+      "a": [
+        "Cristofor Columb",
+        "Amerigo Vespucci",
+        "Vasco da Gama",
+        "Ferdinand Magellan"
+      ]
+    },
+    {
+      "q": "Ce element are simbolul Na?",
+      "a": [
+        "Sodiul",
+        "Azotul",
+        "Neonul",
+        "Nichelul"
+      ]
+    },
+    {
+      "q": "În ce țară se află vulcanul Etna?",
+      "a": [
+        "Italia",
+        "Grecia",
+        "Islanda",
+        "Spania"
+      ]
+    },
+    {
+      "q": "Cine a pictat „Nașterea lui Venus”?",
+      "a": [
+        "Sandro Botticelli",
+        "Leonardo da Vinci",
+        "Rafael",
+        "Tițian"
+      ]
+    },
+    {
+      "q": "Ce țară are cea mai mare populație din lume?",
+      "a": [
+        "India",
+        "China",
+        "SUA",
+        "Indonezia"
+      ]
+    },
+    {
+      "q": "Care este capitala Egiptului?",
+      "a": [
+        "Cairo",
+        "Alexandria",
+        "Luxor",
+        "Giza"
+      ]
+    },
+    {
+      "q": "Câte simfonii a compus Beethoven?",
+      "a": [
+        "9",
+        "7",
+        "10",
+        "12"
+      ]
+    },
+    {
+      "q": "Ce domnitor al Țării Românești e numit „cel Bătrân”?",
+      "a": [
+        "Mircea",
+        "Mihai",
+        "Vlad",
+        "Matei"
+      ]
+    },
+    {
+      "q": "Cine a scris „Eu nu strivesc corola de minuni a lumii”?",
+      "a": [
+        "Lucian Blaga",
+        "Tudor Arghezi",
+        "Ion Barbu",
+        "Nichita Stănescu"
+      ]
+    },
+    {
+      "q": "Ce particulă din nucleu nu are sarcină electrică?",
+      "a": [
+        "Neutronul",
+        "Protonul",
+        "Electronul",
+        "Ionul"
+      ]
+    },
+    {
+      "q": "Ce oraș a găzduit Olimpiada de vară din 2008?",
+      "a": [
+        "Beijing",
+        "Londra",
+        "Atena",
+        "Sydney"
+      ]
+    },
+    {
+      "q": "Cine a inventat dinamita?",
+      "a": [
+        "Alfred Nobel",
+        "Thomas Edison",
+        "Nikola Tesla",
+        "James Watt"
+      ]
+    },
+    {
+      "q": "În ce țară se vorbește oficial și limba flamandă?",
+      "a": [
+        "Belgia",
+        "Elveția",
+        "Austria",
+        "Luxemburg"
+      ]
+    },
+    {
+      "q": "Care e unitatea de măsură a puterii?",
+      "a": [
+        "Wattul",
+        "Voltul",
+        "Amperul",
+        "Ohmul"
+      ]
+    },
+    {
+      "q": "Cine a ajuns primul la Polul Sud?",
+      "a": [
+        "Roald Amundsen",
+        "Robert Scott",
+        "Ernest Shackleton",
+        "Edmund Hillary"
+      ]
+    },
+    {
+      "q": "În ce oraș se află Sagrada Família?",
+      "a": [
+        "Barcelona",
+        "Madrid",
+        "Sevilla",
+        "Valencia"
+      ]
+    },
+    {
+      "q": "Cam câte zile durează un ciclu complet al fazelor Lunii?",
+      "a": [
+        "29,5",
+        "24",
+        "31",
+        "14"
+      ]
+    },
+    {
+      "q": "Ce scriitoare l-a creat pe detectivul Hercule Poirot?",
+      "a": [
+        "Agatha Christie",
+        "Arthur Conan Doyle",
+        "Georges Simenon",
+        "Dorothy Sayers"
+      ]
+    },
+    {
+      "q": "În ce oraș se află Biserica Neagră?",
+      "a": [
+        "Brașov",
+        "Sibiu",
+        "Sighișoara",
+        "Cluj-Napoca"
+      ]
+    },
+    {
+      "q": "Care este cel mai mic ocean?",
+      "a": [
+        "Arctic",
+        "Indian",
+        "Atlantic",
+        "Sudic"
+      ]
+    },
+    {
+      "q": "Ce trupă a cântat „Bohemian Rhapsody”?",
+      "a": [
+        "Queen",
+        "The Beatles",
+        "ABBA",
+        "Pink Floyd"
+      ]
+    },
+    {
+      "q": "În ce țară de azi s-a născut Mozart?",
+      "a": [
+        "Austria",
+        "Germania",
+        "Italia",
+        "Elveția"
+      ]
+    },
+    {
+      "q": "Ce gaz umple baloanele care se ridică singure?",
+      "a": [
+        "Heliul",
+        "Oxigenul",
+        "Azotul",
+        "Dioxidul de carbon"
+      ]
+    },
+    {
+      "q": "Care este capitala Argentinei?",
+      "a": [
+        "Buenos Aires",
+        "Santiago",
+        "Montevideo",
+        "Lima"
+      ]
+    },
+    {
+      "q": "Cine a scris „Micul Prinț”?",
+      "a": [
+        "Antoine de Saint-Exupéry",
+        "Jules Verne",
+        "Victor Hugo",
+        "Albert Camus"
+      ]
+    },
+    {
+      "q": "În ce muzeu se află Mona Lisa?",
+      "a": [
+        "Luvru",
+        "Prado",
+        "Uffizi",
+        "British Museum"
+      ]
+    },
+    {
+      "q": "Ce animal apare pe stema istorică a Moldovei?",
+      "a": [
+        "Capul de bour",
+        "Vulturul",
+        "Leul",
+        "Delfinul"
+      ]
+    },
+    {
+      "q": "Ce țară e numită „Țara Soarelui Răsare”?",
+      "a": [
+        "Japonia",
+        "China",
+        "Coreea de Sud",
+        "Thailanda"
+      ]
+    },
+    {
+      "q": "Din ce boabe se face ciocolata?",
+      "a": [
+        "Cacao",
+        "Cafea",
+        "Soia",
+        "Vanilie"
+      ]
+    },
+    {
+      "q": "La ce club a debutat Cristiano Ronaldo ca profesionist?",
+      "a": [
+        "Sporting Lisabona",
+        "Manchester United",
+        "Real Madrid",
+        "Benfica"
+      ]
+    },
+    {
+      "q": "Ce capitală europeană e traversată de râul Vltava?",
+      "a": [
+        "Praga",
+        "Viena",
+        "Budapesta",
+        "Bratislava"
+      ]
+    },
+    {
+      "q": "Ce număr reprezintă cifra romană L?",
+      "a": [
+        "50",
+        "100",
+        "500",
+        "5"
+      ]
+    },
+    {
+      "q": "Ce lac glaciar din Retezat e cel mai adânc din România?",
+      "a": [
+        "Zănoaga",
+        "Bucura",
+        "Bâlea",
+        "Galeșu"
+      ]
+    },
+    {
+      "q": "Care e capitala Danemarcei?",
+      "a": [
+        "Copenhaga",
+        "Aarhus",
+        "Oslo",
+        "Stockholm"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }

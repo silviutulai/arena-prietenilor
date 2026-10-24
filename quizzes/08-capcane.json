@@ -182,6 +182,367 @@
         "512",
         "2048"
       ]
+    },
+    {
+      "q": "Câți ani a durat, de fapt, Războiul de 100 de ani?",
+      "a": [
+        "116",
+        "100",
+        "99",
+        "130"
+      ]
+    },
+    {
+      "q": "În ce lună sărbătoreau sovieticii Revoluția din Octombrie?",
+      "a": [
+        "Noiembrie",
+        "Octombrie",
+        "Decembrie",
+        "Septembrie"
+      ]
+    },
+    {
+      "q": "Câte luni ale anului au cel puțin 28 de zile?",
+      "a": [
+        "12",
+        "1",
+        "2",
+        "0"
+      ]
+    },
+    {
+      "q": "Ce animal are amprente aproape identice cu ale omului?",
+      "a": [
+        "Koala",
+        "Cimpanzeul",
+        "Gorila",
+        "Urangutanul"
+      ]
+    },
+    {
+      "q": "Pe ce continent a fost domesticit cartoful?",
+      "a": [
+        "America de Sud",
+        "Europa",
+        "Asia",
+        "America de Nord"
+      ]
+    },
+    {
+      "q": "Ce măsoară un an-lumină?",
+      "a": [
+        "O distanță",
+        "Un timp",
+        "O viteză",
+        "O luminozitate"
+      ]
+    },
+    {
+      "q": "Ce culoare are pielea urșilor polari?",
+      "a": [
+        "Neagră",
+        "Albă",
+        "Roz",
+        "Gri"
+      ]
+    },
+    {
+      "q": "Câte oase are un rechin?",
+      "a": [
+        "0",
+        "206",
+        "120",
+        "300"
+      ]
+    },
+    {
+      "q": "Ce gaz domină atmosfera planetei Marte?",
+      "a": [
+        "Dioxidul de carbon",
+        "Azotul",
+        "Oxigenul",
+        "Argonul"
+      ]
+    },
+    {
+      "q": "Ce țară are drept capitală constituțională orașul Sucre?",
+      "a": [
+        "Bolivia",
+        "Peru",
+        "Chile",
+        "Ecuador"
+      ]
+    },
+    {
+      "q": "În ce palat s-a semnat tratatul de pace cu Germania după Primul Război Mondial?",
+      "a": [
+        "Versailles",
+        "Trianon",
+        "Schönbrunn",
+        "Buckingham"
+      ]
+    },
+    {
+      "q": "Cine a fost primul român care a zburat în spațiu?",
+      "a": [
+        "Dumitru Prunariu",
+        "Traian Vuia",
+        "Hermann Oberth",
+        "Aurel Vlaicu"
+      ]
+    },
+    {
+      "q": "Din punct de vedere botanic, roșia este:",
+      "a": [
+        "Un fruct",
+        "O legumă-rădăcină",
+        "O tulpină",
+        "O frunză"
+      ]
+    },
+    {
+      "q": "Care e cea mai mică planetă din Sistemul Solar?",
+      "a": [
+        "Mercur",
+        "Marte",
+        "Pluto",
+        "Venus"
+      ]
+    },
+    {
+      "q": "Marea Caspică este, de fapt:",
+      "a": [
+        "Un lac",
+        "Un ocean",
+        "Un golf",
+        "Un fluviu"
+      ]
+    },
+    {
+      "q": "La ce instrument cânta Sherlock Holmes?",
+      "a": [
+        "Vioară",
+        "Pian",
+        "Flaut",
+        "Violoncel"
+      ]
+    },
+    {
+      "q": "În ce țară a fost inventată hârtia?",
+      "a": [
+        "China",
+        "Egipt",
+        "India",
+        "Grecia"
+      ]
+    },
+    {
+      "q": "Ce culoare are cerul pe Marte la apus?",
+      "a": [
+        "Albastru",
+        "Roșu",
+        "Verde",
+        "Galben"
+      ]
+    },
+    {
+      "q": "Câți ochi are o albină?",
+      "a": [
+        "5",
+        "2",
+        "4",
+        "8"
+      ]
+    },
+    {
+      "q": "Ce rege al României a abdicat în 1947?",
+      "a": [
+        "Mihai I",
+        "Carol al II-lea",
+        "Ferdinand I",
+        "Carol I"
+      ]
+    },
+    {
+      "q": "Cât îi trebuie luminii Soarelui să ajungă pe Pământ?",
+      "a": [
+        "Aproximativ 8 minute",
+        "8 secunde",
+        "O oră",
+        "O zi"
+      ]
+    },
+    {
+      "q": "Care e cel mai răspândit metal din scoarța terestră?",
+      "a": [
+        "Aluminiul",
+        "Fierul",
+        "Cuprul",
+        "Aurul"
+      ]
+    },
+    {
+      "q": "Unde se află cea mai mare parte a apei dulci de pe Pământ?",
+      "a": [
+        "În ghețari și calote glaciare",
+        "În râuri",
+        "În lacuri",
+        "În atmosferă"
+      ]
+    },
+    {
+      "q": "Câte fusuri orare are oficial China?",
+      "a": [
+        "1",
+        "5",
+        "3",
+        "4"
+      ]
+    },
+    {
+      "q": "Ce oraș a fost capitala SUA între 1790 și 1800?",
+      "a": [
+        "Philadelphia",
+        "New York",
+        "Boston",
+        "Baltimore"
+      ]
+    },
+    {
+      "q": "Cum se numește cel mai mic os din corpul omului?",
+      "a": [
+        "Scărița",
+        "Ciocanul",
+        "Nicovala",
+        "Falanga"
+      ]
+    },
+    {
+      "q": "Din ce țară provine berea de tip Pilsner?",
+      "a": [
+        "Cehia",
+        "Germania",
+        "Belgia",
+        "Austria"
+      ]
+    },
+    {
+      "q": "Ce animal are sângele albastru?",
+      "a": [
+        "Caracatița",
+        "Rechinul",
+        "Delfinul",
+        "Broasca"
+      ]
+    },
+    {
+      "q": "Care stat din UE are cei mai puțini locuitori?",
+      "a": [
+        "Malta",
+        "Luxemburg",
+        "Cipru",
+        "Estonia"
+      ]
+    },
+    {
+      "q": "Cine a dat primul apel de pe un telefon mobil, în 1973?",
+      "a": [
+        "Martin Cooper",
+        "Steve Jobs",
+        "Alexander Graham Bell",
+        "Bill Gates"
+      ]
+    },
+    {
+      "q": "În ce an a fost lansat primul iPhone?",
+      "a": [
+        "2007",
+        "2005",
+        "2009",
+        "2010"
+      ]
+    },
+    {
+      "q": "Care era numele real al lui Mark Twain?",
+      "a": [
+        "Samuel Clemens",
+        "Eric Blair",
+        "Charles Dodgson",
+        "Mary Evans"
+      ]
+    },
+    {
+      "q": "Ce pseudonim folosea scriitorul Eric Arthur Blair?",
+      "a": [
+        "George Orwell",
+        "Mark Twain",
+        "Lewis Carroll",
+        "George Eliot"
+      ]
+    },
+    {
+      "q": "Câte zile a durat Războiul de Șase Zile?",
+      "a": [
+        "6",
+        "7",
+        "10",
+        "30"
+      ]
+    },
+    {
+      "q": "Ce pasăre poate zbura și cu spatele?",
+      "a": [
+        "Colibri",
+        "Vrabia",
+        "Șoimul",
+        "Bufnița"
+      ]
+    },
+    {
+      "q": "Câte picioare are un homar?",
+      "a": [
+        "10",
+        "8",
+        "6",
+        "12"
+      ]
+    },
+    {
+      "q": "Din ce e făcută mina unui creion obișnuit?",
+      "a": [
+        "Grafit",
+        "Plumb",
+        "Cărbune",
+        "Fier"
+      ]
+    },
+    {
+      "q": "Câte compartimente are stomacul unei vaci?",
+      "a": [
+        "4",
+        "2",
+        "1",
+        "6"
+      ]
+    },
+    {
+      "q": "Ce animal doarme adesea stând în picioare?",
+      "a": [
+        "Calul",
+        "Vaca",
+        "Câinele",
+        "Porcul"
+      ]
+    },
+    {
+      "q": "Ce domnitor a ridicat cetatea Poenari în forma cunoscută azi?",
+      "a": [
+        "Vlad Țepeș",
+        "Mircea cel Bătrân",
+        "Mihai Viteazul",
+        "Radu cel Frumos"
+      ]
     }
-  ]
+  ],
+  "perGame": 20
 }
