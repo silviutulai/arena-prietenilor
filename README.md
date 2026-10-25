@@ -14,10 +14,11 @@ Aplicație de jocuri pentru gașca ta, gândită pentru telefon.
 **Jocuri de grup (3–10 jucători):**
 - Quiz: 10 niveluri × 60 de întrebări, plus „Quiz amestecat” cu toate cele 600
 - Cel mai amuzant și varianta 18+
+- Ghicește desenul
 - Cine e cel mai...
 - Desenează!
 
-**Extra:** mascote, vot secret pentru jucătorul săptămânii, clasament săptămânal resetabil de admin.
+**Extra:** chat cu porecle, mascote, vot secret pentru jucătorul săptămânii, clasament săptămânal resetabil de admin.
 
 ## Fără repetări
 Fiecare joc ține minte ce întrebări au ieșit deja și alege doar dintre cele nefolosite. Abia după ce s-au folosit toate, lista o ia de la capăt. Memoria se salvează în baza de date, deci nu se pierde nici când serverul repornește.
@@ -31,6 +32,18 @@ Fiecare joc ține minte ce întrebări au ieșit deja și alege doar dintre cele
 | Cel mai amuzant 18+ | 149 | 15 | ~10 |
 | Cine e cel mai... | 124 | 15 | ~8 |
 | Desenează! | 120 de teme | 6 | 20 |
+
+## Chat și porecle
+- **Chatul:** fila **Chat** e comună pentru toată gașca. Mesajele rămân salvate (ultimele 500).
+- **Porecla:** fiecare își poate pune o poreclă care apare în chat în locul numelui, cu numele real mic alături. O setezi apăsând pe butonul din colțul chatului, din fila **Eu**, sau scriind direct în chat `/nick Porecla`.
+- **Moderare:** ca admin, poți șterge orice mesaj (butonul × de pe mesaj).
+
+## Ghicește desenul (2–10 jucători)
+- **Desenatorul:** pe rând, fiecare jucător scrie 3 lucruri pe care le va desena. Dacă nu termină în 45 de secunde, se completează automat.
+- **Ghicitul:** cele 3 lucruri îi apar pe rând desenatorului, iar ceilalți văd desenul în timp real și scriu ce cred că e. Au 80 de secunde pentru fiecare desen.
+- **Forme acceptate:** se acceptă forme apropiate, de exemplu „floare” = „flori” = „o floare” = „florile”, „masă” = „mese”, „câine” = „câinii”, plus mici greșeli de scriere. Dacă ești foarte aproape, primești în privat mesajul „🔥 foarte aproape”.
+- **Indicii:** la jumătatea timpului și la trei sferturi se dezvăluie câte o literă.
+- **Puncte:** ghicitorul ia între 50 și 100 de puncte, după cât de repede a ghicit, iar desenatorul ia 20 pentru fiecare jucător care ghicește. Clasamentul săptămânii primește punctele ca la celelalte jocuri de grup.
 
 ## Zaruri și Piatră, hârtie, foarfecă
 Amândoi jucați în același timp. La Zaruri, fiecare aruncă două zaruri și câștigă runda suma mai mare. La Piatră, hârtie, foarfecă, alegerea ta rămâne ascunsă până alege și celălalt. Meciul îl câștigă primul care ajunge la 3 runde câștigate. La egal, runda se rejoacă.
@@ -64,7 +77,7 @@ Fiecare votează secret pe cineva din gașcă, în fila **Vot**. Votul se poate 
 La prima intrare, fiecare jucător își construiește mascota: formă, culoare, ochi, gură și accesoriu. Mascota apare peste tot în aplicație și se poate schimba din fila **Eu**.
 
 ## Clasament
-Clasamentul arată doar punctele. La 1 la 1: victorie 3 p, egal 1 p. La jocurile de grup (Quiz, Cel mai amuzant, Desenează!), locurile 1, 2 și 3 primesc 3, 2 și 1 p, iar ultimul loc nu primește puncte. Abandonul sau o deconectare mai lungă de 30 de secunde contează ca înfrângere. Clasamentul pornește de la zero în fiecare luni. Ca admin, îl poți reseta oricând din fila **Clasament** (butonul de jos).
+Clasamentul arată doar punctele. La 1 la 1: victorie 3 p, egal 1 p. La jocurile de grup (Quiz, Cel mai amuzant, Desenează!, Ghicește desenul), locurile 1, 2 și 3 primesc 3, 2 și 1 p, iar ultimul loc nu primește puncte. Abandonul sau o deconectare mai lungă de 30 de secunde contează ca înfrângere. Clasamentul pornește de la zero în fiecare luni. Ca admin, îl poți reseta oricând din fila **Clasament** (butonul de jos).
 
 ## Conturi
 - **Primul cont** creat pe site devine administrator. După aceea, nimeni nu-și mai poate face cont singur.

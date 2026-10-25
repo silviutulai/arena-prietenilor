@@ -32,10 +32,12 @@ const GAMES = {
   funny: { name: 'Cel mai amuzant', emoji: '😂', color: '#FF4FA0', desc: '15 întrebări · 3–10 jucători', mode: 'group' },
   funny18: { name: 'Cel mai amuzant 18+', emoji: '🌶️', color: '#E0245E', desc: 'Doar pentru adulți', mode: 'group' },
   who: { name: 'Cine e cel mai...', emoji: '🤪', color: '#F59E0B', desc: 'Votați pe cineva din gașcă', mode: 'group' },
-  draw: { name: 'Desenează!', emoji: '🎨', color: '#10B981', desc: 'Desenați, apoi votați', mode: 'group' }
+  draw: { name: 'Desenează!', emoji: '🎨', color: '#10B981', desc: 'Desenați, apoi votați', mode: 'group' },
+  pict: { name: 'Ghicește desenul', emoji: '🖍️', color: '#E85D9A', desc: 'Unul desenează, ceilalți ghicesc', mode: 'group' },
+  pictionary: { name: 'Ghicește desenul', emoji: '🖍️', color: '#E85D9A', desc: '', mode: 'none' }
 };
-const BOARD_GAMES = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps', 'quiz', 'funny', 'draw'];
-const MODE_EMOJI = { funny: '😂', funny18: '🌶️', who: '🤪', draw: '🎨' };
+const BOARD_GAMES = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps', 'quiz', 'funny', 'draw', 'pictionary'];
+const MODE_EMOJI = { funny: '😂', funny18: '🌶️', who: '🤪', draw: '🎨', pict: '🖍️' };
 const TIERS = ['Ușor', 'Ușor', 'Mediu', 'Mediu', 'Dificil', 'Dificil', 'Greu', 'Greu', 'Foarte greu', 'Foarte greu'];
 
 const S = {
@@ -57,6 +59,11 @@ const S = {
   myAnswers: {},
   partyDraft: '',
   partyImages: null,
+  chat: [],
+  unread: 0,
+  pict: null,
+  dismissedPict: null,
+  pc: null,
   pad: null,
   partyDraftKey: '',
   confettiKey: '',
@@ -335,8 +342,33 @@ async function startApp() {
   s.on('quizInvite', ({ from, title }) => { if (!S.match) toast(`🎯 ${from} a pornit quizul „${title}”!`); });
   s.on('partyInvite', ({ from, mode, title }) => { if (!S.match) toast(`${MODE_EMOJI[mode] || '🎉'} ${from} te cheamă la „${title}”!`); });
   s.on('partyImages', (data) => { S.partyImages = data; refresh('party'); });
+  s.on('chatHistory', (list) => { S.chat = list; refresh('chat'); });
+  s.on('chat', onChatMessage);
+  s.on('chatDeleted', ({ id }) => { S.chat = S.chat.filter((m) => m.id !== id); document.querySelector(`.msg[data-id="${id}"]`)?.remove(); });
+  s.on('pict', (p) => {
+    S.pict = p;
+    if (p && p.remainingMs !== undefined) S.pictEnd = Date.now() + p.remainingMs;
+    if (p && p.phase === 'finished' && myPict() && p.ranking[0]?.id === S.me.id && S.lastPictConfetti !== p.id) { S.lastPictConfetti = p.id; confetti(140); }
+    refresh('pict', 'play');
+  });
+  s.on('pictCanvas', ({ key, strokes }) => {
+    if (S.pc && S.pc.key === key) { S.pc.strokes = strokes; S.pc.redraw(); }
+    else S.pc = { key, strokes, isDrawer: null };
+  });
+  s.on('pictDraw', (op) => {
+    if (S.pc && S.pc.key === op.key && S.pc.apply) S.pc.apply(op);
+    else if (S.pc && S.pc.key === op.key) {
+      // tabla încă nu e afișată: păstrăm trăsăturile
+      if (op.op === 'start') S.pc.strokes.push({ c: op.c, w: op.w, pts: [op.p] });
+      else if (op.op === 'pts') S.pc.strokes[S.pc.strokes.length - 1]?.pts.push(...op.pts);
+      else if (op.op === 'undo') S.pc.strokes.pop();
+      else if (op.op === 'clear') S.pc.strokes = [];
+    }
+  });
+  s.on('pictClose', ({ text }) => toast(`🔥 „${text}” e foarte aproape!`));
+  s.on('pictGotIt', ({ gained }) => { confetti(50); toast(`Ai ghicit! +${gained} puncte 🎉`); });
   s.on('quizzesChanged', async () => { await loadQuizzes(); refresh('play'); });
-  s.on('playersChanged', async () => { await loadPlayers(); updateNavMascot(); refresh('play', 'vote', 'board', 'me'); });
+  s.on('playersChanged', async () => { await loadPlayers(); updateNavMascot(); refresh('play', 'vote', 'board', 'me', 'chat'); });
   s.on('challenged', (c) => { S.incoming.push(c); showIncoming(); });
   s.on('challengeSent', (c) => { S.outgoing.set(c.id, c); refresh('play'); });
   s.on('challengeGone', ({ id, reason, by }) => {
@@ -407,6 +439,7 @@ function currentView() {
   if (S.match) return 'match';
   if (myQuiz()) return 'quiz';
   if (myParty()) return 'party';
+  if (myPict()) return 'pict';
   return S.tab;
 }
 
@@ -425,9 +458,9 @@ function render(fresh) {
   const active = document.activeElement && main.contains(document.activeElement) ? document.activeElement.id : null;
   const caret = active ? document.activeElement.selectionStart : null;
 
-  $('#nav').classList.toggle('hidden', ['match', 'quiz', 'party'].includes(view));
+  $('#nav').classList.toggle('hidden', ['match', 'quiz', 'party', 'pict'].includes(view));
   document.querySelectorAll('#nav .nav-btn').forEach((b) => b.classList.toggle('active', b.dataset.tab === S.tab));
-  const builders = { play: renderPlay, vote: renderVote, board: renderBoard, me: renderMe, match: renderMatch, quiz: renderQuiz, party: renderParty };
+  const builders = { play: renderPlay, chat: renderChat, vote: renderVote, board: renderBoard, me: renderMe, match: renderMatch, quiz: renderQuiz, party: renderParty, pict: renderPict };
   const node = builders[view](fresh);
   const wrap = el('div', { class: 'view' + (view !== S.lastView ? ' enter' : '') }, node);
   main.replaceChildren(wrap);
@@ -466,6 +499,17 @@ function renderPlay() {
   } else if (p && p.phase !== 'finished' && !myParty()) {
     banners.push(el('div', { class: 'banner-card muted-card' }, el('span', { class: 'bc-emoji' }, MODE_EMOJI[p.mode] || '🎉'),
       el('span', { class: 'bc-text' }, el('b', {}, `${p.title} e în desfășurare`), el('span', {}, `Runda ${p.index + 1} din ${p.total}`))));
+  }
+  const pk = S.pict;
+  if (pk && pk.phase === 'lobby' && !myPict()) {
+    const host = pk.players.find((x) => x.id === pk.hostId);
+    banners.push(el('button', { class: 'banner-card pink', style: `--gc:${GAMES.pict.color}`, onclick: () => { S.dismissedPict = null; S.socket.emit('pictJoin'); } },
+      el('span', { class: 'bc-emoji' }, '🖍️'),
+      el('span', { class: 'bc-text' }, el('b', {}, 'Ghicește desenul'), el('span', {}, `${host ? host.name : 'Cineva'} te așteaptă · ${pk.players.length}/10`)),
+      el('span', { class: 'bc-go' }, 'Intră')));
+  } else if (pk && pk.phase !== 'finished' && !myPict()) {
+    banners.push(el('div', { class: 'banner-card muted-card' }, el('span', { class: 'bc-emoji' }, '🖍️'),
+      el('span', { class: 'bc-text' }, el('b', {}, 'Ghicește desenul e în desfășurare'), el('span', {}, `Desenatorul ${pk.turn + 1} din ${pk.totalTurns}`))));
   }
   if (q && q.phase === 'lobby' && !myQuiz()) {
     const host = q.players.find((x) => x.id === q.hostId);
@@ -510,7 +554,7 @@ function renderPlay() {
       el('div', { class: 'game-grid' }, ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps'].map(gameCard))),
     el('section', {},
       el('h2', { class: 'section-title' }, 'Cu toată gașca'),
-      el('div', { class: 'game-grid' }, ['quiz', 'funny', 'who', 'draw', 'funny18'].map((id, i) => gameCard(id, i + 7)))),
+      el('div', { class: 'game-grid' }, ['quiz', 'pict', 'funny', 'who', 'draw', 'funny18'].map((id, i) => gameCard(id, i + 7)))),
     free.length === 0 && others.length ? el('p', { class: 'muted small center' }, 'Toți prietenii online sunt într-un joc acum.') : null);
 }
 
@@ -539,6 +583,7 @@ function pickGame(id) {
     return;
   }
   if (id === 'funny18') return confirm18(() => S.socket.emit('partyCreate', { mode: 'funny18', confirm18: true }));
+  if (id === 'pict') return S.socket.emit('pictCreate');
   S.socket.emit('partyCreate', { mode: id });
 }
 
@@ -1123,6 +1168,306 @@ setInterval(() => {
   if (S.partyEnd - Date.now() < 1200 && S.pad.strokes.length) S.pad.submit();
 }, 300);
 
+// ============ Chat ============
+const displayName = (id) => S.players[id]?.nickname || nameOf(id);
+const timeOf = (at) => new Date(at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+
+function updateChatBadge() {
+  const b = $('#chatBadge');
+  b.textContent = S.unread > 9 ? '9+' : S.unread;
+  b.classList.toggle('hidden', !S.unread);
+}
+
+function chatMsgEl(m, prev) {
+  const mine = m.userId === S.me.id;
+  const grouped = prev && prev.userId === m.userId && m.at - prev.at < 120_000;
+  const nick = S.players[m.userId]?.nickname;
+  return el('div', { class: 'msg' + (mine ? ' mine' : '') + (grouped ? ' grouped' : ''), 'data-id': m.id },
+    mine || grouped ? el('span', { class: 'msg-m' }) : el('span', { class: 'msg-m' }, mascot(m.userId, 'sm')),
+    el('div', { class: 'msg-body' },
+      grouped || mine ? null : el('div', { class: 'msg-who' }, el('b', {}, displayName(m.userId)), nick ? el('span', { class: 'muted' }, ` (${nameOf(m.userId)})`) : null),
+      el('div', { class: 'msg-bubble' }, m.text,
+        el('span', { class: 'msg-time' }, timeOf(m.at)),
+        S.me.isAdmin ? el('button', { class: 'msg-del', title: 'Șterge mesajul', onclick: () => S.socket.emit('chatDelete', { id: m.id }) }, '×') : null)));
+}
+
+function scrollChat() {
+  const list = $('#chatList');
+  if (list) list.scrollTop = list.scrollHeight;
+}
+
+function editNickname() {
+  const input = el('input', { maxlength: 24, placeholder: 'ex. Regele Shaormei', value: S.players[S.me.id]?.nickname || '' });
+  const msg = el('p', { class: 'error' });
+  const save = async (value) => {
+    try {
+      const { nickname } = await api('/api/me/nickname', { nickname: value });
+      if (S.players[S.me.id]) S.players[S.me.id].nickname = nickname;
+      closeModal();
+      toast(nickname ? `Acum ești „${nickname}” în chat. 😎` : 'Ai renunțat la poreclă.');
+      render();
+    } catch (e) { msg.textContent = e.message; }
+  };
+  openModal(el('div', { class: 'modal-emoji' }, '🏷️'), el('h2', {}, 'Porecla ta din chat'),
+    el('p', { class: 'muted small' }, 'Apare în chat în locul numelui (numele real rămâne mic, lângă ea). Poți scrie și direct în chat: /nick Porecla'),
+    input, msg,
+    el('div', { class: 'stack' },
+      el('button', { class: 'btn primary big', onclick: () => save(input.value) }, 'Salvează'),
+      S.players[S.me.id]?.nickname ? el('button', { class: 'btn ghost', onclick: () => save('') }, 'Fără poreclă') : null,
+      el('button', { class: 'btn ghost', onclick: closeModal }, 'Renunță')));
+  input.focus();
+}
+
+function renderChat() {
+  S.unread = 0;
+  updateChatBadge();
+  const send = () => {
+    const i = $('#chatInput');
+    const text = i.value.trim();
+    if (!text) return;
+    S.socket.emit('chat', { text });
+    i.value = '';
+    i.focus();
+  };
+  const input = el('input', { id: 'chatInput', 'data-keep': '', maxlength: 300, placeholder: 'Scrie un mesaj…', autocomplete: 'off', enterkeyhint: 'send',
+    onkeydown: (e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } } });
+  const myNick = S.players[S.me.id]?.nickname;
+  const list = el('div', { class: 'chat-list', id: 'chatList' },
+    S.chat.length ? S.chat.map((m, i) => chatMsgEl(m, S.chat[i - 1])) : el('p', { class: 'muted center empty-note' }, 'Niciun mesaj încă. Sparge gheața! 🧊'));
+  setTimeout(scrollChat);
+  return el('div', { class: 'chat-page' },
+    el('header', { class: 'chat-head' },
+      el('h1', {}, '💬 Chat'),
+      el('button', { class: 'nick-btn', onclick: editNickname }, mascot(S.me.id, 'xs'), el('span', {}, myNick ? myNick : 'Pune-ți o poreclă'), el('span', {}, '✏️'))),
+    list,
+    el('div', { class: 'chat-bar' }, input, el('button', { class: 'btn primary', onclick: send, 'aria-label': 'Trimite' }, '➤')));
+}
+
+function onChatMessage(m) {
+  S.chat.push(m);
+  if (S.chat.length > 200) S.chat.shift();
+  if (currentView() === 'chat') {
+    const list = $('#chatList');
+    if (!list) return render();
+    const nearBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 120;
+    list.querySelector('.empty-note')?.remove();
+    list.append(chatMsgEl(m, S.chat[S.chat.length - 2]));
+    if (nearBottom || m.userId === S.me.id) scrollChat();
+  } else if (m.userId !== S.me.id) {
+    S.unread++;
+    updateChatBadge();
+  }
+}
+
+// ============ Ghicește desenul ============
+const PICT_COLORS = ['#1E1B3A', '#FF4D6A', '#FF8A3D', '#FFC93C', '#16B97A', '#2D9CFF', '#7C5CFF', '#8B5A2B', '#FFFFFF'];
+const PICT_IDEAS = ['floare', 'pisică', 'casă', 'soare', 'avion', 'pizza', 'chitară', 'bicicletă', 'dinozaur', 'rachetă', 'om de zăpadă', 'balenă', 'castel', 'curcubeu', 'umbrelă', 'ochelari', 'telefon', 'tort', 'vulcan', 'fantomă', 'robot', 'cactus', 'pinguin', 'minge', 'ceas', 'brad', 'pește', 'fluture', 'mașină', 'inimă', 'copac', 'lună', 'ciupercă', 'balon', 'pirat', 'elefant', 'girafă', 'semafor', 'plajă', 'clovn'];
+
+function myPict() {
+  const p = S.pict;
+  return p && p.players.some((x) => x.id === S.me.id) && S.dismissedPict !== p.id ? p : null;
+}
+
+function pictBoard(key, isDrawer) {
+  if (S.pc && S.pc.key === key && S.pc.isDrawer === isDrawer) return S.pc;
+  const SIZE = 500;
+  const canvas = el('canvas', { class: 'pad-canvas' + (isDrawer ? '' : ' readonly'), width: SIZE, height: SIZE });
+  const ctx = canvas.getContext('2d');
+  const pc = { key, isDrawer, canvas, ctx, strokes: (S.pc && S.pc.key === key) ? S.pc.strokes : [], color: PICT_COLORS[0], size: 8, buf: [] };
+  const k = SIZE / 1000;
+  const line = (s, from) => {
+    ctx.strokeStyle = s.c;
+    ctx.fillStyle = s.c;
+    ctx.lineWidth = s.w;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (s.pts.length === 1) {
+      ctx.beginPath();
+      ctx.arc(s.pts[0][0] * k, s.pts[0][1] * k, s.w / 2, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
+    ctx.beginPath();
+    const start = Math.max(0, from - 1);
+    ctx.moveTo(s.pts[start][0] * k, s.pts[start][1] * k);
+    for (let i = start + 1; i < s.pts.length; i++) ctx.lineTo(s.pts[i][0] * k, s.pts[i][1] * k);
+    ctx.stroke();
+  };
+  pc.redraw = () => {
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    for (const s of pc.strokes) line(s, 0);
+  };
+  pc.apply = (op) => {
+    if (op.op === 'start') { pc.strokes.push({ c: op.c, w: op.w, pts: [op.p] }); line(pc.strokes[pc.strokes.length - 1], 0); }
+    else if (op.op === 'pts') {
+      const s = pc.strokes[pc.strokes.length - 1];
+      if (!s) return;
+      const from = s.pts.length;
+      s.pts.push(...op.pts);
+      line(s, from);
+    } else if (op.op === 'undo') { pc.strokes.pop(); pc.redraw(); }
+    else if (op.op === 'clear') { pc.strokes = []; pc.redraw(); }
+  };
+  pc.redraw();
+
+  if (isDrawer) {
+    const pos = (e) => {
+      const r = canvas.getBoundingClientRect();
+      return [Math.round(((e.clientX - r.left) / r.width) * 1000), Math.round(((e.clientY - r.top) / r.height) * 1000)];
+    };
+    let drawing = false;
+    canvas.addEventListener('pointerdown', (e) => {
+      canvas.setPointerCapture(e.pointerId);
+      drawing = true;
+      const op = { op: 'start', c: pc.color, w: pc.size, p: pos(e) };
+      pc.apply(op);
+      S.socket.emit('pictDraw', op);
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!drawing) return;
+      const p = pos(e);
+      pc.apply({ op: 'pts', pts: [p] });
+      pc.buf.push(p);
+    });
+    const stop = () => { drawing = false; flush(); };
+    canvas.addEventListener('pointerup', stop);
+    canvas.addEventListener('pointercancel', stop);
+    const flush = () => {
+      if (!pc.buf.length) return;
+      S.socket.emit('pictDraw', { op: 'pts', pts: pc.buf });
+      pc.buf = [];
+    };
+    pc.timer = setInterval(flush, 45);
+    const act = (op) => { pc.apply(op); S.socket.emit('pictDraw', op); };
+    const swatches = PICT_COLORS.map((c) => {
+      const b = el('button', { class: 'pad-color' + (c === pc.color ? ' sel' : ''), style: `--sw:${c}`, 'aria-label': 'Culoare', onclick: () => { pc.color = c; swatches.forEach((x) => x.classList.toggle('sel', x === b)); } });
+      return b;
+    });
+    const sizes = [4, 8, 16, 32].map((sz) => {
+      const b = el('button', { class: 'pad-size' + (sz === pc.size ? ' sel' : ''), onclick: () => { pc.size = sz; sizes.forEach((x) => x.classList.toggle('sel', x === b)); } }, el('i', { style: `width:${Math.max(4, sz / 2)}px;height:${Math.max(4, sz / 2)}px` }));
+      return b;
+    });
+    pc.wrap = el('div', { class: 'pad' }, canvas,
+      el('div', { class: 'pad-colors' }, swatches),
+      el('div', { class: 'pad-tools' }, sizes,
+        el('button', { class: 'btn small', onclick: () => act({ op: 'undo' }) }, '↩️ Anulează'),
+        el('button', { class: 'btn small', onclick: () => act({ op: 'clear' }) }, '🗑️')));
+  } else {
+    pc.wrap = el('div', { class: 'pad' }, canvas);
+  }
+  if (S.pc && S.pc.timer) clearInterval(S.pc.timer);
+  S.pc = pc;
+  return pc;
+}
+
+function pictFeed(p) {
+  const box = el('div', { class: 'pict-feed', id: 'pictFeed' }, p.feed.map((f) => {
+    if (f.type === 'system') return el('p', { class: 'feed-sys' }, f.text);
+    if (f.type === 'correct') return el('p', { class: 'feed-ok' }, '✅ ', el('b', {}, nameOf(f.uid)), ` a ghicit! +${f.gained}`);
+    return el('p', { class: 'feed-guess' }, el('b', {}, nameOf(f.uid) + ': '), f.text);
+  }));
+  setTimeout(() => { const f = $('#pictFeed'); if (f) f.scrollTop = f.scrollHeight; });
+  return box;
+}
+
+function renderPict() {
+  const p = myPict();
+  const isHost = p.hostId === S.me.id;
+  const isDrawer = p.drawerId === S.me.id;
+  const drawerName = p.drawerId ? nameOf(p.drawerId) : '';
+  const leave = el('button', { class: 'btn ghost small', onclick: () => { S.socket.emit('pictLeave'); S.dismissedPict = p.id; render(); } }, 'Ieși');
+  const endBtn = isHost && ['setup', 'draw', 'reveal'].includes(p.phase) ? el('button', { class: 'btn ghost small', onclick: () => {
+    openModal(el('h2', {}, 'Închei jocul acum?'), el('p', { class: 'muted' }, 'Se calculează clasamentul cu punctele de până acum.'),
+      el('div', { class: 'stack' }, el('button', { class: 'btn primary big', onclick: () => { closeModal(); S.socket.emit('pictEnd'); } }, 'Da, închei'),
+        el('button', { class: 'btn ghost', onclick: closeModal }, 'Mai jucăm')));
+  } }, 'Închei') : null;
+  const roster = el('div', { class: 'mini-scores' }, [...p.players].sort((a, b) => b.score - a.score).map((x) => el('div', { class: 'ms' + (x.id === S.me.id ? ' me' : '') + (x.guessed ? ' done' : '') },
+    mascot(x.id, 'xs'), x.id === p.drawerId ? el('span', {}, '✏️') : null, el('span', {}, x.score))));
+
+  if (p.phase === 'lobby') {
+    const slots = [];
+    for (let i = 0; i < 10; i++) {
+      const pl = p.players[i];
+      slots.push(pl
+        ? el('div', { class: 'crowd-p', style: `--i:${i}` }, mascot(pl.id, 'md', 'bob d' + (i % 5)), el('span', {}, pl.name, pl.id === p.hostId ? ' ⭐' : ''))
+        : el('div', { class: 'crowd-p empty' }, el('span', { class: 'slot' }, '?'), el('span', {}, 'liber')));
+    }
+    return el('div', { class: 'stage party mode-pict' },
+      el('div', { class: 'room-top' }, el('span', { class: 'room-title' }, '🖍️ Ghicește desenul'), leave),
+      el('div', { class: 'card center' },
+        el('p', { class: 'eyebrow' }, `Sala de așteptare · ${p.players.length}/10`),
+        el('div', { class: 'crowd ten' }, slots),
+        el('p', { class: 'muted small' }, 'Pe rând, fiecare scrie 3 lucruri și le desenează unul câte unul. Ceilalți ghicesc scriind răspunsul. Se acceptă și forme apropiate: „flori” sau „o floare” pentru „floare”. Cu cât ghicești mai repede, cu atât iei mai multe puncte.')),
+      isHost
+        ? el('button', { class: 'btn primary big', disabled: p.players.length < 2, onclick: () => S.socket.emit('pictStart') }, p.players.length < 2 ? 'Mai trebuie un jucător' : 'Pornește jocul 🎉')
+        : el('p', { class: 'muted center' }, 'Așteptăm ca organizatorul să pornească jocul…'));
+  }
+
+  if (p.phase === 'finished') {
+    const top = p.ranking[0];
+    return el('div', { class: 'stage party mode-pict' },
+      el('div', { class: 'room-top' }, el('span', { class: 'room-title' }, '🖍️ Ghicește desenul')),
+      el('h2', { class: 'center' }, '🏆 Cel mai bun ghicitor'),
+      top ? el('div', { class: 'champion' }, el('span', { class: 'crown' }, '👑'), mascot(top.id, 'xl', 'bob'), el('b', {}, top.name)) : null,
+      rankingList(p.ranking.map((r) => ({ ...r, sub: `${r.score} puncte în joc` }))),
+      el('button', { class: 'btn primary big', onclick: () => { S.dismissedPict = p.id; render(); } }, 'Înapoi'));
+  }
+
+  const end = S.pictEnd;
+  const head = el('div', { class: 'room-top' },
+    el('span', { class: 'room-title' }, `${p.turn + 1}`, el('span', { class: 'muted' }, ` / ${p.totalTurns}`)),
+    secs(end), el('span', { class: 'row-tight' }, endBtn, leave));
+
+  if (p.phase === 'setup') {
+    if (isDrawer) {
+      const inputs = [0, 1, 2].map((i) => el('input', { id: 'pw' + i, 'data-keep': '', maxlength: 40, placeholder: `Lucrul ${i + 1}`, autocomplete: 'off' }));
+      const submit = () => S.socket.emit('pictWords', { words: inputs.map((x) => document.getElementById(x.id)?.value || '') });
+      return el('div', { class: 'stage party mode-pict' }, head, timerBar(end, p.durationMs),
+        el('div', { class: 'card' },
+          el('h2', {}, '✏️ E rândul tău să desenezi!'),
+          el('p', { class: 'muted small' }, 'Scrie 3 lucruri pe care le vei desena. Le primești pe rând, iar ceilalți încearcă să le ghicească. Dacă nu termini la timp, le completăm noi.'),
+          el('div', { class: 'stack mt' }, inputs),
+          el('div', { class: 'row mt' },
+            el('button', { class: 'btn small', onclick: () => {
+              const pool = [...PICT_IDEAS].sort(() => Math.random() - 0.5);
+              inputs.forEach((x, i) => { const live = document.getElementById(x.id); if (live && !live.value) live.value = pool[i]; });
+            } }, '🎲 Idei'),
+            el('button', { class: 'btn primary grow', onclick: submit }, 'Gata, desenez!'))),
+        roster);
+    }
+    return el('div', { class: 'stage party mode-pict' }, head, timerBar(end, p.durationMs),
+      el('div', { class: 'card center' }, mascot(p.drawerId, 'xl', 'bob'),
+        el('h2', {}, `${drawerName} alege ce desenează…`),
+        el('p', { class: 'muted' }, 'Pregătește-te să ghicești! 👀')),
+      pictFeed(p), roster);
+  }
+
+  const pc = pictBoard(p.key, isDrawer && p.phase === 'draw');
+  const wordNo = el('span', { class: 'muted small' }, `Desenul ${p.wordIndex + 1} din ${p.wordsCount}`);
+  let top;
+  if (p.phase === 'reveal') top = el('div', { class: 'pict-word reveal pop' }, el('span', { class: 'muted small' }, 'Era:'), el('b', {}, p.word));
+  else if (isDrawer) top = el('div', { class: 'pict-word' }, el('span', { class: 'muted small' }, 'Desenează:'), el('b', {}, p.word), wordNo);
+  else if (p.word) top = el('div', { class: 'pict-word got' }, el('span', { class: 'muted small' }, 'Ai ghicit! 🎉'), el('b', {}, p.word), wordNo);
+  else top = el('div', { class: 'pict-word' }, el('span', { class: 'muted small' }, `Desenează ${drawerName}`), el('div', { class: 'mask' }, [...p.mask].map((ch) => el('span', { class: ch === ' ' ? 'gap' : ch === '_' ? 'blank' : 'shown' }, ch === '_' || ch === ' ' ? '' : ch))), wordNo);
+
+  let guess = null;
+  if (p.phase === 'draw' && !isDrawer && !p.word) {
+    const send = () => {
+      const i = $('#pictGuess');
+      const text = i.value.trim();
+      if (!text) return;
+      S.socket.emit('pictGuess', { text });
+      i.value = '';
+      i.focus();
+    };
+    guess = el('div', { class: 'chat-bar inline' },
+      el('input', { id: 'pictGuess', 'data-keep': '', maxlength: 60, placeholder: 'Ce crezi că e?', autocomplete: 'off', enterkeyhint: 'send', onkeydown: (e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } } }),
+      el('button', { class: 'btn primary', onclick: send }, 'Ghicește'));
+  }
+  return el('div', { class: 'stage party mode-pict' }, head, timerBar(p.phase === 'reveal' ? Date.now() : end, p.durationMs), top, pc.wrap, guess, pictFeed(p), roster);
+}
+
 // ============ Vot: jucătorul săptămânii ============
 async function loadVote() {
   try {
@@ -1220,6 +1565,7 @@ function renderMe() {
       S.me.isAdmin ? el('span', { class: 'tag accent' }, '⭐ administrator') : null,
       el('div', { class: 'stack' },
         el('button', { class: 'btn primary', onclick: () => showBuilder(false) }, '🎨 Schimbă mascota'),
+        el('button', { class: 'btn', onclick: editNickname }, `🏷️ ${S.players[S.me.id]?.nickname ? 'Porecla: ' + S.players[S.me.id].nickname : 'Pune-ți o poreclă'}`),
         el('button', { class: 'btn', onclick: changePassword }, '🔑 Schimbă parola'),
         el('button', { class: 'btn ghost', onclick: logout }, 'Ieși din cont'))),
     S.me.isAdmin ? [playersPanel(), quizzesPanel()] : null);

@@ -9,6 +9,8 @@ const { Server } = require('socket.io');
 const { createStorage, weekKey } = require('./storage');
 const { GAMES } = require('./games');
 const PARTY_PROMPTS = require('./party-prompts');
+const WORDS = require('./words');
+const { checkGuess } = require('./guess-match');
 
 const PORT = process.env.PORT || 3000;
 const INVITE_CODE = (process.env.INVITE_CODE || '').trim();
@@ -263,7 +265,24 @@ async function main() {
   app.get('/api/players', h(async (req, res) => {
     if (!(await authUser(req))) return res.status(401).json({ error: 'Nu ești conectat.' });
     const users = await storage.listUsers();
-    res.json({ players: users.map((u) => ({ id: u.id, name: u.name, mascot: u.mascot })) });
+    res.json({ players: users.map((u) => ({ id: u.id, name: u.name, nickname: u.nickname || null, mascot: u.mascot })) });
+  }));
+
+  // Porecla din chat (goală = fără poreclă).
+  async function setNickname(userId, raw) {
+    const nickname = String(raw || '').replace(/\s+/g, ' ').trim();
+    if (nickname.length > 24) return { error: 'Porecla poate avea cel mult 24 de caractere.' };
+    await storage.setNickname(userId, nickname || null);
+    io.emit('playersChanged');
+    return { nickname: nickname || null };
+  }
+
+  app.post('/api/me/nickname', h(async (req, res) => {
+    const user = await authUser(req);
+    if (!user) return res.status(401).json({ error: 'Nu ești conectat.' });
+    const r = await setNickname(user.id, req.body?.nickname);
+    if (r.error) return res.status(400).json(r);
+    res.json(r);
   }));
 
   // ---------- Votul pentru jucătorul săptămânii (secret) ----------
@@ -481,7 +500,8 @@ async function main() {
   const inQuiz = (uid) => Boolean(quiz && quiz.phase !== 'finished' && quiz.players.has(uid));
   let party = null;
   const inParty = (uid) => Boolean(party && party.phase !== 'finished' && party.players.has(uid));
-  const isBusy = (uid) => userMatch.has(uid) || inQuiz(uid) || inParty(uid);
+  const isBusy = (uid) => userMatch.has(uid) || inQuiz(uid) || inParty(uid) || inPict(uid);
+  const lastChat = new Map();
 
   function broadcastLobby() {
     const list = [...online.values()]
@@ -897,6 +917,170 @@ async function main() {
 
   const newPartyPlayer = (u) => ({ id: u.id, name: u.name, score: 0, rounds: 0, titles: [] });
 
+  // ---------- Ghicește desenul ----------
+  // Pe rând, fiecare jucător scrie 3 lucruri, apoi le desenează unul câte unul; ceilalți ghicesc.
+  const PICT_MIN = 2;
+  const PICT_MAX = 10;
+  const SETUP_MS = 45_000;
+  const DRAW_MS = 80_000;
+  const REVEAL_MS_P = 5_000;
+  const MAX_POINTS = 30_000;
+  let pict = null;
+  const inPict = (uid) => Boolean(pict && pict.phase !== 'finished' && pict.players.has(uid));
+  const pictKey = () => `${pict.id}:${pict.turn}:${pict.wordIndex}`;
+
+  function pictMask() {
+    const w = pict.words[pict.wordIndex] || '';
+    return [...w].map((ch, i) => (/[\p{L}\p{N}]/u.test(ch) ? (pict.revealed.includes(i) ? ch : '_') : ch)).join('');
+  }
+
+  function pictView(uid) {
+    if (!pict) return null;
+    const p = pict;
+    const v = {
+      id: p.id, phase: p.phase, hostId: p.hostId, drawerId: p.drawerId,
+      turn: p.turn, totalTurns: p.order.length, wordIndex: p.wordIndex, wordsCount: p.words.length || 3,
+      players: [...p.players.values()].map((x) => ({ id: x.id, name: x.name, score: x.score, guessed: p.guessed.has(x.id), online: online.has(x.id) })),
+      feed: p.feed.slice(-40)
+    };
+    if (['setup', 'draw', 'reveal'].includes(p.phase)) {
+      v.remainingMs = Math.max(0, p.deadline - Date.now());
+      v.durationMs = p.phase === 'setup' ? SETUP_MS : p.phase === 'draw' ? DRAW_MS : REVEAL_MS_P;
+    }
+    if (p.phase === 'draw' || p.phase === 'reveal') {
+      v.key = pictKey();
+      v.mask = pictMask();
+      if (p.phase === 'reveal' || uid === p.drawerId || p.guessed.has(uid)) v.word = p.words[p.wordIndex];
+    }
+    if (p.phase === 'finished') v.ranking = p.ranking;
+    return v;
+  }
+
+  function sendPict() {
+    for (const id of online.keys()) toUser(id).emit('pict', pictView(id));
+  }
+
+  function pictFeed(entry) {
+    pict.feed.push({ id: newId(), ...entry });
+    if (pict.feed.length > 80) pict.feed.splice(0, pict.feed.length - 80);
+  }
+
+  function clearPictTimers() {
+    clearTimeout(pict.timer);
+    for (const t of pict.hintTimers || []) clearTimeout(t);
+    pict.hintTimers = [];
+  }
+
+  function pictNextTurn() {
+    if (!pict) return;
+    clearPictTimers();
+    do { pict.turn++; } while (pict.turn < pict.order.length && !pict.players.has(pict.order[pict.turn]));
+    if (pict.turn >= pict.order.length) return pictFinish();
+    pict.drawerId = pict.order[pict.turn];
+    pict.words = [];
+    pict.wordIndex = 0;
+    pict.phase = 'setup';
+    pict.deadline = Date.now() + SETUP_MS;
+    pict.timer = setTimeout(pictBeginDrawing, SETUP_MS);
+    pictFeed({ type: 'system', text: `${pict.players.get(pict.drawerId).name} alege ce desenează…` });
+    sendPict();
+  }
+
+  function pictBeginDrawing() {
+    if (!pict || pict.phase !== 'setup') return;
+    clearPictTimers();
+    // dacă n-a scris toate cele 3, completăm cu cuvinte la întâmplare
+    const filler = deckTake('pict:words', WORDS.map((_, i) => String(i)), 3).map((i) => WORDS[Number(i)]);
+    while (pict.words.length < 3) pict.words.push(filler[pict.words.length] || 'floare');
+    pict.wordIndex = 0;
+    pictStartWord();
+  }
+
+  function pictStartWord() {
+    pict.phase = 'draw';
+    pict.strokes = [];
+    pict.points = 0;
+    pict.guessed = new Set();
+    pict.revealed = [];
+    pict.deadline = Date.now() + DRAW_MS;
+    pict.timer = setTimeout(pictReveal, DRAW_MS);
+    const word = pict.words[pict.wordIndex];
+    const letters = [...word].map((ch, i) => (/[\p{L}\p{N}]/u.test(ch) ? i : -1)).filter((i) => i >= 0);
+    const hint = (frac) => setTimeout(() => {
+      if (!pict || pict.phase !== 'draw' || letters.length <= 2) return;
+      const left = letters.filter((i) => !pict.revealed.includes(i));
+      if (left.length <= 1) return;
+      pict.revealed.push(pict.revealed.length ? left[Math.floor(Math.random() * left.length)] : letters[0]);
+      sendPict();
+    }, DRAW_MS * frac);
+    pict.hintTimers = [hint(0.5), hint(0.75)];
+    io.emit('pictCanvas', { key: pictKey(), strokes: [] });
+    sendPict();
+  }
+
+  function pictReveal() {
+    if (!pict || pict.phase !== 'draw') return;
+    clearPictTimers();
+    pict.phase = 'reveal';
+    const word = pict.words[pict.wordIndex];
+    pictFeed({ type: 'system', text: `Cuvântul era „${word}”. ${pict.guessed.size ? `${pict.guessed.size} ${pict.guessed.size === 1 ? 'a ghicit' : 'au ghicit'}.` : 'Nu l-a ghicit nimeni. 🙈'}` });
+    pict.deadline = Date.now() + REVEAL_MS_P;
+    pict.timer = setTimeout(() => {
+      if (!pict || pict.phase !== 'reveal') return;
+      pict.wordIndex++;
+      if (pict.wordIndex < pict.words.length && pict.players.has(pict.drawerId)) pictStartWord();
+      else pictNextTurn();
+    }, REVEAL_MS_P);
+    sendPict();
+  }
+
+  function pictCheckAllGuessed() {
+    const guessers = [...pict.players.keys()].filter((id) => id !== pict.drawerId && online.has(id));
+    if (guessers.length && guessers.every((id) => pict.guessed.has(id))) pictReveal();
+  }
+
+  function pictFinish() {
+    clearPictTimers();
+    pict.phase = 'finished';
+    const list = [...pict.players.values()].sort((a, b) => b.score - a.score);
+    const n = list.length;
+    let rank = 0;
+    pict.ranking = list.map((p, i) => {
+      if (i === 0 || p.score !== list[i - 1].score) rank = i + 1;
+      return { id: p.id, name: p.name, score: p.score, rank, points: rank <= 3 && rank < n ? 4 - rank : 0 };
+    });
+    if (n >= 2 && pict.ranking.some((r) => r.score > 0)) {
+      const firsts = pict.ranking.filter((r) => r.rank === 1).length;
+      record(pict.ranking.map((r) => [{ id: r.id }, r.rank === 1 ? (firsts > 1 ? 'draw' : 'win') : 'loss', r.points]), 'pictionary');
+    }
+    const id = pict.id;
+    pict.timer = setTimeout(() => { if (pict && pict.id === id) { pict = null; sendPict(); } }, 180_000);
+    sendPict();
+    broadcastLobby();
+  }
+
+  function pictRemove(uid) {
+    if (!pict || pict.phase === 'finished' || !pict.players.has(uid)) return;
+    pict.players.delete(uid);
+    if (pict.players.size === 0) {
+      clearPictTimers();
+      pict = null;
+      sendPict();
+      broadcastLobby();
+      return;
+    }
+    if (pict.hostId === uid) pict.hostId = pict.players.keys().next().value;
+    if (pict.phase !== 'lobby' && pict.players.size < PICT_MIN) return pictFinish();
+    if (pict.drawerId === uid && ['setup', 'draw', 'reveal'].includes(pict.phase)) {
+      pictFeed({ type: 'system', text: 'Desenatorul a ieșit. Trecem la următorul.' });
+      pictNextTurn();
+    } else if (pict.phase === 'draw') {
+      pictCheckAllGuessed();
+    }
+    sendPict();
+    broadcastLobby();
+  }
+
   // ---------- Conexiuni ----------
   io.on('connection', (socket) => {
     const u = socket.user;
@@ -919,6 +1103,9 @@ async function main() {
     if (current) socket.emit('match', matchView(current, u.id));
     socket.emit('quiz', quizView());
     socket.emit('party', partyView(u.id));
+    socket.emit('pict', pictView(u.id));
+    if (pict && pict.phase === 'draw') socket.emit('pictCanvas', { key: pictKey(), strokes: pict.strokes });
+    storage.recentChat(80).then((list) => socket.emit('chatHistory', list)).catch(() => {});
     if (party && pmode().kind === 'draw' && ['vote', 'result'].includes(party.phase)) socket.emit('partyImages', partyImages());
     broadcastLobby();
 
@@ -1013,7 +1200,7 @@ async function main() {
         : getQuiz(quizId);
       if (!def) return err('Quizul ales nu mai există.');
       if (quiz && quiz.phase !== 'finished') return err('Există deja un quiz. Intră în el!');
-      if (userMatch.has(u.id) || inParty(u.id)) return err('Termină întâi jocul în care ești.');
+      if (userMatch.has(u.id) || inParty(u.id) || inPict(u.id)) return err('Termină întâi jocul în care ești.');
       if (quiz) clearTimeout(quiz.timer);
       quiz = {
         id: newId(), phase: 'lobby', hostId: u.id, players: new Map(), questions: prepareQuestions(quizId),
@@ -1029,7 +1216,7 @@ async function main() {
 
     socket.on('quizJoin', () => {
       if (!quiz || quiz.phase !== 'lobby') return err('Quizul a început deja sau nu mai există.');
-      if (userMatch.has(u.id) || inParty(u.id)) return err('Termină întâi jocul în care ești.');
+      if (userMatch.has(u.id) || inParty(u.id) || inPict(u.id)) return err('Termină întâi jocul în care ești.');
       if (quiz.players.has(u.id)) return;
       quiz.players.set(u.id, { id: u.id, name: u.name, score: 0, correct: 0, gained: 0 });
       cancelChallengesOf(u.id);
@@ -1126,6 +1313,139 @@ async function main() {
       partyFinish();
     });
 
+    // ---------- Chat ----------
+    socket.on('chat', async (data) => {
+      const now = Date.now();
+      if (now - (lastChat.get(u.id) || 0) < 600) return err('Mai încet. 🙂');
+      lastChat.set(u.id, now);
+      const text = String(data?.text || '').replace(/\s+/g, ' ').trim().slice(0, 300);
+      if (!text) return;
+      const nick = text.match(/^\/(nick|porecla|poreclă)\s*(.*)$/i);
+      if (nick) return setNickname(u.id, nick[2]).then((r) => (r.error ? err(r.error) : null));
+      try {
+        const msg = await storage.addChat(u.id, text);
+        io.emit('chat', msg);
+      } catch (e) {
+        console.error(e);
+        err('Mesajul nu a putut fi trimis.');
+      }
+    });
+
+    socket.on('chatDelete', async (data) => {
+      if (!(await isAdmin(u))) return;
+      const id = Number(data?.id);
+      await storage.deleteChat(id);
+      io.emit('chatDeleted', { id });
+    });
+
+    // ---------- Ghicește desenul ----------
+    socket.on('pictCreate', () => {
+      if (pict && pict.phase !== 'finished') return err('Există deja un joc „Ghicește desenul”. Intră în el!');
+      if (isBusy(u.id)) return err('Termină întâi jocul în care ești.');
+      if (pict) clearPictTimers();
+      pict = {
+        id: newId(), phase: 'lobby', hostId: u.id, players: new Map(), order: [], turn: -1, drawerId: null,
+        words: [], wordIndex: 0, strokes: [], points: 0, guessed: new Set(), revealed: [], feed: [],
+        timer: null, hintTimers: [], deadline: 0, ranking: null
+      };
+      pict.players.set(u.id, { id: u.id, name: u.name, score: 0 });
+      cancelChallengesOf(u.id);
+      sendPict();
+      io.except('u:' + u.id).emit('partyInvite', { from: u.name, mode: 'pict', title: 'Ghicește desenul' });
+      broadcastLobby();
+    });
+
+    socket.on('pictJoin', () => {
+      if (!pict || pict.phase !== 'lobby') return err('Jocul a început deja sau nu mai există.');
+      if (pict.players.has(u.id)) return;
+      if (pict.players.size >= PICT_MAX) return err(`Sala e plină (maxim ${PICT_MAX}).`);
+      if (isBusy(u.id)) return err('Termină întâi jocul în care ești.');
+      pict.players.set(u.id, { id: u.id, name: u.name, score: 0 });
+      cancelChallengesOf(u.id);
+      sendPict();
+      broadcastLobby();
+    });
+
+    socket.on('pictLeave', () => pictRemove(u.id));
+
+    socket.on('pictStart', () => {
+      if (!pict || pict.phase !== 'lobby' || pict.hostId !== u.id) return;
+      if (pict.players.size < PICT_MIN) return err(`E nevoie de cel puțin ${PICT_MIN} jucători.`);
+      pict.order = shuffle([...pict.players.keys()]);
+      pict.turn = -1;
+      pictNextTurn();
+      broadcastLobby();
+    });
+
+    socket.on('pictWords', (data) => {
+      if (!pict || pict.phase !== 'setup' || pict.drawerId !== u.id) return;
+      const words = (Array.isArray(data?.words) ? data.words : [])
+        .map((w) => String(w || '').replace(/\s+/g, ' ').trim().slice(0, 40))
+        .filter((w) => /[\p{L}\p{N}]/u.test(w))
+        .slice(0, 3);
+      if (words.length < 3) return err('Scrie toate cele 3 lucruri.');
+      pict.words = words;
+      pictBeginDrawing();
+    });
+
+    socket.on('pictDraw', (op) => {
+      if (!pict || pict.phase !== 'draw' || pict.drawerId !== u.id || !op || typeof op !== 'object') return;
+      const pt = (p) => (Array.isArray(p) && p.length === 2 ? [Math.max(0, Math.min(1000, Math.round(+p[0] || 0))), Math.max(0, Math.min(1000, Math.round(+p[1] || 0)))] : null);
+      let out;
+      if (op.op === 'start') {
+        const p = pt(op.p);
+        if (!p || pict.points >= MAX_POINTS) return;
+        const color = /^#[0-9a-fA-F]{6}$/.test(op.c) ? op.c : '#1E1B3A';
+        const size = Math.max(2, Math.min(60, Math.round(+op.w || 8)));
+        pict.strokes.push({ c: color, w: size, pts: [p] });
+        pict.points++;
+        out = { op: 'start', c: color, w: size, p };
+      } else if (op.op === 'pts') {
+        const s = pict.strokes[pict.strokes.length - 1];
+        if (!s || !Array.isArray(op.pts)) return;
+        const pts = op.pts.slice(0, 200).map(pt).filter(Boolean);
+        if (pict.points + pts.length > MAX_POINTS) return;
+        s.pts.push(...pts);
+        pict.points += pts.length;
+        out = { op: 'pts', pts };
+      } else if (op.op === 'undo') {
+        pict.strokes.pop();
+        out = { op: 'undo' };
+      } else if (op.op === 'clear') {
+        pict.strokes = [];
+        out = { op: 'clear' };
+      } else return;
+      for (const id of pict.players.keys()) if (id !== u.id) toUser(id).emit('pictDraw', { key: pictKey(), ...out });
+    });
+
+    socket.on('pictGuess', (data) => {
+      if (!pict || pict.phase !== 'draw' || !pict.players.has(u.id) || pict.drawerId === u.id || pict.guessed.has(u.id)) return;
+      const text = String(data?.text || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+      if (!text) return;
+      const r = checkGuess(pict.words[pict.wordIndex], text);
+      if (r === 2) {
+        const left = Math.max(0, pict.deadline - Date.now());
+        const gained = 50 + Math.round((50 * left) / DRAW_MS);
+        pict.guessed.add(u.id);
+        pict.players.get(u.id).score += gained;
+        const drawer = pict.players.get(pict.drawerId);
+        if (drawer) drawer.score += 20;
+        pictFeed({ type: 'correct', uid: u.id, gained });
+        socket.emit('pictGotIt', { gained });
+        sendPict();
+        pictCheckAllGuessed();
+        return;
+      }
+      if (r === 1) socket.emit('pictClose', { text });
+      else pictFeed({ type: 'guess', uid: u.id, text });
+      sendPict();
+    });
+
+    socket.on('pictEnd', () => {
+      if (!pict || pict.hostId !== u.id || !['setup', 'draw', 'reveal'].includes(pict.phase)) return;
+      pictFinish();
+    });
+
     socket.on('disconnect', () => {
       const entry = online.get(u.id);
       if (!entry) return;
@@ -1142,11 +1462,14 @@ async function main() {
         if (!maybeRevealEarly()) sendQuiz();
       }
       if (party && !partyCheckEarly()) sendParty();
+      if (pict && pict.phase === 'draw' && pict.players.has(u.id)) pictCheckAllGuessed();
+      if (pict) sendPict();
       awayTimers.set(u.id, setTimeout(() => {
         awayTimers.delete(u.id);
         leaveMatch(u.id, 'abandon');
         if (quiz && quiz.phase === 'lobby') quizRemove(u.id);
         if (party && party.phase === 'lobby') partyRemove(u.id);
+        if (pict && (pict.phase === 'lobby' || pict.drawerId === u.id)) pictRemove(u.id);
       }, GRACE_MS));
       broadcastLobby();
     });

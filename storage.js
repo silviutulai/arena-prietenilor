@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const GAME_IDS = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps', 'quiz', 'funny', 'draw'];
+const GAME_IDS = ['ttt', 'tttq', 'c4', 'hangman', 'battleship', 'dice', 'rps', 'quiz', 'funny', 'draw', 'pictionary'];
 const OUTCOME_COL = { win: 'wins', draw: 'draws', loss: 'losses' };
 
 // Cheia săptămânii = data zilei de luni (ora României), ex. "2026-10-19".
@@ -42,6 +42,7 @@ async function createPg(url) {
     );
     ALTER TABLE users ADD COLUMN IF NOT EXISTS mascot TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS award_seen TEXT;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS nickname TEXT;
     CREATE TABLE IF NOT EXISTS sessions (
       token TEXT PRIMARY KEY,
       user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -71,6 +72,12 @@ async function createPg(url) {
       voter_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       target_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       PRIMARY KEY (week_key, voter_id)
+    );
+    CREATE TABLE IF NOT EXISTS chat_messages (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      text TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
     CREATE TABLE IF NOT EXISTS decks (
       name TEXT PRIMARY KEY,
@@ -105,7 +112,7 @@ async function createPg(url) {
       return r.rows[0];
     },
     async listUsers() {
-      const r = await pool.query('SELECT id, name, mascot, created_at AS "createdAt" FROM users ORDER BY name_lower');
+      const r = await pool.query('SELECT id, name, nickname, mascot, created_at AS "createdAt" FROM users ORDER BY name_lower');
       return r.rows.map((u) => ({ ...u, mascot: parseJson(u.mascot) }));
     },
     async setPassword(id, hash) {
@@ -113,6 +120,22 @@ async function createPg(url) {
     },
     async setMascot(id, mascot) {
       await pool.query('UPDATE users SET mascot = $2 WHERE id = $1', [id, JSON.stringify(mascot)]);
+    },
+    async setNickname(id, nickname) {
+      await pool.query('UPDATE users SET nickname = $2 WHERE id = $1', [id, nickname]);
+    },
+    // --- chat ---
+    async addChat(userId, text) {
+      const r = await pool.query('INSERT INTO chat_messages (user_id, text) VALUES ($1, $2) RETURNING id, created_at', [userId, text]);
+      if (r.rows[0].id % 50 === 0) await pool.query('DELETE FROM chat_messages WHERE id <= $1', [r.rows[0].id - 500]);
+      return { id: r.rows[0].id, userId, text, at: new Date(r.rows[0].created_at).getTime() };
+    },
+    async recentChat(limit) {
+      const r = await pool.query('SELECT id, user_id, text, created_at FROM chat_messages ORDER BY id DESC LIMIT $1', [limit]);
+      return r.rows.reverse().map((m) => ({ id: m.id, userId: m.user_id, text: m.text, at: new Date(m.created_at).getTime() }));
+    },
+    async deleteChat(id) {
+      await pool.query('DELETE FROM chat_messages WHERE id = $1', [id]);
     },
     async deleteUser(id) {
       return (await pool.query('DELETE FROM users WHERE id = $1', [id])).rowCount > 0;
@@ -125,9 +148,9 @@ async function createPg(url) {
     },
     async getSessionUser(token) {
       if (!token || typeof token !== 'string') return null;
-      const r = await pool.query('SELECT u.id, u.name, u.mascot FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = $1', [token]);
+      const r = await pool.query('SELECT u.id, u.name, u.nickname, u.mascot FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = $1', [token]);
       const u = r.rows[0];
-      return u ? { id: u.id, name: u.name, mascot: parseJson(u.mascot) } : null;
+      return u ? { id: u.id, name: u.name, nickname: u.nickname || null, mascot: parseJson(u.mascot) } : null;
     },
     async deleteSession(token) {
       await pool.query('DELETE FROM sessions WHERE token = $1', [token]);
@@ -224,6 +247,8 @@ function createJson(file) {
   db.nextQuizId ||= 1;
   db.votes ||= [];
   db.decks ||= {};
+  db.chat ||= [];
+  db.nextChatId ||= 1;
 
   let timer = null;
   const save = () => {
@@ -269,7 +294,7 @@ function createJson(file) {
       return { id: u.id, name: u.name };
     },
     async listUsers() {
-      return db.users.map((u) => ({ id: u.id, name: u.name, mascot: u.mascot || null, createdAt: u.createdAt || null }))
+      return db.users.map((u) => ({ id: u.id, name: u.name, nickname: u.nickname || null, mascot: u.mascot || null, createdAt: u.createdAt || null }))
         .sort((a, b) => a.name.localeCompare(b.name, 'ro'));
     },
     async setPassword(id, hash) {
@@ -283,11 +308,25 @@ function createJson(file) {
       const u = byId(id);
       if (u) { u.mascot = mascot; save(); }
     },
+    async setNickname(id, nickname) {
+      const u = byId(id);
+      if (u) { u.nickname = nickname; save(); }
+    },
+    async addChat(userId, text) {
+      const m = { id: db.nextChatId++, userId, text, at: Date.now() };
+      db.chat.push(m);
+      if (db.chat.length > 500) db.chat = db.chat.slice(-500);
+      save();
+      return m;
+    },
+    async recentChat(limit) { return db.chat.slice(-limit); },
+    async deleteChat(id) { db.chat = db.chat.filter((m) => m.id !== id); save(); },
     async deleteUser(id) {
       const before = db.users.length;
       db.users = db.users.filter((u) => u.id !== id);
       db.results = db.results.filter((r) => r.userId !== id);
       db.votes = db.votes.filter((v) => v.voterId !== id && v.targetId !== id);
+      db.chat = db.chat.filter((m) => m.userId !== id);
       for (const [t, uid] of Object.entries(db.sessions)) if (uid === id) delete db.sessions[t];
       save();
       return db.users.length < before;
@@ -301,7 +340,7 @@ function createJson(file) {
     async getSessionUser(token) {
       if (!token || typeof token !== 'string') return null;
       const u = byId(db.sessions[token]);
-      return u ? { id: u.id, name: u.name, mascot: u.mascot || null } : null;
+      return u ? { id: u.id, name: u.name, nickname: u.nickname || null, mascot: u.mascot || null } : null;
     },
     async deleteSession(token) { delete db.sessions[token]; save(); },
     async deleteSessionsOf(id) {
